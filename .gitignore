@@ -1,0 +1,16 @@
+# Vagrant
+.vagrant
+package.box
+
+# Data / Config
+/files/*
+!/files/config/.gitkeep
+!/files/www/.gitkeep
+
+# Sublime Text
+.sublime-project
+.sublime-workspace
+
+# OS or Editor folders
+.DS_Store
+Thumbs.db
