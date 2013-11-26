@@ -4,12 +4,18 @@ Protobox is the only [Vagrant](http://vagrantup.com) development box you will ev
 
 Protobox easily allows you to setup a development environment with PHP, Apache, MySQL, Grunt and quickly switch to developing the same application in PHP, Nginx, Mongodb, Redis. If you need Node, Beakstalkd, or any other package just turn it on in the configuration file and `vagrant up`. 
 
-## Examples ##
+## Installation ##
 
 	mkdir protobox && cd protobox
-    git clone git@github.com/protobox/protobox.git .
+    git clone git@github.com:protobox/protobox.git .
     cp data/vagrant/common.yaml-dist data/vagrant/common.yaml
     vagrant up
+
+Make sure you add an entry to your `/etc/hosts` for any virtualhosts in your `data/vagrant/common.yaml` file:
+
+	192.168.5.10    protobox.dev www.protobox.dev
+
+Then pull up `http://protobox.dev` in your browser to see if it is setup correctly.
 
 ## Configuration ##
 

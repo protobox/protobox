@@ -1,42 +1,4 @@
 ---
-puppetfile:
-    forge: http://forge.puppetlabs.com
-    modules:
-        stdlib:
-            git: git://github.com/puphpet/puppetlabs-stdlib.git
-            #ref: '0.0.3'
-            #path: modules/apt
-        concat:
-            git: git://github.com/puphpet/puppetlabs-concat.git
-        apt:
-            git: git://github.com/puphpet/puppetlabs-apt.git
-        yum:
-            git: git://github.com/puphpet/puppet-yum.git
-        vcsrepo:
-            git: git://github.com/puphpet/puppetlabs-vcsrepo.git
-        ntp:
-            git: git://github.com/puphpet/puppetlabs-ntp.git
-        iptables:
-            git: git://github.com/puphpet/puppet-iptables.git
-        apache:
-            git: git://github.com/puphpet/puppetlabs-apache.git
-        php:
-            git: git://github.com/puphpet/puppet-php.git
-        composer:
-            git: git://github.com/puphpet/puppet-composer.git
-        puphpet:
-            git: git://github.com/puphpet/puppet-puphpet.git
-        mysql:
-            git: git://github.com/puphpet/puppetlabs-mysql.git
-        postgresql:
-            git: git://github.com/puphpet/puppetlabs-postgresql.git
-        nodejs:
-            git: git://github.com/puppetlabs/puppetlabs-nodejs.git
-        mailcatcher:
-            git: git://github.com/protobox/puppet-mailcatcher.git
-        ngrok:
-            git: git://github.com/protobox/puppet-ngrok.git
-
 vagrantfile-local:
     vm:
         box: precise32
@@ -119,6 +81,29 @@ server:
             #    filename: 'github_id_rsa'
     _prevent_empty: ''
 
+application:
+    install: 0
+    sites:
+        app:
+            install: 1
+            provider: git
+            source: 'git@github.com:protobox/web-install.git'
+            args:
+                revision: 'master'
+            pre_install: { }
+            post_install: { }
+        #app2:
+        #    install: 0
+        #    provider: composer
+        #    source: 'laravel/laravel'
+        #    args:
+        #        prefer_dist: true
+        #        stability: 'dev'
+        #        dev: true
+        #    pre_install: { }
+        #    post_install: 
+        #        - 'composer update'
+
 apache:
     install: 1
     modules:
@@ -126,13 +111,10 @@ apache:
         - rewrite
     vhosts:
         app:
-            servername: app.dev
+            servername: protobox.dev
             serveraliases:
-                - 'www.app.dev'
-            docroot: /srv/www/web/app
-            #docroot_owner: vagrant
-            #docroot_group: www-data
-            default_vhost: false
+                - 'www.protobox.dev'
+            docroot: /srv/www/web/protobox
             port: '80'
             setenv:
                 - 'APP_ENV dev'
@@ -140,17 +122,17 @@ apache:
                 - All
     user: vagrant
     group: www-data
-    default_vhost: true
+    default_vhost: false
     mpm_module: prefork
 
 nginx:
     install: 0
     vhosts:
         app:
-            server_name: app.dev
+            server_name: protobox.dev
             server_aliases:
-                - www.app.dev
-            www_root: /srv/www/web/app
+                - www.protobox.dev
+            www_root: /srv/www/web/protobox
             listen_port: '80'
             index_files:
                 - index.html
@@ -258,25 +240,40 @@ ngrok:
     #  ssh:
     #    proto: 'tcp: 22'
 
-application:
-    install: 0
-    sites:
-        app:
-            install: 1
-            provider: git
-            source: 'git@github.com/laravel/laravel.git'
-            args:
-                revision: 'master'
-            pre_install: { }
-            post_install: { }
-        app2:
-            install: 0
-            provider: composer
-            source: 'laravel/laravel'
-            args:
-                prefer_dist: true
-                stability: 'dev'
-                dev: true
-            pre_install: { }
-            post_install: 
-                - 'composer update'
+puppetfile:
+    forge: http://forge.puppetlabs.com
+    modules:
+        stdlib:
+            git: git://github.com/puphpet/puppetlabs-stdlib.git
+            #ref: '0.0.3'
+            #path: modules/apt
+        concat:
+            git: git://github.com/puphpet/puppetlabs-concat.git
+        apt:
+            git: git://github.com/puphpet/puppetlabs-apt.git
+        yum:
+            git: git://github.com/puphpet/puppet-yum.git
+        vcsrepo:
+            git: git://github.com/puphpet/puppetlabs-vcsrepo.git
+        ntp:
+            git: git://github.com/puphpet/puppetlabs-ntp.git
+        iptables:
+            git: git://github.com/puphpet/puppet-iptables.git
+        apache:
+            git: git://github.com/puphpet/puppetlabs-apache.git
+        php:
+            git: git://github.com/puphpet/puppet-php.git
+        composer:
+            git: git://github.com/puphpet/puppet-composer.git
+        puphpet:
+            git: git://github.com/puphpet/puppet-puphpet.git
+        mysql:
+            git: git://github.com/puphpet/puppetlabs-mysql.git
+        postgresql:
+            git: git://github.com/puphpet/puppetlabs-postgresql.git
+        nodejs:
+            git: git://github.com/puppetlabs/puppetlabs-nodejs.git
+        mailcatcher:
+            git: git://github.com/protobox/puppet-mailcatcher.git
+        ngrok:
+            git: git://github.com/protobox/puppet-ngrok.git
