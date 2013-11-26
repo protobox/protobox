@@ -1,15 +1,12 @@
-# Vagrant
+# Vagrant Files
 .vagrant
 package.box
 
-# Data / Config
-/files/*
-!/files/config/.gitkeep
-!/files/www/.gitkeep
+# Web Files
+index.html
 
 # Sublime Text
-.sublime-project
-.sublime-workspace
+*.sublime*
 
 # OS or Editor folders
 .DS_Store

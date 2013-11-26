@@ -1,0 +1,282 @@
+---
+puppetfile:
+    forge: http://forge.puppetlabs.com
+    modules:
+        stdlib:
+            git: git://github.com/puphpet/puppetlabs-stdlib.git
+            #ref: '0.0.3'
+            #path: modules/apt
+        concat:
+            git: git://github.com/puphpet/puppetlabs-concat.git
+        apt:
+            git: git://github.com/puphpet/puppetlabs-apt.git
+        yum:
+            git: git://github.com/puphpet/puppet-yum.git
+        vcsrepo:
+            git: git://github.com/puphpet/puppetlabs-vcsrepo.git
+        ntp:
+            git: git://github.com/puphpet/puppetlabs-ntp.git
+        iptables:
+            git: git://github.com/puphpet/puppet-iptables.git
+        apache:
+            git: git://github.com/puphpet/puppetlabs-apache.git
+        php:
+            git: git://github.com/puphpet/puppet-php.git
+        composer:
+            git: git://github.com/puphpet/puppet-composer.git
+        puphpet:
+            git: git://github.com/puphpet/puppet-puphpet.git
+        mysql:
+            git: git://github.com/puphpet/puppetlabs-mysql.git
+        postgresql:
+            git: git://github.com/puphpet/puppetlabs-postgresql.git
+        nodejs:
+            git: git://github.com/puppetlabs/puppetlabs-nodejs.git
+        mailcatcher:
+            git: git://github.com/protobox/puppet-mailcatcher.git
+        ngrok:
+            git: git://github.com/protobox/puppet-ngrok.git
+
+vagrantfile-local:
+    vm:
+        box: precise32
+        box_url: 'http://files.vagrantup.com/precise32.box'
+        hostname: protobox
+        network:
+            private_network: 192.168.5.10
+            forwarded_port:
+                web:
+                    host: ''
+                    guest: ''
+        provider:
+            virtualbox:
+                modifyvm:
+                    name: protobox
+                    natdnshostresolver1: 'on'
+                    memory: '1024'
+                setextradata:
+                    VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root: 1
+        provision:
+            puppet:
+                manifests_path: puppet/manifests
+                module_path: null
+                manifest_file: default.pp
+                options:
+                    #- --verbose
+                    #- --debug
+        synced_folder:
+            root:
+                id: vagrant-root
+                source: ./
+                target: /srv/www
+                nfs: false
+                owner: vagrant
+                group: www-data
+                mount_options: 
+                    - 'dmode=775'
+                    - 'fmode=775'
+        usable_port_range: 2200..2250
+    ssh:
+        host: null
+        port: null
+        private_key_path: null
+        public_key_path: null
+        username: vagrant
+        guest_port: null
+        keep_alive: true
+        forward_agent: false
+        forward_x11: false
+        shell: 'bash -l'
+    vagrant:
+        host: ':detect'
+
+server:
+    packages:
+        - vim
+        - vim-common
+    dot_files:
+        -
+            bash_aliases: null
+    ssh:
+        authorized_keys:
+            #user:
+            #    key: ''
+            #    type: 'ssh-rsa'
+            #user2:
+            #    key_file: '/srv/www/data/ssh/known_hosts'
+            #    type: 'ssh-rsa'
+            #    user: username
+        config:
+            #all:
+            #    config_file: '/srv/www/data/ssh/git_config'
+            #github:
+            #    config: 'host *\n\tIdentityFile ~/.ssh/git_id_rsa'
+        keys:
+            #user:
+            #    key: ''
+            #user2:
+            #    key_file: '/srv/www/data/ssh/github_id_rsa'
+            #    filename: 'github_id_rsa'
+    _prevent_empty: ''
+
+apache:
+    install: 1
+    modules:
+        - php
+        - rewrite
+    vhosts:
+        app:
+            servername: app.dev
+            serveraliases:
+                - 'www.app.dev'
+            docroot: /srv/www/web/app
+            #docroot_owner: vagrant
+            #docroot_group: www-data
+            default_vhost: false
+            port: '80'
+            setenv:
+                - 'APP_ENV dev'
+            override:
+                - All
+    user: vagrant
+    group: www-data
+    default_vhost: true
+    mpm_module: prefork
+
+nginx:
+    install: 0
+    vhosts:
+        app:
+            server_name: app.dev
+            server_aliases:
+                - www.app.dev
+            www_root: /srv/www/web/app
+            listen_port: '80'
+            index_files:
+                - index.html
+                - index.htm
+                - index.php
+            envvars:
+                - 'APP_ENV dev'
+
+php:
+    version: '54'
+    composer: 1
+    mailcatcher: 1
+    modules:
+        php:
+            - cli
+            - intl
+            - mcrypt
+            - curl
+        pear: {  }
+        pecl:
+            - pecl_http
+    ini:
+        display_errors: 'On'
+        error_reporting: '-1'
+        session.save_path: /var/lib/php/session
+    timezone: America/Chicago
+
+xdebug:
+    install: 0
+    settings:
+        xdebug.default_enable: '1'
+        xdebug.remote_autostart: '0'
+        xdebug.remote_connect_back: '1'
+        xdebug.remote_enable: '1'
+        xdebug.remote_handler: dbgp
+        xdebug.remote_port: '9000'
+
+xhprof:
+    install: 0
+    location: /srv/www/web/xhprof
+
+mysql:
+    install: 1
+    phpmyadmin: 0
+    root_password: 'root'
+    databases:
+        app:
+            grant:
+                - ALL
+            name: app
+            host: localhost
+            user: user
+            password: user
+            #sql_file: '/srv/www/data/sql/app.sql'
+            sql_file: ''
+
+postgresql:
+    install: 0
+    root_password: 'root'
+    user_group: postgres
+    databases:
+        app:
+            grant: ALL
+            name: database
+            user: root
+            password: root
+            sql_file: ''
+
+mongodb:
+    install: 0
+    root_password: 'root'
+
+redis:
+    install: 0
+    conf_port: 6379
+    conf_bind: 127.0.0.1
+
+beanstalkd:
+    install: 0
+    listen_addr: '127.0.0.1'
+    listen_port: '11300'
+
+node:
+    install: 0
+    npm:
+        - grunt
+        - grunt-cli
+        - bower
+    gems:
+        - sass
+        - compass
+
+ngrok:
+    install: 1
+    port: 80
+    #subdomain: protoboxapp
+    #httpauth: 'user:password'
+    #proto: 'tcp 22'
+    #client: 'client1 client2 client3'
+    #hostname: 'your.domain.com'
+    #tunnels:
+    #  client:
+    #    httpauth: 'user:password'
+    #    proto: 'https 8080'
+    #  ssh:
+    #    proto: 'tcp: 22'
+
+application:
+    install: 0
+    sites:
+        app:
+            install: 1
+            provider: git
+            source: 'git@github.com/laravel/laravel.git'
+            args:
+                revision: 'master'
+            pre_install: { }
+            post_install: { }
+        app2:
+            install: 0
+            provider: composer
+            source: 'laravel/laravel'
+            args:
+                prefer_dist: true
+                stability: 'dev'
+                dev: true
+            pre_install: { }
+            post_install: 
+                - 'composer update'
