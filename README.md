@@ -37,23 +37,40 @@ Protobox has built in support for the following functionality:
 
 Protobox has built in support for the following modules:
 
-- Any Distro
-- PHP
-- Apache
-- Nginx
-- Mongodb
-- Composer
-- XDebug
-- Xhprof
-- Mailcatcher
-- MySQL
-- PostgreSQL
-- Redis
-- Beanstalkd
-- Ngrok
-- Node
-- Bower
-- Grunt
+- [Any Distro](http://www.vagrantbox.es/)
+- [PHP](http://php.net)
+- [Apache](http://httpd.apache.org/)
+- [Nginx](http://wiki.nginx.org/Main)
+- [Composer](http://getcomposer.org/)
+- [XDebug](http://xdebug.org/)
+- [Xhprof](http://pecl.php.net/package/xhprof)
+- [Mailcatcher](http://mailcatcher.me/)
+- [MySQL](http://www.mysql.com/)
+- [PostgreSQL](http://www.postgresql.org/)
+- [Mongodb](http://www.mongodb.org/)
+- [Redis](http://redis.io/)
+- [Beanstalkd](http://kr.github.io/beanstalkd/)
+- [Ngrok](https://ngrok.com/)
+- [Node](http://nodejs.org/)
+- [Bower](http://bower.io/)
+- [Grunt](http://gruntjs.com/)
+
+## Apps (Coming Soon) ##
+
+Protobox has built in support for installing any of these applications:
+
+- [Wordpress](http://wordpress.org/)
+- [Magento](http://magento.com/)
+- [Drupal](https://drupal.org/)
+- [Laravel](http://laravel.com/)
+- [Wardrobe CMS](http://wardrobecms.com/)
+- [Lemonstand](http://lemonstand.com/)
+- [Symfony](http://symfony.com/)
+- [Symfony CMF](http://cmf.symfony.com/)
+- [Sylius](http://sylius.org/)
+- [Akeneo](http://www.akeneo.com/)
+- [Oro CRM](http://www.orocrm.com/)
+- [Prestashop](http://www.prestashop.com/)
 
 ## License ##
 

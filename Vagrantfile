@@ -72,9 +72,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # Time Zone
-  #config.vm.provision :shell, :inline => "echo \"America/Chicago\" | sudo tee /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata"
-
   # Shell Provisioning
   config.vm.provision :shell, :path => "puppet/shell/initial-setup.sh"
   config.vm.provision :shell, :path => "puppet/shell/update-puppet.sh"
@@ -123,6 +120,8 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # Finish Provisioning
+  config.vm.provision :shell, :path => "puppet/shell/finish-setup.sh"
 
   # SSH Configuration
   settings[vagrant_vm]['ssh'].each do |item, value|

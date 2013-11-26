@@ -1103,9 +1103,3 @@ define add_application_repo (
     }
   }
 }
-
-## Begin final manifest
-
-notify {"finished":
-  message => "I'm Finished"
-} 
