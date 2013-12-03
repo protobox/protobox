@@ -7,8 +7,18 @@ options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: build-puppetfile.rb [options]"
 
-  opts.on('-s', '--source URL', 'Source URL') { |v| options[:source_url] = v }
-  opts.on('-l', '--logo URL', 'Logo URL') { |v| options[:logo_url] = v }
+  opts.on('-s', '--source [PATH]', 'Source YAML Path') do |v| 
+  	options[:source_url] = v
+  end
+
+  opts.on('-l', '--logo [PATH]', 'Logo Path') do |v| 
+  	options[:logo_url] = v 
+  end
+
+  opts.on_tail("-h", "--help", "Help") do
+    puts opts
+    exit
+  end
 end.parse!
 
 yaml_file = options[:source_url]
@@ -40,8 +50,8 @@ if !data['apache'].nil? and data['apache']['install'] == 1
 end
 
 if !data['nginx'].nil? and data['nginx']['install'] == 1
-	data['apache']['server_name'].each do |key, vhost|
-		puts "http://" + vhost['servername'] + "\n"
+	data['nginx']['vhosts'].each do |key, vhost|
+		puts "http://" + vhost['server_name'] + "\n"
 	end
 end
 

@@ -7,7 +7,14 @@ options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: build-puppetfile.rb [options]"
 
-  opts.on('-s', '--source URL', 'Source URL') { |v| options[:source_url] = v }
+  opts.on('-s', '--source [PATH]', 'Source YAML Path') do |v| 
+  	options[:source_url] = v
+  end
+
+  opts.on_tail("-h", "--help", "Help") do
+    puts opts
+    exit
+  end
 end.parse!
 
 yaml_file = options[:source_url]
