@@ -261,6 +261,8 @@ puppetfile:
             git: git://github.com/puphpet/puppet-iptables.git
         apache:
             git: git://github.com/puphpet/puppetlabs-apache.git
+        nginx:
+            git: git://github.com/puphpet/puppet-nginx.git
         php:
             git: git://github.com/puphpet/puppet-php.git
         composer:
