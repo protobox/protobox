@@ -767,6 +767,9 @@ enable_dl = Off
 ; to use SCRIPT_FILENAME rather than PATH_TRANSLATED.
 ; http://php.net/cgi.fix-pathinfo
 ;cgi.fix_pathinfo=1
+{% if nginx is defined and nginx.install == 1 %}
+cgi.fix_pathinfo=0
+{% endif %}
 
 ; FastCGI under IIS (on WINNT based OS) supports the ability to impersonate
 ; security tokens of the calling client.  This allows IIS to define the

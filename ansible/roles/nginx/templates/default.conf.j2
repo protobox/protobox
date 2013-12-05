@@ -1,0 +1,39 @@
+server {
+        listen {{ item.listen_port|default('80') }};
+        #listen [::]:{{ item.listen_port|default('80') }} ipv6only=on default_server;
+        server_name {{ item.server_name }}{% if item.server_aliases %}{% for alias in item.server_aliases %} {{ alias }}{% endfor %}{% endif %};
+        root {{ item.www_root }};
+
+        client_max_body_size 64M;
+
+        # Deny access to any files with a .php extension in the uploads directory
+        location ~* /(?:uploads|files)/.*\.php$ {
+                deny all;
+        }
+ 
+        location / {
+                index index.php index.html index.htm;
+                try_files $uri $uri/ /index.php?$args;
+        }
+ 
+        location ~* \.(gif|jpg|jpeg|png|css|js)$ {
+                expires max;
+        }
+ 
+        location ~ \.php$ {
+                try_files $uri =404;
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+
+                # With php5-cgi alone:
+                #fastcgi_pass 127.0.0.1:9000;
+
+                # With php5-fpm:
+                fastcgi_pass unix:/var/run/php5-fpm.sock;
+
+                fastcgi_index index.php;
+
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+
+                include fastcgi_params;
+        }
+}

@@ -3,3 +3,17 @@
     name=apache2 
     state=restarted
   sudo: yes
+  when: apache is defined and apache.install == 1
+
+- name: php-restart
+  service: >
+    name=nginx 
+    state=restarted
+  sudo: yes
+  when: nginx is defined and nginx.install == 1
+
+- name: php-fpm-restart
+  service: >
+    name=php5-fpm 
+    state=restarted
+  sudo: yes

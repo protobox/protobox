@@ -1,0 +1,9 @@
+- name: nginx | install fpm
+  apt: >
+    pkg={{ item }} 
+    state=installed
+  with_items:
+    - php5-fpm
+  sudo: yes
+  notify:
+    - php-fpm-restart

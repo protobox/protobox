@@ -7,6 +7,9 @@
 - include: apache.yml
   when: apache is defined and apache.install == 1
 
+- include: nginx.yml
+  when: nginx is defined and nginx.install == 1
+
 - include: ini.yml
   when: php.version is defined
 
