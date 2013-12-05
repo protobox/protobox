@@ -2,6 +2,10 @@
 .vagrant
 package.box
 
+# Ansible Files
+vagrant_ansible*
+.my.cnf
+
 # Web Files
 index.html
 

@@ -1,0 +1,7 @@
+- name: mysql | install php
+  apt: >
+    pkg={{ item }} 
+    state=latest
+  with_items:
+    - php5-mysql
+  sudo: yes

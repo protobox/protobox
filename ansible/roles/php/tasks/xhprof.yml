@@ -1,0 +1,4 @@
+#sudo pecl install xhprof-beta
+#echo 'extension=xhprof.so' | sudo tee /etc/php5/conf.d/xhprof.ini >/dev/null
+#sudo apachectl restart
+#git clone git://github.com/preinheimer/xhprof.git

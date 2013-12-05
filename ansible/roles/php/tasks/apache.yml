@@ -1,0 +1,14 @@
+- name: apache | install apache php
+  apt: >
+    pkg={{ item }} 
+    state=installed
+  with_items:
+    - libapache2-mod-php5
+
+#- name: apache | set php.ini apache2 template
+#  template:
+#    src=php_web.ini
+#    dest=/etc/php5/apache2/php.ini
+#    owner=root group=root mode=0644
+#  notify:
+#  - apache-restart

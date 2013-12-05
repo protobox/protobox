@@ -1,8 +1,8 @@
 ---
-vagrantfile-local:
+vagrant:
     vm:
-        box: precise32
-        box_url: 'http://files.vagrantup.com/precise32.box'
+        box: ubuntu-precise12042-x64-vbox43
+        box_url: 'https://puphpet.s3.amazonaws.com/ubuntu-precise12042-x64-vbox43.box'
         hostname: protobox
         network:
             private_network: 192.168.5.10
@@ -19,11 +19,19 @@ vagrantfile-local:
                 setextradata:
                     VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root: 1
         provision:
-            puppet:
-                manifests_path: puppet/manifests
-                module_path: null
-                manifest_file: default.pp
-                options:
+            ansible:
+                playbook: "ansible/site.yml"
+                #hosts: "webservers"
+                #inventory: "ansible/inventory"
+                #verbose: "yes"
+                #extra_vars: 
+                #    ntp_server: "pool.ntp.org"
+                #    nginx_workers: 4'
+            #puppet:
+            #    manifests_path: puppet/manifests
+            #    module_path: null
+            #    manifest_file: default.pp
+            #    options:
                     #- --verbose
                     #- --debug
         synced_folder:
@@ -56,9 +64,11 @@ server:
     packages:
         - vim
         - vim-common
-    dot_files:
-        -
-            bash_aliases: null
+    dotfiles:
+        git: ''
+        files:
+          - 
+        bash_aliases: null
     ssh:
         authorized_keys:
             #user:
@@ -79,47 +89,22 @@ server:
             #user2:
             #    key_file: '/srv/www/data/ssh/github_id_rsa'
             #    filename: 'github_id_rsa'
-    _prevent_empty: ''
-
-application:
-    install: 0
-    sites:
-        app:
-            install: 1
-            provider: git
-            source: 'git@github.com:protobox/web-install.git'
-            args:
-                revision: 'master'
-            pre_install: { }
-            post_install: { }
-        #app2:
-        #    install: 0
-        #    provider: composer
-        #    source: 'laravel/laravel'
-        #    args:
-        #        prefer_dist: true
-        #        stability: 'dev'
-        #        dev: true
-        #    pre_install: { }
-        #    post_install: 
-        #        - 'composer update'
 
 apache:
     install: 1
     modules:
-        - php
         - rewrite
     vhosts:
-        app:
-            servername: protobox.dev
-            serveraliases:
-                - 'www.protobox.dev'
-            docroot: /srv/www/web/protobox
-            port: '80'
-            setenv:
-                - 'APP_ENV dev'
-            override:
-                - All
+        - name: protobox
+          servername: protobox.dev
+          serveraliases:
+              - 'www.protobox.dev'
+          docroot: /srv/www/web/protobox
+          port: '80'
+          setenv:
+              - 'APP_ENV dev'
+          override:
+              - All
     user: vagrant
     group: www-data
     default_vhost: false
@@ -128,78 +113,85 @@ apache:
 nginx:
     install: 0
     vhosts:
-        app:
-            server_name: protobox.dev
-            server_aliases:
-                - www.protobox.dev
-            www_root: /srv/www/web/protobox
-            listen_port: '80'
-            index_files:
-                - index.html
-                - index.htm
-                - index.php
-            envvars:
-                - 'APP_ENV dev'
+        - name: protobox
+          server_name: protobox.dev
+          server_aliases:
+              - www.protobox.dev
+          www_root: /srv/www/web/protobox
+          listen_port: '80'
+          index_files:
+              - index.html
+              - index.htm
+              - index.php
+          envvars:
+              - 'APP_ENV dev'
 
 php:
+    install: 1
     version: '54'
-    composer: 1
-    mailcatcher: 1
     modules:
-        php:
-            - cli
-            - intl
-            - mcrypt
-            - curl
-        pear: {  }
-        pecl:
-            - pecl_http
+        - php5-cli
+        - php5-intl
+        - php5-mcrypt
+        - php5-curl
+        - php5-gd
+    pear:
+        install: 1
+        modules:
+            -
+    pecl:
+        install: 1
+        modules:
+            - 
+    composer: 
+        install: 1
+    mailcatcher: 
+        install: 0
+    xdebug:
+        install: 1
+        webgrind: 1
+        settings:
+            default_enable: '1'
+            remote_autostart: '0'
+            remote_connect_back: '1'
+            remote_enable: '1'
+            remote_handler: dbgp
+            remote_port: '9000'
+    xhprof:
+        install: 0
+        xhgui: 1
+        location: /srv/www/web/xhprof
     ini:
         display_errors: 'On'
+        display_startup_errors: 'On'
         error_reporting: '-1'
-        session.save_path: /var/lib/php/session
+        session_save_path: /var/lib/php/session
     timezone: America/Chicago
-
-xdebug:
-    install: 0
-    settings:
-        xdebug.default_enable: '1'
-        xdebug.remote_autostart: '0'
-        xdebug.remote_connect_back: '1'
-        xdebug.remote_enable: '1'
-        xdebug.remote_handler: dbgp
-        xdebug.remote_port: '9000'
-
-xhprof:
-    install: 0
-    location: /srv/www/web/xhprof
 
 mysql:
     install: 1
     phpmyadmin: 0
     root_password: 'root'
     databases:
-        app:
-            grant:
-                - ALL
-            name: app
-            host: localhost
-            user: user
-            password: user
-            #sql_file: '/srv/www/data/sql/app.sql'
-            sql_file: ''
+        - name: app
+          host: localhost
+          user: user
+          password: user
+          grant:
+              - ALL
+          #sql_file: '/srv/www/data/sql/app.sql'
+          sql_file: ''
 
 postgresql:
     install: 0
     root_password: 'root'
     user_group: postgres
     databases:
-        app:
-            grant: ALL
-            name: database
-            user: root
-            password: root
-            sql_file: ''
+        - name: app
+          user: root
+          password: root
+          grant: ALL
+          sql_file: ''
 
 mongodb:
     install: 0
@@ -209,6 +201,9 @@ redis:
     install: 0
     conf_port: 6379
     conf_bind: 127.0.0.1
+
+riak:
+    install: 0
 
 beanstalkd:
     install: 0

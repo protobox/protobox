@@ -1,0 +1,71 @@
+# need a tool to unzip
+- name: ngrok | install unzip
+  apt: >
+    pkg={{ item }} 
+    state=latest
+    force=yes
+  with_items:
+    - unzip
+  sudo: yes
+
+- name: ngrok | set facts
+  set_fact: >
+    ngrok_package="{{ localtunnel.ngrok.download_url|default("https://dl.ngrok.com/linux_386/ngrok.zip") }}"
+    ngrok_port={{ localtunnel.ngrok.port|default('80') }}
+    ngrok_client={{ localtunnel.ngrok.client|default('false') }}
+    ngrok_subdomain="-subdomain={{ localtunnel.ngrok.subdomain|default('') }}"
+    ngrok_httpauth="-httpauth={{ localtunnel.ngrok.httpauth|default('') }}"
+    ngrok_proto="-proto={{ localtunnel.ngrok.proto|default('') }}"
+    ngrok_hostname="-hostname={{ localtunnel.ngrok.hostname|default('') }}"
+    ngrok_config="-config={{ localtunnel.ngrok.config|default('') }}"
+    ngrok_log="-log=stdout"
+
+- name: ngrok | check if installed
+  shell: "[ -f /usr/src/ngrok ] && echo 'Found' || echo ''"
+  register: ngrok_installed
+
+- name: ngrok | download package
+  get_url: >
+    url={{ ngrok_package }}
+    dest=/usr/src/ngrok.zip
+    force=yes
+  when: not ngrok_installed
+
+#- name: ngrok | extract package
+#  unarchive: >
+#    src=/usr/src/ngrok.zip
+#    dest=/usr/src
+#  sudo: yes
+
+- name: ngrok | extract package
+  command: >
+    unzip ngrok.zip
+    chdir=/usr/src/
+    creates=/usr/src/ngrok
+  sudo: yes
+  when: not ngrok_installed
+
+- name: ngrok | remove package
+  file: >
+    path=/usr/src/ngrok.zip
+    state=absent
+  when: not ngrok_installed
+
+- name: ngrok | install symlink
+  file: >
+    src=/usr/src/ngrok
+    dest=/usr/local/bin/ngrok
+    state=link
+  when: not ngrok_installed
+
+- name: ngrok | start client service
+  command: > 
+    ngrok {{ ngrok_config }} {{ ngrok_log }} start {{ ngrok_client }}
+  sudo: yes
+  when: localtunnel.ngrok.config is defined
+
+- name: ngrok | start service
+  command: > 
+    ngrok {{ ngrok_subdomain }} {{ ngrok_httpauth }} {{ ngrok_proto }} {{ ngrok_hostname }} {{ ngrok_log }} {{ ngrok_port }}
+  sudo: yes
+  when: localtunnel.ngrok.config is not defined

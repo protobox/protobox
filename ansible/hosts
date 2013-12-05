@@ -1,0 +1,11 @@
+[db-servers]
+localhost   ansible_connection=local
+
+[web-servers]
+localhost   ansible_connection=local
+
+[work-servers]
+localhost   ansible_connection=local
+
+[web-servers]
+localhost   ansible_connection=local

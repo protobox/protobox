@@ -1,0 +1,30 @@
+- name: main | updates apt cache
+  apt: update_cache=true
+  sudo: yes
+
+- name: main | installs apache packages
+  apt: >
+    pkg={{ item }} 
+    state=latest
+  with_items:
+    - apache2
+  sudo: yes
+
+- name: main | set httpd.conf 
+  template: >
+    src=httpd.conf.j2
+    dest=/etc/apache2/httpd.conf
+  sudo: yes
+  notify:
+    - restart apache
+
+- name: main | installs apache modules
+  command: a2enmod {{ item }}
+  with_items: apache.modules
+  sudo: yes
+  when: "apache.modules is defined"
+  notify:
+    - restart apache
+
+- include: virtualhosts.yml
+  when: apache.vhosts is defined

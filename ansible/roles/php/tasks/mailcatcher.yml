@@ -1,0 +1,21 @@
+- name: mailcatcher | install packages
+  gem: >
+    name={{ item }} 
+    state=latest
+  with_items:
+    - mailcatcher
+  sudo: yes
+
+#--smtp-ip= --http-ip=
+- set_fact: >
+    mailcatcher_ip: "--ip={{ php.mailcatcher.ip|default('0.0.0.0') }}"
+    mailcatcher_port: "--smtp-port={{ php.mailcatcher.smtp_port|default('') }}"
+    mailcatcher_http: "--http-port={{ php.mailcatcher.http_port|default('') }}"
+    mailcatcher_no_quit: "--no-quit"
+
+- name: mailcatcher | start service
+  service: > 
+    name=mailcatcher
+    state=started
+    arguments="mailcatcher_ip mailcatcher_port mailcatcher_http mailcatcher_no_quit"
+  sudo: yes

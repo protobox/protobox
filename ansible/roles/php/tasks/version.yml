@@ -1,0 +1,75 @@
+
+# Debian
+
+- name: version | add dotdeb package for php 5.4 squeeze
+  apt_repository: >
+    repo='deb http://packages.dotdeb.org squeeze-php54 all' 
+    state=present
+  sudo: yes
+  when: "php.version == '54' and ansible_lsb.codename == 'squeeze'"
+
+- name: version | add dotdeb package sources for php 5.4 squeeze
+  apt_repository: >
+    repo='deb-src http://packages.dotdeb.org squeeze-php54 all' 
+    state=present
+  sudo: yes
+  when: "php.version == '54' and ansible_lsb.codename == 'squeeze'"
+
+- name: version | add dotdeb package for php 5.4 wheezy
+  apt_repository: >
+    repo='deb http://packages.dotdeb.org wheezy all' 
+    state=present
+  sudo: yes
+  when: "php.version == '54' and ansible_lsb.codename == 'wheezy'"
+
+- name: version | add dotdeb package sources for php 5.4 wheezy
+  apt_repository: >
+    repo='deb-src http://packages.dotdeb.org wheezy all' 
+    state=present
+  sudo: yes
+  when: "php.version == '54' and ansible_lsb.codename == 'wheezy'"
+
+# Debian / Ubuntu
+
+- name: version | add dotdeb apt key for php 5.4
+  apt_key: >
+    url=http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x7E3F070089DF5277 
+    state=present
+  sudo: yes
+  when: "php.version == '54' and ansible_os_family == 'Debian'"
+
+- name: version | add php 5.4 repository
+  apt_repository: >
+    repo=ppa:ondrej/php5-oldstable
+  sudo: yes
+  when: "php.version == '54' and ansible_os_family == 'Debian'"
+
+# php
+
+- name: version | install php
+  apt: >
+    pkg={{ item }} 
+    state=latest
+    force=yes
+  with_items:
+    - php5
+  sudo: yes
+
+# modules
+
+- name: main | install php packages
+  apt: >
+    pkg={{ item }}
+    state=latest
+  with_items: php.modules
+  sudo: yes
+  when: php.modules is defined
+
+# backup php.ini
+
+#- name: main | make backup of php.ini
+#  sudo: yes
+#  copy: >
+#    src=/etc/php5/apache2/php.ini 
+#    dest=/etc/php5/apache2/php.ini.bak
+#    force=yes

@@ -1,0 +1,56 @@
+- name: main | prerequisites for node.js
+  apt: >
+    pkg=python-software-properties
+    state=installed
+  sudo: yes
+
+- name: main | add node.js repository
+  apt_repository: >
+    repo=ppa:chris-lea/node.js
+  sudo: yes
+
+- name: main | updates apt cache
+  apt: update_cache=true
+  sudo: yes
+
+- name: main | install dependencies
+  apt: >
+    pkg={{ item }}
+    state=installed
+  with_items:
+    - python-software-properties
+  sudo: yes
+
+- name: main | install nodejs
+  apt: >
+    pkg={{ item }}
+    state=installed
+  with_items:
+    - nodejs
+  sudo: yes
+
+# npm should be installed with nodejs
+#- name: main | install npm
+#  apt: >
+#    pkg={{ item }}
+#    state=installed
+#  with_items:
+#    - npm
+#  sudo: yes
+
+- name: main | install npm modules
+  npm: >
+    name={{ item }}
+    global=yes
+    state=latest
+  with_items: node.npm
+  sudo: yes
+  when: node.npm is defined
+
+- name: main | install gem modules
+  gem: >
+    name={{ item }}
+    state=latest
+  with_items: node.gems
+  sudo: yes
+  when: node.gems is defined

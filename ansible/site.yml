@@ -1,0 +1,44 @@
+---
+
+- name: Common Tasks
+  hosts: all
+  roles:
+    - { role: 'common', tags: [ 'common' ] }
+
+- name: DB Tasks
+  #hosts: db-servers
+  hosts: all
+  vars_files:
+    - "../data/vagrant/common.yaml"
+  roles:
+    - { role: 'mysql', when: "mysql is defined and mysql.install == 1" }
+    #- { role: 'postgres', when: "postgres is defined and postgres.install == 1" }
+    #- { role: 'mongodb', when: "mongodb is defined and mongodb.install == 1" }
+    #- { role: 'redis', when: "redis is defined and redis.install == 1" }
+
+- name: Web Tasks
+  #hosts: web-servers
+  hosts: all
+  vars_files:
+    - "../data/vagrant/common.yaml"
+  roles: 
+    - { role: php, when: "php is defined and php.install == 1" }
+    - { role: apache, when: "apache is defined and apache.install == 1" }
+    #- { role: nginx, when: "nginx is defined and nginx.install == 1" }
+    - { role: node, when: "node is defined and node.install == 1" }
+
+- name: Work Tasks
+  #hosts: work-servers
+  hosts: all
+  vars_files:
+    - "../data/vagrant/common.yaml"
+  #roles:
+    #- { role: 'beanstalkd', when: "beanstalkd is defined and beanstalkd.install == 1" }
+
+- name: Dev Tasks
+  #hosts: dev-servers
+  hosts: all
+  vars_files:
+    - "../data/vagrant/common.yaml"
+  roles:
+    - { role: 'localtunnel', when: "localtunnel is defined and localtunnel.install == 1" }

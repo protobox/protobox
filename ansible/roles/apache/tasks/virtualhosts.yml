@@ -1,0 +1,50 @@
+- name: virtualhosts | add apache virtual host directory
+  file: >
+    path={{ item.docroot }}
+    state=directory
+  with_items: apache.vhosts
+
+- name: virtualhosts | add apache configurations
+  template: >
+    src={{ item.template|default('default.j2') }}
+    dest=/etc/apache2/sites-available/{{ item.name }}
+    mode=0640
+  with_items: apache.vhosts
+  sudo: yes
+  notify:
+    - restart apache
+
+- name: virtualhosts | activates our virtualhost
+  command: a2ensite {{ item.name }}
+  with_items: apache.vhosts
+  sudo: yes
+
+- name: virtualhosts | check that our config is valid
+  command: apache2ctl configtest
+  register: apache_result
+  ignore_errors: True
+
+- name: virtualhosts | rolling back - Restoring old default virtualhost
+  command: a2ensite default
+  sudo: yes
+  when: apache_result|failed
+
+- name: virtualhosts | rolling back - Removing our virtualhost
+  command: a2dissite {{ item.name }}
+  with_items: apache.vhosts
+  sudo: yes
+  when: apache_result|failed
+
+- name: virtualhosts | rolling back - Ending playbook
+  action: fail msg="Configuration file is not valid. Please check that before re-running the playbook."
+  when: apache_result|failed
+
+- name: virtualhosts | deactivates the default virtualhost
+  command: a2dissite default
+  sudo: yes
+
+- name: virtualhosts | deactivates the default ssl virtualhost
+  command: a2dissite default-ssl
+  sudo: yes
+  notify:
+    - restart apache

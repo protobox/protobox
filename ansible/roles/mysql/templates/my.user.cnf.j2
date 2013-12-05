@@ -1,0 +1,6 @@
+# {{ ansible_managed }}
+[client]
+user=root
+{% if mysql.root_password is defined %}
+password={{ mysql.root_password }}
+{% endif %}

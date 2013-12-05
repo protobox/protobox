@@ -1,0 +1,70 @@
+- name: xdebug | install packages
+  apt: >
+    pkg={{ item }} 
+    state=installed
+  with_items:
+    - php5-xdebug
+  sudo: yes
+
+# shortcut for xdebug CLI debugging
+- name: xdebug | add xdebug cli
+  template: >
+    src=cli_alias.j2
+    dest=/usr/bin/xdebug
+    owner=root
+    group=root
+    mode=0755
+  sudo: yes
+
+#- name: main | set xdebug settings
+#  ini_file: >
+#    dest=/etc/php5/apache2/php.ini 
+#    section=xdebug 
+#    option={{ item.name }} 
+#    value={{ item.value }}
+#    state=present
+#  with_items: php.xdebug.settings
+#  sudo: yes
+#  when: php.xdebug.settings is defined and apache is defined and apache.install == 1
+#  notify:
+#    - restart php
+
+- name: xdebug | set ini 
+  template: >
+    src=xdebug.ini.j2
+    dest=/etc/php5/mods-available/xdebug-options.ini
+  sudo: yes
+  notify:
+    - restart php
+
+#- name: xdebug | ensure config file exists
+#  shell: >
+#    chdir=/etc/php5/mods-available
+#    touch xdebug.ini;
+#  sudo: yes
+
+#- name: xdebug | ensure xdebug config options contains section
+#  lineinfile: >
+#    dest=/etc/php5/mods-available/xdebug.ini 
+#    regexp="^[xdebug]" 
+#    value="[xdebug]" 
+#    state=present 
+#    insertafter=EOF
+
+#- name: xdebug | set xdebug options
+#  ini_file: >
+#    option={{ item[0] }} 
+#    value={{ item[1] }} 
+#    dest=/etc/php5/mods-available/xdebug.ini 
+#    section=xdebug
+#  with_nested:
+#    - php.xdebug.settings
+#    - php.xdebug.settings
+      
+- name: xdebug | enable xdebug config
+  shell: >
+    chdir=/etc/php5/mods-available
+    php5enmod xdebug-options;
+  sudo: yes
+  notify:
+    - restart php
