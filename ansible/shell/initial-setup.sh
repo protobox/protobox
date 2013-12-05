@@ -3,7 +3,7 @@
 OS=$(/bin/bash /vagrant/ansible/shell/os-detect.sh ID)
 CODENAME=$(/bin/bash /vagrant/ansible/shell/os-detect.sh CODENAME)
 
-PUPPET_DATA=/vagrant/data/vagrant/common.yaml
+PUPPET_DATA=/vagrant/data/config/common.yml
 PROTOBOX_LOGO=/vagrant/ansible/shell/logo.txt
 
 # process arguments

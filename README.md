@@ -8,10 +8,10 @@ Protobox easily allows you to setup a development environment with PHP, Apache, 
 
 	mkdir protobox && cd protobox
     git clone git@github.com:protobox/protobox.git .
-    cp data/vagrant/common.yaml-dist data/vagrant/common.yaml
+    cp data/config/common.yml-dist data/config/common.yml
     vagrant up
 
-Make sure you add an entry to your `/etc/hosts` for any virtualhosts in your `data/vagrant/common.yaml` file:
+Make sure you add an entry to your `/etc/hosts` for any virtualhosts in your `data/config/common.yml` file:
 
 	192.168.5.10    protobox.dev www.protobox.dev
 
@@ -19,7 +19,7 @@ Then pull up `http://protobox.dev` in your browser to see if it is setup correct
 
 ## Configuration ##
 
-The protobox configuration file is found at `data/vagrant/common.yaml`. You can easily install new services by setting `install: 1` under any of the software in the configuration file. 
+The protobox configuration file is found at `data/config/common.yml`. You can easily install new services by setting `install: 1` under any of the software in the configuration file. 
 
 ## Functionality ##
 

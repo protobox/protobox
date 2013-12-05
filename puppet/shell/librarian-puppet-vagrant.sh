@@ -7,7 +7,7 @@ CODENAME=$(/bin/bash /vagrant/puppet/shell/os-detect.sh CODENAME)
 PUPPET_DIR=/etc/puppet/
 PUPPET_LOC=/etc/puppet/Puppetfile
 PUPPET_FILE=/.protobox/puppetfile.build
-PUPPET_DATA=/vagrant/data/vagrant/common.yaml
+PUPPET_DATA=/vagrant/data/config/common.yml
 
 $(which git > /dev/null 2>&1)
 FOUND_GIT=$?

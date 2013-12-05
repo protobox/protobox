@@ -1,2 +1,3 @@
 *
 !.gitignore
+!common.yml-dist

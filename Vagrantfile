@@ -5,7 +5,7 @@ require 'yaml'
 
 dir = Dir.pwd
 vagrant_dir = File.expand_path(File.dirname(__FILE__))
-vagrant_file = 'data/vagrant/common.yaml'
+vagrant_file = 'data/config/common.yml'
 
 if !File.file?(vagrant_file)
   puts "Data file is missing: #{vagrant_file}\n"
