@@ -114,13 +114,16 @@ fi
 if [[ ! -f /.protobox/install-ansible-hosts ]]; then
     if [ "$OS" == 'debian' ] || [ "$OS" == 'ubuntu' ]; then
         echo "Installing ansible hosts"
-        echo "localhost" > /etc/ansible/hosts
+        mkdir -p /etc/ansible
+        touch /etc/ansible/hosts
+        #echo "localhost" > /etc/ansible/hosts
         #echo "127.0.0.1" > /etc/ansible/hosts
+        echo "localhost ansible_connection=local" > /etc/ansible/hosts
 
         touch /.protobox/install-ansible-hosts
     elif [ "$OS" == 'centos' ]; then
 
-        touch /.protobox/install-ansible
+        touch /.protobox/install-ansible-hosts
     fi
 fi
 
