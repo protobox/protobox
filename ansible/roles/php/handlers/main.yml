@@ -1,2 +1,5 @@
-- name: restart php
-  action: service name=apache2 state=restarted
+- name: php-restart
+  service: >
+    name=apache2 
+    state=restarted
+  sudo: yes

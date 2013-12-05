@@ -1,7 +1,7 @@
 - name: main | ensure ntpd is at the latest version
   apt: pkg=ntp state=latest
   notify:
-    - restart ntpd
+    - ntpd-restart
 
 #- name: Copy the EPEL repository definition
 #  copy: src=epel.repo dest=/etc/yum.repos.d/epel.repo

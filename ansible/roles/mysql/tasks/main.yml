@@ -14,6 +14,8 @@
   with_items:
     - mysql-server
   sudo: yes
+  notify: 
+    - mysql-start
 
 #- name: install support packages
 #  apt: >
@@ -36,13 +38,6 @@
 #    insertafter="^:OUTPUT " 
 #    line="-A INPUT -p tcp  --dport {{ mysql_port }} -j  ACCEPT"
 #  notify: restart iptables
-
-- name: main | start service
-  service: >
-    name=mysql 
-    state=started 
-    enabled=true
-  sudo: yes
 
 - name: main | create mysql configuration file
   template: >

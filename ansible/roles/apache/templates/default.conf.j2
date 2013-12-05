@@ -1,5 +1,5 @@
 # {{ ansible_managed }}
-<VirtualHost *:{{ item.port }}>
+<VirtualHost *:{{ item.port|default('80') }}>
     ServerName {{ item.servername }}
 
     {% if item.serveraliases %}

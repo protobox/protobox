@@ -29,4 +29,4 @@
   sudo: yes
   when: php.ini is defined and apache is defined and apache.install == 1
   notify:
-    - restart php
+    - php-restart

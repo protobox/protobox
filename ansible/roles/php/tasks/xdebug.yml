@@ -35,7 +35,7 @@
     dest=/etc/php5/mods-available/xdebug-options.ini
   sudo: yes
   notify:
-    - restart php
+    - php-restart
 
 #- name: xdebug | ensure config file exists
 #  shell: >
@@ -67,4 +67,4 @@
     php5enmod xdebug-options;
   sudo: yes
   notify:
-    - restart php
+    - php-restart

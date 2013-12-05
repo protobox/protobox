@@ -16,7 +16,7 @@
     dest=/etc/apache2/httpd.conf
   sudo: yes
   notify:
-    - restart apache
+    - apache-restart
 
 - name: main | installs apache modules
   command: a2enmod {{ item }}
@@ -24,7 +24,7 @@
   sudo: yes
   when: "apache.modules is defined"
   notify:
-    - restart apache
+    - apache-restart
 
 - include: virtualhosts.yml
   when: apache.vhosts is defined

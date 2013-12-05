@@ -1,3 +1,17 @@
-- name: restart apache
-  action: service name=apache2 state=restarted
+- name: apache-restart
+  service: >
+    name=apache2 
+    state=restarted
+  sudo: yes
+
+- name: apache-start
+  service: >
+    name=apache2 
+    state=started
+  sudo: yes
+
+- name: apache-stop
+  service: >
+    name=apache2 
+    state=restarted
   sudo: yes

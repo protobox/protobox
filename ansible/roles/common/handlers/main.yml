@@ -1,5 +1,8 @@
-- name: restart ntpd
-  service: name=ntpd state=restarted
+- name: ntpd-restart
+  service: >
+    name=ntpd 
+    state=restarted
+  sudo: yes
 
 #- name: restart iptables
 #  service: name=iptables state=restarted
