@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
   # with possible backward compatible issues.
   vagrant_version = Vagrant::VERSION.sub(/^v/, '')
 
-  vagrant_vm = 'vagrantfile-local'
+  vagrant_vm = 'vagrant'
 
   # Default Box
   config.vm.box = settings[vagrant_vm]['vm']['box']
@@ -73,55 +73,96 @@ Vagrant.configure("2") do |config|
   end
 
   # Shell Provisioning
-  config.vm.provision :shell, :path => "puppet/shell/initial-setup.sh"
-  config.vm.provision :shell, :path => "puppet/shell/update-puppet.sh"
-  config.vm.provision :shell, :path => "puppet/shell/librarian-puppet-vagrant.sh"
+  if settings[vagrant_vm]['vm']['provision'].has_key?("puppet")
+    config.vm.provision :shell, :path => "puppet/shell/initial-setup.sh"
+    config.vm.provision :shell, :path => "puppet/shell/update-puppet.sh"
+    config.vm.provision :shell, :path => "puppet/shell/librarian-puppet-vagrant.sh"
+  end 
+
+  if settings[vagrant_vm]['vm']['provision'].has_key?("ansible")
+    ansible = settings[vagrant_vm]['vm']['provision']['ansible']
+    playbook = "/vagrant/" + ansible['playbook']
+    params = "#{playbook}"
+
+    if !ansible['inventory'].nil?
+      params = "#{params} -i \\\"" + ansible['inventory'] + "\\\""
+    end
+
+    if !ansible['verbose'].nil?
+      if ansible['verbose'] == 'vv' or ansible['verbose'] == 'vvv' or ansible['verbose'] == 'vvvv'
+        params = "#{params} -" + ansible['verbose']
+      else
+        params = "#{params} --verbose"
+      end
+    end
+
+    params = "#{params} --connection=local"
+
+    config.vm.provision :shell, :path => "ansible/shell/initial-setup.sh", :args => "-a \"#{params}\""
+
+    #config.vm.provision :shell, :inline => "sudo ansible-playbook #{playbook} #{params} --connection=local"
+
+    #cmds = "sudo apt-get update && " +
+    #       "sudo apt-get -y install python-software-properties && " +
+    #       "sudo add-apt-repository -y ppa:rquillo/ansible && " +
+    #       "sudo apt-get -y install ansible && " + 
+    #       "echo localhost > /etc/ansible/hosts && " +
+    #       "sudo ansible-playbook " + playbook + " --connection=local #{params}"
+    #
+    #config.vm.provision :shell, :inline => cmds
+  end 
 
   # Puppet Provisioning
   settings[vagrant_vm]['vm']['provision'].each do |prov, options|
+    next if prov == "ansible"
+
     config.vm.provision prov.to_sym do |item|
+
+      # Puppet
       if prov == "puppet"
         item.facter = {
           "ssh_username" => "vagrant"
         }
-      end
 
-      if !options['manifests_path'].nil?
-        item.manifests_path = options['manifests_path']
-      end
+        if !options['manifests_path'].nil?
+          item.manifests_path = options['manifests_path']
+        end
 
-      if !options['module_path'].nil?
-        item.module_path = options['module_path']
-      end
+        if !options['module_path'].nil?
+          item.module_path = options['module_path']
+        end
 
-      if !options['manifest_file'].nil?
-        item.manifest_file = options['manifest_file']
-      end
+        if !options['manifest_file'].nil?
+          item.manifest_file = options['manifest_file']
+        end
 
-      if !options['options'].nil?
-        opt = options['options']
-      else
-        opt = Array.new
-      end
+        if !options['options'].nil?
+          opt = options['options']
+        else
+          opt = Array.new
+        end
 
-      if !opt.any? { |o| o.include? "--hiera_config" } 
-        opt.push('--hiera_config /vagrant/puppet/hiera/hiera.yaml')
-      end
+        if !opt.any? { |o| o.include? "--hiera_config" } 
+          opt.push('--hiera_config /vagrant/puppet/hiera/hiera.yaml')
+        end
 
-      if !opt.any? { |o| o.include? "--parser" } 
-        opt.push('--parser future')
-      end
+        if !opt.any? { |o| o.include? "--parser" } 
+          opt.push('--parser future')
+        end
 
-      if !opt.any? { |o| o.include? "--modulepath" } 
-        opt.push('--modulepath /vagrant/puppet/modules:/etc/puppet/modules:/usr/share/puppet/modules')
-      end
+        if !opt.any? { |o| o.include? "--modulepath" } 
+          opt.push('--modulepath /vagrant/puppet/modules:/etc/puppet/modules:/usr/share/puppet/modules')
+        end
 
-      item.options = opt
+        item.options = opt
+      end
     end
   end
 
   # Finish Provisioning
-  config.vm.provision :shell, :path => "puppet/shell/finish-setup.sh"
+  if settings[vagrant_vm]['vm']['provision'].has_key?("puppet")
+    config.vm.provision :shell, :path => "puppet/shell/finish-setup.sh"
+  end 
 
   # SSH Configuration
   settings[vagrant_vm]['ssh'].each do |item, value|
