@@ -11,7 +11,7 @@
   when: php.composer is not defined or php.composer.install != 1
 
 - name: compatibility | check for install path
-  fail: msg="Install path missing"
+  fail: msg="Laravel - {{ item.name }} - Install path missing"
   with_items: applications.laravel
   when: item.path is not defined
   

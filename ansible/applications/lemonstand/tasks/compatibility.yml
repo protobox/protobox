@@ -29,11 +29,11 @@
   when: php is not defined or php.ini is not defined or php.ini.short_open_tag is not defined
 
 - name: compatibility | check for install path
-  fail: msg="Install path missing"
+  fail: msg="Lemonstand - {{ item.name }} - Install path missing"
   with_items: applications.wordpress
   when: item.path is not defined
 
 - name: compatibility | check for settings
-  fail: msg="Wordpress - Settings are missing"
+  fail: msg="Lemonstand - {{ item.name }} - Settings are missing"
   with_items: applications.wordpress
   when: item.settings is not defined

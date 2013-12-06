@@ -11,21 +11,21 @@
   when: mysql is not defined or mysql.install != 1
 
 - name: compatibility | check for install path
-  fail: msg="Install path missing"
+  fail: msg="Wordpress - {{ item.name }} - Install path missing"
   with_items: applications.wordpress
   when: item.path is not defined
 
 - name: compatibility | check for options
-  fail: msg="Wordpress - Options are missing"
+  fail: msg="Wordpress - {{ item.name }} - Options are missing"
   with_items: applications.wordpress
   when: item.options is not defined
 
 - name: compatibility | check for wordpress version
-  fail: msg="Wordpress - Version is required"
+  fail: msg="Wordpress - {{ item.name }} - Version is required"
   with_items: applications.wordpress
   when: item.options.version is not defined or item.options.version == ''
 
 - name: compatibility | check for settings
-  fail: msg="Wordpress - Settings are missing"
+  fail: msg="Wordpress - {{ item.name }} - Settings are missing"
   with_items: applications.wordpress
   when: item.settings is not defined
