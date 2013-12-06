@@ -1,8 +1,9 @@
-- name: virtualhosts | add apache virtual host directory
-  file: >
-    path={{ item.docroot }}
-    state=directory
-  with_items: apache.vhosts
+# TODO : verify this, handle directory creation in applications
+#- name: virtualhosts | add apache virtual host directory
+#  file: >
+#    path={{ item.docroot }}
+#    state=directory
+#  with_items: apache.vhosts
 
 - name: virtualhosts | add apache configurations
   template: >

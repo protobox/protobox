@@ -1,7 +1,7 @@
 - name: pear | install pear packages
   apt: >
-  	pkg={{ item }} 
-  	state=installed
+    pkg={{ item }} 
+    state=installed
   with_items:
     - php5-dev
     - php-pear
@@ -13,6 +13,6 @@
   command: pear config-set auto_discover 1
 
 # this fails often (dns problems, pear problems, etc. So just ignore the errors and continue.)
-- name: pear | pear install the PHP QA Toolchain
-  command: pear install pear.phpqatools.org/phpqatools creates=/usr/bin/phpunit
-  ignore_errors: True
+#- name: pear | pear install the PHP QA Toolchain
+#  command: pear install pear.phpqatools.org/phpqatools creates=/usr/bin/phpunit
+#  ignore_errors: True

@@ -19,11 +19,11 @@
   when: mysql is not defined or mysql.install != 1
 
 # TODO : run shell or grep against php.ini to check instead of this
-- name: dependencies | check php short tags
-  fail: msg="PHP - short_open_tag is required"
-  when: php is not defined or php.ini is not defined or php.ini.short_open_tag is not defined
+#- name: dependencies | check php short tags
+#  shell: "php -i | grep -i '^short_open_tag' | awk '{print $3}'"
+#  register: php_short_open_tags
 
-# TODO : run shell or check server for mcrypt instead of this
+# TODO : so using this for now
 - name: dependencies | check php short tags
   fail: msg="PHP - short_open_tag is required"
   when: php is not defined or php.ini is not defined or php.ini.short_open_tag is not defined

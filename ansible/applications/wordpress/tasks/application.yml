@@ -1,3 +1,10 @@
+- name: application | verify install paths
+  file: >
+    path={{ item.path }}
+    state=directory
+  with_items: applications.wordpress
+  when: item.install == 1
+
 ## Zip Installation
 
 # TODO : only download the version one time, skip if it already exists

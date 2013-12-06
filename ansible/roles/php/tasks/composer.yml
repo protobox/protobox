@@ -1,0 +1,14 @@
+- name: composer | install dependencies
+  apt: >
+    pkg={{ item }} 
+    state=latest
+  with_items:
+    - curl
+    - php5-curl
+  sudo: yes
+
+- name: composer | install composer
+  shell: >
+    curl -sS https://getcomposer.org/installer | /usr/bin/php && /bin/mv -f ./composer.phar /usr/local/bin/composer
+    creates=/usr/local/bin/composer
+  sudo: yes
