@@ -1,274 +1,275 @@
 ---
 protobox:
-    version: 0.0.1
-    document: abc123
+  version: 0.0.1
+  document: abc123
 
 vagrant:
-    vm:
-        box: ubuntu-precise12042-x64-vbox43
-        box_url: 'https://puphpet.s3.amazonaws.com/ubuntu-precise12042-x64-vbox43.box'
-        hostname: protobox
-        network:
-            private_network: 192.168.5.10
-            forwarded_port:
-                web:
-                    host: ''
-                    guest: ''
-        provider:
-            virtualbox:
-                modifyvm:
-                    name: protobox
-                    natdnshostresolver1: 'on'
-                    memory: '1024'
-                setextradata:
-                    VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root: 1
-        provision:
-            ansible:
-                playbook: "ansible/site.yml"
-                #hosts: "webservers"
-                #inventory: "ansible/inventory"
-                #verbose: "yes"
-                #extra_vars: 
-                #    ntp_server: "pool.ntp.org"
-                #    nginx_workers: 4'
-        synced_folder:
-            root:
-                id: vagrant-root
-                source: ./
-                target: /srv/www
-                nfs: false
-                owner: vagrant
-                group: www-data
-                mount_options: 
-                    - 'dmode=775'
-                    - 'fmode=775'
-        usable_port_range: 2200..2250
-    ssh:
-        host: null
-        port: null
-        private_key_path: null
-        public_key_path: null
-        username: vagrant
-        guest_port: null
-        keep_alive: true
-        forward_agent: false
-        forward_x11: false
-        shell: 'bash -l'
-    vagrant:
-        host: ':detect'
+  vm:
+    box: ubuntu-precise12042-x64-vbox43
+    box_url: 'https://puphpet.s3.amazonaws.com/ubuntu-precise12042-x64-vbox43.box'
+    hostname: protobox
+    network:
+      private_network: 192.168.5.10
+      forwarded_port:
+        web:
+          host: ''
+          guest: ''
+    provider:
+      virtualbox:
+        modifyvm:
+          name: protobox
+          natdnshostresolver1: 'on'
+          memory: '1024'
+        setextradata:
+          VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root: 1
+    provision:
+      ansible:
+        playbook: "ansible/site.yml"
+        #hosts: "webservers"
+        #inventory: "ansible/inventory"
+        #verbose: "yes"
+        #extra_vars: 
+        #  ntp_server: "pool.ntp.org"
+        #  nginx_workers: 4'
+    synced_folder:
+      root:
+        id: vagrant-root
+        source: ./
+        target: /srv/www
+        nfs: false
+        owner: vagrant
+        group: www-data
+        mount_options: 
+          - 'dmode=775'
+          - 'fmode=775'
+    usable_port_range: 2200..2250
+  ssh:
+    host: null
+    port: null
+    private_key_path: null
+    public_key_path: null
+    username: vagrant
+    guest_port: null
+    keep_alive: true
+    forward_agent: false
+    forward_x11: false
+    shell: 'bash -l'
+  vagrant:
+    host: ':detect'
 
 server:
-    packages:
-        - vim
-        - vim-common
-    dotfiles:
-        git: ''
-        files:
-          - 
-        bash_aliases: null
-    ssh:
-        authorized_keys:
-            #user:
-            #    key: ''
-            #    type: 'ssh-rsa'
-            #user2:
-            #    key_file: '/srv/www/data/ssh/known_hosts'
-            #    type: 'ssh-rsa'
-            #    user: username
-        config:
-            #all:
-            #    config_file: '/srv/www/data/ssh/git_config'
-            #github:
-            #    config: 'host *\n\tIdentityFile ~/.ssh/git_id_rsa'
-        keys:
-            #user:
-            #    key: ''
-            #user2:
-            #    key_file: '/srv/www/data/ssh/github_id_rsa'
-            #    filename: 'github_id_rsa'
+  packages:
+    - vim
+    - vim-common
+  dotfiles:
+    git: ''
+    files:
+      - 
+    bash_aliases: null
+  ssh:
+    authorized_keys:
+      #user:
+      #  key: ''
+      #  type: 'ssh-rsa'
+      #user2:
+      #  key_file: '/srv/www/data/ssh/known_hosts'
+      #  type: 'ssh-rsa'
+      #  user: username
+    config:
+      #all:
+      #  config_file: '/srv/www/data/ssh/git_config'
+      #github:
+      #  config: 'host *\n\tIdentityFile ~/.ssh/git_id_rsa'
+    keys:
+      #user:
+      #  key: ''
+      #user2:
+      #  key_file: '/srv/www/data/ssh/github_id_rsa'
+      #  filename: 'github_id_rsa'
 
 apache:
-    install: 1
-    modules:
-        - rewrite
-    user: vagrant
-    group: www-data
-    default_vhost: false
-    mpm_module: prefork
-    vhosts:
-        - name: protobox
-          servername: protobox.dev
-          serveraliases:
-              - 'www.protobox.dev'
-          docroot: /srv/www/web/protobox
-          port: '80'
-          setenv:
-              - 'APP_ENV dev'
-          override:
-              - All
+  install: 1
+  modules:
+    - rewrite
+  user: vagrant
+  group: www-data
+  default_vhost: false
+  mpm_module: prefork
+  vhosts:
+    - name: protobox
+      servername: protobox.dev
+      serveraliases:
+        - 'www.protobox.dev'
+      docroot: /srv/www/web/protobox
+      port: '80'
+      setenv:
+        - 'APP_ENV dev'
+      override:
+        - All
 
 nginx:
-    install: 0
-    mpm_module: fpm
-    vhosts:
-        - name: protobox
-          server_name: protobox.dev
-          server_aliases:
-              - www.protobox.dev
-          www_root: /srv/www/web/protobox
-          listen_port: '80'
-          index_files:
-              - index.html
-              - index.htm
-              - index.php
-          envvars:
-              - 'APP_ENV dev'
+  install: 0
+  mpm_module: fpm
+  vhosts:
+    - name: protobox
+      server_name: protobox.dev
+      server_aliases:
+        - www.protobox.dev
+      www_root: /srv/www/web/protobox
+      listen_port: '80'
+      index_files:
+        - index.html
+        - index.htm
+        - index.php
+      envvars:
+        - 'APP_ENV dev'
 
 php:
+  install: 1
+  version: '54'
+  modules:
+    - php5-cli
+    - php5-intl
+    - php5-mcrypt
+    - php5-curl
+    - php5-gd
+  pear:
     install: 1
-    version: '54'
     modules:
-        - php5-cli
-        - php5-intl
-        - php5-mcrypt
-        - php5-curl
-        - php5-gd
-    pear:
-        install: 1
-        modules:
-            -
-    pecl:
-        install: 1
-        modules:
-            - 
-    composer: 
-        install: 1
-    mailcatcher: 
-        install: 0
-    phpmyadmin:
-        install: 0
-    xdebug:
-        install: 1
-        webgrind: 1
-        settings:
-            default_enable: '1'
-            remote_autostart: '0'
-            remote_connect_back: '1'
-            remote_enable: '1'
-            remote_handler: dbgp
-            remote_port: '9000'
-    xhprof:
-        install: 0
-        xhgui: 1
-        location: /srv/www/web/xhprof
-    ini:
-        display_errors: 'On'
-        display_startup_errors: 'On'
-        error_reporting: '-1'
-        short_open_tag: 'On'
-    timezone: America/Chicago
+      -
+  pecl:
+    install: 1
+    modules:
+      - 
+  composer: 
+    install: 1
+  mailcatcher: 
+    install: 0
+  phpmyadmin:
+    install: 0
+  xdebug:
+    install: 1
+    webgrind: 1
+    settings:
+      default_enable: '1'
+      remote_autostart: '0'
+      remote_connect_back: '1'
+      remote_enable: '1'
+      remote_handler: dbgp
+      remote_port: '9000'
+  xhprof:
+    install: 0
+    xhgui: 1
+    location: /srv/www/web/xhprof
+  ini:
+    display_errors: 'On'
+    display_startup_errors: 'On'
+    error_reporting: '-1'
+    short_open_tag: 'On'
+  timezone: America/Chicago
 
 mysql:
-    install: 1
-    phpmyadmin: 0
-    root_password: 'root'
-    databases:
-        - name: app
-          host: localhost
-          user: user
-          password: user
-          grant:
-              - ALL
-          #sql_file: '/srv/www/data/sql/app.sql'
-          sql_file: ''
+  install: 1
+  phpmyadmin: 0
+  root_password: 'root'
+  databases:
+    - name: app
+      host: localhost
+      user: user
+      password: user
+      grant:
+        - ALL
+      #sql_file: '/srv/www/data/sql/app.sql'
+      sql_file: ''
 
 postgresql:
-    install: 0
-    root_password: 'root'
-    user_group: postgres
-    databases:
-        - name: app
-          user: root
-          password: root
-          grant: ALL
-          sql_file: ''
+  install: 0
+  root_password: 'root'
+  user_group: postgres
+  databases:
+    - name: app
+      user: root
+      password: root
+      grant: 
+        - ALL
+      sql_file: ''
 
 mongodb:
-    install: 0
-    root_password: 'root'
+  install: 0
+  root_password: 'root'
 
 redis:
-    install: 0
-    conf_port: 6379
-    conf_bind: 127.0.0.1
+  install: 0
+  conf_port: 6379
+  conf_bind: 127.0.0.1
 
 riak:
-    install: 0
+  install: 0
 
 beanstalkd:
-    install: 0
-    listen_addr: '127.0.0.1'
-    listen_port: '11300'
+  install: 0
+  listen_addr: '127.0.0.1'
+  listen_port: '11300'
 
 node:
-    install: 0
-    npm:
-        - grunt
-        - grunt-cli
-        - bower
-    gems:
-        - sass
-        - compass
+  install: 0
+  npm:
+    - grunt
+    - grunt-cli
+    - bower
+  gems:
+    - sass
+    - compass
 
 ngrok:
-    install: 1
-    port: 80
-    #subdomain: protoboxapp
-    #httpauth: 'user:password'
-    #proto: 'tcp 22'
-    #client: 'client1 client2 client3'
-    #hostname: 'your.domain.com'
-    #tunnels:
-    #  client:
-    #    httpauth: 'user:password'
-    #    proto: 'https 8080'
-    #  ssh:
-    #    proto: 'tcp: 22'
+  install: 1
+  port: 80
+  #subdomain: protoboxapp
+  #httpauth: 'user:password'
+  #proto: 'tcp 22'
+  #client: 'client1 client2 client3'
+  #hostname: 'your.domain.com'
+  #tunnels:
+  #  client:
+  #    httpauth: 'user:password'
+  #    proto: 'https 8080'
+  #  ssh:
+  #    proto: 'tcp: 22'
 
 applications:
-    install: 1
-    #wordpress:
-    #    - name: test
-    #      install: 1
-    #      path: /srv/www/web/lemonstand
-    #      settings:
-    #            user: patrickheeney
-    #    - name: test2
-    #      path: /srv/www/web/lemonstand2
-    #laravel:
-    #    - name: test3
-    #      install: 1
-    #      path: /srv/www/web/laravel
-    #lemonstand:
-    #    - name: test4
-    #      install: 1
-    #      path: /srv/www/web/lemonstand
-    #      settings:
-    #            holder: 
-    #            serial: 
-    #            dbhost: localhost
-    #            dbname: lemonstand
-    #            dbuser: root
-    #            dbpass: root
-    #repo:
-    #    - name: protobox-web
-    #      install: 1
-    #      path: /srv/www/web/protobox-web
-    #      options:
-    #            provider: git
-    #            source: 'git@github.com:protobox/web-install.git'
-    #            revision: 'master'
-    #            pre_install:
-    #                -
-    #            post_install:
-    #                - composer update
+  install: 1
+  #wordpress:
+  #  - name: test
+  #    install: 1
+  #    path: /srv/www/web/lemonstand
+  #    settings:
+  #      user: patrickheeney
+  #  - name: test2
+  #    path: /srv/www/web/lemonstand2
+  #laravel:
+  #  - name: test3
+  #    install: 1
+  #    path: /srv/www/web/laravel
+  #lemonstand:
+  #  - name: test4
+  #    install: 1
+  #    path: /srv/www/web/lemonstand
+  #    settings:
+  #      holder: 
+  #      serial: 
+  #      dbhost: localhost
+  #      dbname: lemonstand
+  #      dbuser: root
+  #      dbpass: root
+  #repo:
+  #  - name: protobox-web
+  #    install: 1
+  #    path: /srv/www/web/protobox-web
+  #    options:
+  #      provider: git
+  #      source: 'git@github.com:protobox/web-install.git'
+  #      revision: 'master'
+  #      pre_install:
+  #        -
+  #      post_install:
+  #        - composer update
