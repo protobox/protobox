@@ -1,0 +1,34 @@
+- name: application | check for installer
+  stat: path={{ item.path }}/install.php
+  register: test[item.name]
+  with_items: applications.laravel
+
+- debug: msg="{{ test[item.name] }}"
+  with_items: applications.laravel
+
+- name: done
+  fail: msg="{{ test }}"
+
+# TODO : remove directories if they are blank but for now remove .DS_Store and other files so composer can work
+- name: application | remove if blank
+  file: >
+    path={{ item.path }}/.DS_Store
+    state=absent
+  with_items: applications.laravel
+  when: item.install == 1
+
+- name: application | verify install paths
+  file: >
+    path={{ item.path }}
+    state=directory
+  with_items: applications.laravel
+  when: item.install == 1
+
+- name: install laravel
+  command: > 
+    composer create-project laravel/laravel . --prefer-dist
+    chdir={{ item.path }}
+  with_items: applications.laravel
+  when: item.install == 1
+
+# TODO : set apache + nginx virtual host document root to /public folder or verify it as part of compatibility

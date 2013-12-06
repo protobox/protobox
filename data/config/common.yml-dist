@@ -253,7 +253,7 @@ applications:
   #      dbuser: root
   #      dbpass: root
   #laravel:
-  #  - name: test3
+  #  - name: laravelapp
   #    install: 1
   #    path: /srv/www/web/laravel
   #lemonstand:

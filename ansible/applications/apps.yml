@@ -5,3 +5,4 @@
   roles:
     - { role: 'lemonstand', dir: 'applications/lemonstand', when: "applications.lemonstand is defined" }
     - { role: 'wordpress', dir: 'applications/wordpress', when: "applications.wordpress is defined" }
+    - { role: 'laravel', dir: 'applications/laravel', when: "applications.laravel is defined" }
