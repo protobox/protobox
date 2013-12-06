@@ -1,0 +1,38 @@
+# TODO : change this from vagrant to {{ ansible_user_id }} or some variable
+# to equal vagrant right now {{ ansible_user_id }} is root
+- name: dotfiles | set facts
+  set_fact: >
+    dotfiles_path="/home/vagrant"
+
+- name: dotfiles | install dotfiles
+  git: >
+    repo={{ item.repo }}
+    dest={{ item.path|default(dotfiles_path) }}
+  with_items: server.dotfiles.git
+  when: server.dotfiles.git is defined
+
+# TODO : add dot files from /vagrant/data/dot/
+
+# check for vimrc if we are not in the root folder to symlink
+- name: dotfiles | check for vimrc
+  stat: >
+    path={{ item.path|default(dotfiles_path) }}/.vimrc
+  with_items: server.dotfiles.git
+  register: dotfiles_vimrc
+  when: server.dotfiles.git is defined and item.path != dotfiles_path
+
+- debug: var=dotfiles_vimrc
+
+- name: dotfiles | create .vimrc symlink
+  file: >
+    src={{ item.item.path }}/.vimrc
+    dest=/home/{{ ansible_user_id }}/.vimrc
+    state=symlink
+  with_items: dotfiles_vimrc.results
+  when: item.stat.exists and item.item.path != '/home/' + ansible_user_id + '/.vimrc'
+
+#- name: Compile and Install Command-T plugin
+#  command: >
+#    rake make
+#    chdir=/home/{{ ansible_user_id }}/.vim/bundle/Command-T
+#    creates=/home/{{ ansible_user_id }}/.vim/bundle/Command-T/command-t.recipe

@@ -1,3 +1,7 @@
+- name: application | set facts
+  set_fact: >
+    wordpress_repo="git@github.com:WordPress/WordPress.git"
+
 - name: application | verify install paths
   file: >
     path={{ item.path }}
@@ -36,7 +40,7 @@
 
 - name: application | install wordpress via git
   git: >
-    repo={{ item.options.repo|default('git@github.com:WordPress/WordPress.git') }}
+    repo={{ item.options.repo|default(wordpress_repo) }}
     dest={{ item.path }}
     version={{ item.options.revision|default(item.options.version) }}
   with_items: applications.wordpress
@@ -66,18 +70,31 @@
 #  when: item.install == 1
 
 - name: application | check for config file
-  stat: path=/usr/src/lemonstand.zip
-  register: lemonstand_installer
+  stat: >
+    path={{ item.path }}/wp-config.php
+  register: wordpress_config
+  with_items: applications.wordpress
+
+#- debug: >
+#    msg="{{ item.0.path }} - {{ item.1.stat.exists }}"
+#  with_together: 
+#    - applications.wordpress
+#    - wordpress_config.results
 
 # TODO : this doesn't install a database so leave out for now
 #- name: application | fetch random salts for config
 #  command: >
 #    curl https://api.wordpress.org/secret-key/1.1/salt/
 #  register: wordpress_salt 
+#  with_items: applications.wordpress
 
 #- name: application | copy config file
 #  template: >
 #    src={{ item.config|default('wp-config.php.j2') }}
 #    dest={{ item.path }}/wp-config.php
-#  with_items: applications.wordpress
-#  when: item.install == 1
+#  with_together: 
+#    - applications.wordpress
+#    - wordpress_config.results
+#    - wordpress_salt
+#  when: item.0.install == 1 and not item.1.stat.exists
+

@@ -6,6 +6,8 @@
     - git-core
   sudo: yes
 
+# TODO : check for ssh keys for github
+
 - name: git | check for source repo
   fail: msg="Repository - {{ item.name }} - Source is missing"
   with_items: applications.repository

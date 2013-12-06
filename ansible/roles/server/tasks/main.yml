@@ -1,24 +1,10 @@
-- name: main | installs server packages
-  apt: >
-  	pkg={{ item }} 
-  	state=latest
-  with_items: server.packages
-  sudo: yes
-  when: "server.packages is defined"
+- include: compatibility.yml
 
-#- name: Install Dotfiles
-#  git: >
-#    repo=git@github.com/beberlei/vim-dotfiles.git
-#    dest=/home/{{ ansible_user_id }}/.vim
+- include: packages.yml
+  when: server.packages is defined
 
-#- name: Create .vimrc Symlink
-#  file: >
-#    src=/home/{{ ansible_user_id }}/.vim/vimrc
-#    dest=/home/{{ ansible_user_id }}/.vimrc
-#    state=symlink
+- include: sshkeys.yml
+  when: server.ssh is defined
 
-#- name: Compile and Install Command-T plugin
-#  command: >
-#    rake make
-#    chdir=/home/{{ ansible_user_id }}/.vim/bundle/Command-T
-#    creates=/home/{{ ansible_user_id }}/.vim/bundle/Command-T/command-t.recipe
+- include: dotfiles.yml
+  when: server.dotfiles is defined

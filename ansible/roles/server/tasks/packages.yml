@@ -1,0 +1,6 @@
+- name: packages | installs server packages
+  apt: >
+    pkg={{ item }} 
+    state=latest
+  with_items: server.packages
+  sudo: yes

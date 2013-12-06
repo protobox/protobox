@@ -16,16 +16,16 @@
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define('DB_NAME', '{{ item.options.dbname|default('wordpress') }}');
+define('DB_NAME', '{{ item.0.options.dbname|default('wordpress') }}');
 
 /** MySQL database username */
-define('DB_USER', '{{ item.options.dbuser|default('') }}');
+define('DB_USER', '{{ item.0.options.dbuser|default('') }}');
 
 /** MySQL database password */
-define('DB_PASSWORD', '{{ item.options.dbname|default('') }}');
+define('DB_PASSWORD', '{{ item.0.options.dbname|default('') }}');
 
 /** MySQL hostname */
-define('DB_HOST', '{{ item.options.dbhost|default('localhost') }}');
+define('DB_HOST', '{{ item.0.options.dbhost|default('localhost') }}');
 
 /** Database Charset to use in creating database tables. */
 define('DB_CHARSET', 'utf8');
@@ -43,7 +43,7 @@ define('DB_COLLATE', '');
  * @since 2.6.0
  */
 
-{{ wordpress_salt.stdout }}
+{{ item.3.stdout }}
 
 /**#@-*/
 
@@ -53,7 +53,7 @@ define('DB_COLLATE', '');
  * You can have multiple installations in one database if you give each a unique
  * prefix. Only numbers, letters, and underscores please!
  */
-$table_prefix  = '{{ item.options.dbprefix|default('wp_') }}';
+$table_prefix  = '{{ item.0.options.dbprefix|default('wp_') }}';
 
 /**
  * WordPress Localized Language, defaults to English.

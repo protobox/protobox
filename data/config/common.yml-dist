@@ -60,7 +60,6 @@ vagrant:
 server:
   packages:
     - vim
-    - vim-common
   dotfiles:
     git: ''
     files:

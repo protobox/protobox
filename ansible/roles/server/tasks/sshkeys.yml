@@ -1,0 +1,87 @@
+# TODO : change this from vagrant to {{ ansible_user_id }} or some variable
+# to equal vagrant right now {{ ansible_user_id }} is root
+# {{ lookup('env', 'USER') }} ?
+- name: sshkeys | set facts
+  set_fact: >
+    sshkeys_path="/home/vagrant"
+    sshkeys_user="{{ ansible_user_id }}"
+
+# make sure ssh config exists
+
+- name: sshkeys | ensure directory exists
+  file: >
+    path=/{{ ansible_user_id }}/.ssh
+    state=directory
+    owner={{ ansible_user_id }}
+    group={{ ansible_user_id }}
+    mode=0644
+
+- name: sshkeys | ensure config exists
+  template: >
+    src=ssh_config.j2 
+    dest=/{{ ansible_user_id }}/.ssh/config 
+    owner={{ ansible_user_id }} 
+    group={{ ansible_user_id }} 
+    mode=0644
+  notify:
+    - ssh-restart
+
+## SSH Authorized Keys
+
+#- name: sshkeys | check for files
+#  stat: >
+#    path={{ item.file }}
+#  with_items: server.ssh.authorized_keys
+#  register: sshkeys_files
+#  when: server.ssh.authorized_keys is defined and item.file is defined
+
+#- debug: >
+#    msg="{{ item.0.name }} - {{ item.1.stat.exists }}"
+#  with_together: 
+#    - server.ssh.authorized_keys
+#    - sshkeys_files.results
+
+#key={{ item.file|default(lookup('file', sshkeys_path + '/.ssh/id_rsa.pub')) }}
+- name: sshkeys | add authorized keys from files
+  authorized_key: >
+    user={{ item.user|default(sshkeys_user) }}
+    key="{{ lookup('file', item.file) }}"
+    state=present
+  sudo: yes
+  with_items: server.ssh.authorized_keys
+  when: server.ssh.authorized_keys is defined and item.file is defined
+
+- name: sshkeys | add authorized key entries
+  authorized_key: >
+    user={{ item.user|default(sshkeys_user) }}
+    key="{{ item.key }}"
+    state=present
+  sudo: yes
+  with_items: server.ssh.authorized_keys
+  when: server.ssh.authorized_keys is defined and item.key is defined
+
+## SSH Private Keys
+
+#- shell: "echo -e -n \"test\n\ttest2\" >> test creates=test"
+
+- command: "echo -e -n \"test\n\ttest2\" >> test creates=test"
+
+# copy key files into place
+- name: sshkeys | add private keys from files
+  shell: >
+    cp {{ item.file }} /{{ ansible_user_id }}/.ssh/{{ item.file|basename }} && 
+    chmod 600 /{{ ansible_user_id }}/.ssh/{{ item.file|basename }}
+  with_items: server.ssh.private_keys
+  sudo: yes
+  when: server.ssh.private_keys is defined and item.file is defined
+
+# copy key entries into place
+- name: sshkeys | add private keys entries
+  shell: >
+    echo -e "{{ item.entry }}" >> /{{ ansible_user_id }}/.ssh/{{ item.entry|md5 }} &&
+    chmod 600 /{{ ansible_user_id }}/.ssh/{{ item.entry|md5 }} &&
+    echo -e "\nhost *\n\tIdentityFile '/{{ ansible_user_id }}/.ssh/{{ item.entry|md5 }}'" >> /{{ ansible_user_id }}/.ssh/config
+    creates=/{{ ansible_user_id }}/.ssh/{{ item.entry|md5 }}
+  with_items: server.ssh.private_keys
+  sudo: yes
+  when: server.ssh.private_keys is defined and item.entry is defined and item.entry
