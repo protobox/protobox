@@ -1,3 +1,5 @@
+- include: compatibility.yml
+
 - name: main | ensure ntpd is at the latest version
   apt: pkg=ntp state=latest
   notify:

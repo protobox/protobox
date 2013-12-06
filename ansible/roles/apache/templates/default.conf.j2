@@ -3,7 +3,7 @@
     ServerName {{ item.servername }}
 
     {% if item.serveraliases %}
-    ServerAlias {% for alias in item.serveraliases %} {{ alias }} {% endfor %}
+    ServerAlias{% for alias in item.serveraliases %} {{ alias }}{% endfor %}
     {% endif %}
 
     {% if item.serveradmin is defined %}
@@ -19,7 +19,8 @@
 
     <Directory {{ item.docroot }}>
             Options Indexes FollowSymLinks MultiViews
-            AllowOverride None
+            #AllowOverride None
+            AllowOverride All
             Order allow,deny
             allow from all
     </Directory>

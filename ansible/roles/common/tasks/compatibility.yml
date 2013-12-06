@@ -1,0 +1,3 @@
+- name: compatibility | check for multiple web servers
+  fail: msg="Either Apache or Nginx must be installed (not both)"
+  when: apache is defined and apache.install == 1 and nginx is defined and nginx.install == 1

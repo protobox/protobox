@@ -34,7 +34,7 @@
 
 - name: main | deactivates the default virtualhost
   command: >
-    rm -rf /etc/nginx/sites-available/default && rm -rf /etc/nginx/sites-enabled/default
+    rm -rf /etc/nginx/sites-enabled/default
   sudo: yes
   notify:
     - nginx-restart

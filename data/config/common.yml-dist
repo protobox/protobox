@@ -1,4 +1,7 @@
 ---
+protobox:
+    version: 0.0.1
+
 vagrant:
     vm:
         box: ubuntu-precise12042-x64-vbox43
@@ -87,6 +90,10 @@ apache:
     install: 1
     modules:
         - rewrite
+    user: vagrant
+    group: www-data
+    default_vhost: false
+    mpm_module: prefork
     vhosts:
         - name: protobox
           servername: protobox.dev
@@ -98,13 +105,10 @@ apache:
               - 'APP_ENV dev'
           override:
               - All
-    user: vagrant
-    group: www-data
-    default_vhost: false
-    mpm_module: prefork
 
 nginx:
     install: 0
+    mpm_module: fpm
     vhosts:
         - name: protobox
           server_name: protobox.dev
@@ -139,6 +143,8 @@ php:
     composer: 
         install: 1
     mailcatcher: 
+        install: 0
+    phpmyadmin:
         install: 0
     xdebug:
         install: 1
