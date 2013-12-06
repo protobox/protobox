@@ -1,4 +1,4 @@
-- name: application | install dependencies
+- name: dependencies | install dependencies
   apt: >
     pkg={{ item }} 
     state=latest

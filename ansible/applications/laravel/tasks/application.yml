@@ -1,14 +1,3 @@
-- name: application | check for installer
-  stat: path={{ item.path }}/install.php
-  register: test[item.name]
-  with_items: applications.laravel
-
-- debug: msg="{{ test[item.name] }}"
-  with_items: applications.laravel
-
-- name: done
-  fail: msg="{{ test }}"
-
 # TODO : remove directories if they are blank but for now remove .DS_Store and other files so composer can work
 - name: application | remove if blank
   file: >

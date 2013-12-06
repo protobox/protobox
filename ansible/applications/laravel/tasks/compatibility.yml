@@ -1,16 +1,16 @@
-- name: dependencies | require php
+- name: compatibility | require php
   fail: msg="PHP is required"
   when: php is not defined or php.install != 1
 
-- name: dependencies | require apache or nginx
+- name: compatibility | require apache or nginx
   fail: msg="Apache or Nginx is required"
   when: (apache is not defined or apache.install != 1) and (nginx is not defined or nginx.install != 1)
 
-- name: dependencies | require composer
+- name: compatibility | require composer
   fail: msg="PHP - Composer is required"
   when: php.composer is not defined or php.composer.install != 1
 
-- name: dependencies | check for install path
+- name: compatibility | check for install path
   fail: msg="Install path missing"
   with_items: applications.laravel
   when: item.path is not defined

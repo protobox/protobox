@@ -1,31 +1,31 @@
-- name: dependencies | require php
+- name: compatibility | require php
   fail: msg="PHP is required"
   when: php is not defined or php.install != 1
 
-- name: dependencies | require apache or nginx
+- name: compatibility | require apache or nginx
   fail: msg="Apache or Nginx is required"
   when: (apache is not defined or apache.install != 1) and (nginx is not defined or nginx.install != 1)
 
-- name: dependencies | require mysql
+- name: compatibility | require mysql
   fail: msg="Mysql is required"
   when: mysql is not defined or mysql.install != 1
 
-- name: dependencies | check for install path
+- name: compatibility | check for install path
   fail: msg="Install path missing"
   with_items: applications.wordpress
   when: item.path is not defined
 
-- name: dependencies | check for options
+- name: compatibility | check for options
   fail: msg="Wordpress - Options are missing"
   with_items: applications.wordpress
   when: item.options is not defined
 
-- name: dependencies | check for wordpress version
+- name: compatibility | check for wordpress version
   fail: msg="Wordpress - Version is required"
   with_items: applications.wordpress
   when: item.options.version is not defined or item.options.version == ''
 
-- name: dependencies | check for settings
+- name: compatibility | check for settings
   fail: msg="Wordpress - Settings are missing"
   with_items: applications.wordpress
   when: item.settings is not defined
