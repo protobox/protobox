@@ -1,0 +1,7 @@
+- name: application | install dependencies
+  apt: >
+    pkg={{ item }} 
+    state=latest
+  with_items:
+    - php5-mcrypt
+  sudo: yes

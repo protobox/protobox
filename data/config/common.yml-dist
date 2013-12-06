@@ -1,6 +1,7 @@
 ---
 protobox:
     version: 0.0.1
+    document: abc123
 
 vagrant:
     vm:
@@ -164,7 +165,7 @@ php:
         display_errors: 'On'
         display_startup_errors: 'On'
         error_reporting: '-1'
-        session_save_path: /var/lib/php/session
+        short_open_tag: 'On'
     timezone: America/Chicago
 
 mysql:
@@ -233,3 +234,41 @@ ngrok:
     #    proto: 'https 8080'
     #  ssh:
     #    proto: 'tcp: 22'
+
+applications:
+    install: 1
+    #wordpress:
+    #    - name: test
+    #      install: 1
+    #      path: /srv/www/web/lemonstand
+    #      settings:
+    #            user: patrickheeney
+    #    - name: test2
+    #      path: /srv/www/web/lemonstand2
+    #laravel:
+    #    - name: test3
+    #      install: 1
+    #      path: /srv/www/web/laravel
+    #lemonstand:
+    #    - name: test4
+    #      install: 1
+    #      path: /srv/www/web/lemonstand
+    #      settings:
+    #            holder: 
+    #            serial: 
+    #            dbhost: localhost
+    #            dbname: lemonstand
+    #            dbuser: root
+    #            dbpass: root
+    #repo:
+    #    - name: protobox-web
+    #      install: 1
+    #      path: /srv/www/web/protobox-web
+    #      options:
+    #            provider: git
+    #            source: 'git@github.com:protobox/web-install.git'
+    #            revision: 'master'
+    #            pre_install:
+    #                -
+    #            post_install:
+    #                - composer update

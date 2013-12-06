@@ -1,0 +1,286 @@
+<?php
+
+require "installer_files/libs/misc.php";
+
+if (cli_detect())
+{
+	custom_cli_install();
+	die();
+}
+
+
+function custom_cli_install()
+{
+	global $argc, $argv;
+
+	$a = array();
+
+	cli_print_line('LEMONSTAND INSTALLATION!');
+
+	$agree 			= $a['agree']			= isset($argv[1]) && $argv[1] == 'agree' ? true : (true);
+	$holder 		= $a['holder']			= isset($argv[2]) ? $argv[2] : "{{ item.settings.holder|default('') }}";
+	$serial 		= $a['serial']			= isset($argv[3]) ? $argv[3] : "{{ item.settings.serial|default('') }}";
+	$dbhost 		= $a['dbhost']			= isset($argv[4]) ? $argv[4] : "{{ item.settings.dbhost|default('localhost') }}";
+	$dbname 		= $a['dbname']			= isset($argv[5]) ? $argv[5] : "{{ item.settings.dbname|default('') }}";
+	$dbuser 		= $a['dbuser']			= isset($argv[6]) ? $argv[6] : "{{ item.settings.dbuser|default('') }}";
+	$dbpass 		= $a['dbpass']			= isset($argv[7]) ? $argv[7] : "{{ item.settings.dbpass|default('') }}";
+	$backend 		= $a['backend']			= isset($argv[8]) ? $argv[8] : "{{ item.settings.backend|default(lemonstand_backend_url) }}";
+	$config 		= $a['config']			= isset($argv[9]) ? $argv[9] : "{{ item.settings.config|default(lemonstand_config_url) }}";
+	$firstname 		= $a['firstname']		= isset($argv[10]) ? $argv[10] : "{{ item.settings.firstname|default(lemonstand_user_firstname) }}";
+	$lastname		= $a['lastname']		= isset($argv[11]) ? $argv[11] : "{{ item.settings.lastname|default(lemonstand_user_lastname) }}";
+	$email 			= $a['email']			= isset($argv[12]) ? $argv[12] : "{{ item.settings.email|default(lemonstand_user_email) }}";
+	$username 		= $a['username']		= isset($argv[13]) ? $argv[13] : "{{ item.settings.username|default(lemonstand_user_username) }}";
+	$password 		= $a['password']		= isset($argv[14]) ? $argv[14] : "{{ item.settings.password|default(lemonstand_user_password) }}";
+	$defaulttheme 	= $a['defaulttheme'] 	= isset($argv[15]) ? $argv[15] : "{{ item.settings.defaulttheme|default(lemonstand_default_theme) }}";
+	$defaulttwig 	= $a['defaulttwig']		= isset($argv[16]) ? $argv[16] : "{{ item.settings.defaulttwig|default(lemonstand_default_theme_twig) }}";
+	$demodata 		= $a['demodata']		= isset($argv[17]) ? $argv[17] : "{{ item.settings.demodata|default(lemonstand_demo_data) }}";
+	$encrypt 		= $a['encrypt']			= isset($argv[18]) ? $argv[18] : "{{ item.settings.encrypt|default(lemonstand_encypt_key) }}";
+
+	// CHECK DEFAULTS
+	foreach ($a as $v => $d)
+	{
+		if (empty($d))
+		{
+			cli_print_error('Missing Data: '.$v);
+
+			install_cleanup();
+			exit(1);
+		}
+	}
+	// END CHECK DEFAULTS
+
+	// EULA
+	// cli_eula();
+	// 
+		cli_print_line("Loading End User License Agreement...");
+		
+		try
+		{
+			$eula_text = installer_get_eula_text();
+
+			//$lines = explode("\n", $eula_text);
+			//foreach ($lines as $line)
+				//cli_print_line(wordwrap($line, 80, "\n"));
+		}
+		catch (exception $ex)
+		{
+			cli_print_error($ex->getMessage());
+
+			install_cleanup();
+			exit(1);
+		}
+	// End EULA
+
+	// System requirements
+	// cli_system_requirements();
+	// 
+	// skip
+	
+	// License information
+	// cli_license_information();
+	// 
+		cli_print_line('STEP 1 of 9: License Information');
+
+		$_POST['holder_name'] = $holder;
+		$_POST['serial_number'] = $serial;
+		
+		try
+		{
+			cli_print_line("Validating the license information. The operation could take several minutes...");
+			validate_license_information();
+		} catch (Exception $ex)
+		{
+			cli_print_error($ex->getMessage());
+
+			install_cleanup();
+			exit(1);
+		}
+	// End license information
+
+	// DB information
+	// cli_db_parameters();
+	// 
+		cli_print_line('STEP 2 of 9: Database Connection Parameters');
+
+		$time_zones = timezone_identifiers_list();
+		if (in_array('US/Central', $time_zones))
+			$_POST['time_zone'] = 'US/Central';
+		else
+			$_POST['time_zone'] = 'America/New_York';
+
+		$_POST['mysql_host'] = $dbhost;
+		$_POST['db_name'] = $dbname;
+		$_POST['mysql_user'] = $dbuser;
+		$_POST['mysql_password'] = $dbpass;
+		
+		try
+		{
+			validate_config_information();
+		} catch (Exception $ex)
+		{
+			cli_print_error($ex->getMessage());
+
+			install_cleanup();
+			exit(1);
+		}
+	// End db information
+
+	// Admin urls
+	// cli_admin_urls();
+	// 
+		cli_print_line('STEP 3 of 9: Administration URLs');
+
+		$_POST['backend_url'] = $backend;
+		$_POST['config_url'] = $config;
+		
+		try
+		{
+			validate_urls();
+		} catch (Exception $ex)
+		{
+			cli_print_error($ex->getMessage());
+
+			install_cleanup();
+			exit(1);
+		}
+	// End admin urls
+
+	// Image magick
+	// cli_image_magick();
+	// 
+		cli_print_line('STEP 4 of 9: ImageMagick Configuration');
+
+		$_POST['enable_im'] = 0;
+		//$_POST['convert_path'] = "";
+				
+		try
+		{
+			validate_image_magick();
+		} catch (Exception $ex)
+		{
+			cli_print_error($ex->getMessage());
+
+			install_cleanup();
+			exit(1);
+		}
+	// End image magick
+
+	// Folder permissions
+	// cli_permissions();
+	// 
+		cli_print_line('STEP 5 of 9: Folder and File permissions');
+
+		$_POST['folder_mask'] = 777;
+		$_POST['file_mask'] = 777;
+		
+		try
+		{
+			validate_permissions();
+		} catch (Exception $ex)
+		{
+			cli_print_error($ex->getMessage());
+
+			install_cleanup();
+			exit(1);
+		}
+	// End folder permissions
+
+	// Admin user
+	// cli_admin_user();
+	// 
+		cli_print_line('STEP 6 of 9: Administrator Account');
+
+		$_POST['firstname'] = $firstname;
+		$_POST['lastname'] = $lastname;
+		$_POST['email'] = $email;
+		$_POST['username'] = $username;
+		$_POST['password'] = $password;
+		$_POST['password_confirm'] = $password;
+
+		try
+		{
+			validate_admin_user();
+		} catch (Exception $ex)
+		{
+			cli_print_error($ex->getMessage());
+
+			install_cleanup();
+			exit(1);
+		}
+	// End admin user
+
+	// Config user
+	// cli_config_user();
+	// 
+		cli_print_line('STEP 7 of 9: Configuration Tool User Account');
+
+		$_POST['config_username'] = $username;
+		$_POST['password'] = $password;
+		$_POST['password_confirm'] = $password;
+		
+		try
+		{
+			validate_config_user();
+		} catch (Exception $ex)
+		{
+			cli_print_error($ex->getMessage());
+
+			install_cleanup();
+			exit(1);
+		}
+	// End config user
+
+	// Default theme and data
+	// cli_default_theme();
+	// 
+		cli_print_line('STEP 8 of 9: Themes and Demo Data');
+
+		$_POST['import_default_theme'] = $defaulttheme;
+		$_POST['import_default_theme_twig'] = $defaulttwig;
+		save_default_theme_flag();
+
+		$_POST['import_demo_data'] = $demodata;
+		save_demo_data_flag();
+	// End default theme and data
+
+	// Encryption key
+	// cli_encryption_key
+	// 
+		cli_print_line('STEP 9 of 9: Encryption Key');
+
+		$_POST['encryption_key'] = $encrypt;
+		$_POST['confirmation'] = $encrypt;
+		
+		try
+		{
+			validate_encryption_key(true);
+		} catch (Exception $ex)
+		{
+			cli_print_error($ex->getMessage());
+			//if (!($ex instanceof ValidationException))
+				//return false;
+
+			install_cleanup();
+			exit(1);
+		}
+	// End encryption key
+
+	// Complete
+	// cli_complete();
+	// 
+		cli_print_line('Installation Complete!');
+		
+		/*try
+		{
+			@installer_remove_dir(dirname(__FILE__).'/installer_files');
+			@unlink(dirname(__FILE__).'/install.php');
+		} catch (Exception $ex) {}*/
+	// End complete
+
+	// CREATE CUSTOM INSTALL FILE
+	//@file_put_contents('INSTALLED', '');
+	// END
+
+	install_cleanup();
+	exit(0);
+}

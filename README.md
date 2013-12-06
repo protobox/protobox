@@ -55,22 +55,21 @@ Protobox has built in support for the following modules:
 - [Bower](http://bower.io/)
 - [Grunt](http://gruntjs.com/)
 
-## Applications (Coming Soon) ##
+## Applications ##
 
 Protobox has built in support for installing any of these applications:
 
 - [Wordpress](http://wordpress.org/)
-- [Magento](http://magento.com/)
-- [Drupal](https://drupal.org/)
+- [Magento](http://magento.com/) (Coming Soon)
+- [Drupal](https://drupal.org/) (Coming Soon)
 - [Laravel](http://laravel.com/)
-- [Wardrobe CMS](http://wardrobecms.com/)
 - [Lemonstand](http://lemonstand.com/)
-- [Symfony](http://symfony.com/)
-- [Symfony CMF](http://cmf.symfony.com/)
-- [Sylius](http://sylius.org/)
-- [Akeneo](http://www.akeneo.com/)
-- [Oro CRM](http://www.orocrm.com/)
-- [Prestashop](http://www.prestashop.com/)
+- [Symfony](http://symfony.com/) (Coming Soon)
+- [Symfony CMF](http://cmf.symfony.com/) (Coming Soon)
+- [Sylius](http://sylius.org/) (Coming Soon)
+- [Akeneo](http://www.akeneo.com/) (Coming Soon)
+- [Oro CRM](http://www.orocrm.com/) (Coming Soon)
+- [Prestashop](http://www.prestashop.com/) (Coming Soon)
 
 ## License ##
 

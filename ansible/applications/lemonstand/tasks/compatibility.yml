@@ -1,0 +1,29 @@
+#PHP 5.2.5 or higher
+#PHP CURL library
+#PHP OpenSSL library
+#PHP Mcrypt library
+#PHP MySQL functions
+#PHP Multibyte String functions
+#Permissions for PHP to write to the installation directory
+
+- name: dependencies | require php
+  fail: msg="PHP is required"
+  when: php is not defined or php.install != 1
+
+- name: dependencies | require apache
+  fail: msg="Apache is required"
+  when: apache is not defined or apache.install != 1
+
+- name: dependencies | require mysql
+  fail: msg="Mysql is required"
+  when: mysql is not defined or mysql.install != 1
+
+# TODO : run shell or grep against php.ini to check instead of this
+- name: dependencies | check php short tags
+  fail: msg="PHP - short_open_tag is required"
+  when: php is not defined or php.ini is not defined or php.ini.short_open_tag is not defined
+
+# TODO : run shell or check server for mcrypt instead of this
+- name: dependencies | check php short tags
+  fail: msg="PHP - short_open_tag is required"
+  when: php is not defined or php.ini is not defined or php.ini.short_open_tag is not defined
