@@ -27,3 +27,13 @@
 - name: dependencies | check php short tags
   fail: msg="PHP - short_open_tag is required"
   when: php is not defined or php.ini is not defined or php.ini.short_open_tag is not defined
+
+- name: dependencies | check for install path
+  fail: msg="Install path missing"
+  with_items: applications.wordpress
+  when: item.path is not defined
+
+- name: dependencies | check for settings
+  fail: msg="Wordpress - Settings are missing"
+  with_items: applications.wordpress
+  when: item.settings is not defined

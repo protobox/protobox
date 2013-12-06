@@ -1,0 +1,8 @@
+- name: application | install dependencies
+  apt: >
+    pkg={{ item }} 
+    state=latest
+  with_items:
+    - curl
+    - php5-curl
+  sudo: yes

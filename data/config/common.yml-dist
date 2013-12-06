@@ -241,11 +241,17 @@ applications:
   #wordpress:
   #  - name: test
   #    install: 1
-  #    path: /srv/www/web/lemonstand
+  #    path: /srv/www/web/wordpress
+  #    options:
+  #      version: '3.6'
+  #      sha: 'cf3dac69cd1810d8f4880b2c982fee869a0c56e1c4f793bbfc6d7021fd6da97c'
+  #      revision: 'master'
+  #      method: zip
   #    settings:
-  #      user: patrickheeney
-  #  - name: test2
-  #    path: /srv/www/web/lemonstand2
+  #      dbhost: localhost
+  #      dbname: wordpress
+  #      dbuser: root
+  #      dbpass: root
   #laravel:
   #  - name: test3
   #    install: 1

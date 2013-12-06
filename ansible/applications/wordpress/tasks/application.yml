@@ -1,0 +1,76 @@
+## Zip Installation
+
+# TODO : only download the version one time, skip if it already exists
+- name: application | download wordpress
+  get_url: >
+    url=http://wordpress.org/wordpress-{{ item.options.version }}.tar.gz
+    dest={{ item.path }}/wordpress-{{ item.options.version }}.tar.gz
+    sha256sum="{{ item.options.sha|default('') }}"
+  with_items: applications.wordpress
+  when: item.install == 1 and (item.options.method is not defined or item.options.method == 'zip') 
+
+#--strip-path=1
+- name: application | extract archive
+  command: >
+    /bin/tar xvf wordpress-{{ item.options.version }}.tar.gz -C ./ --strip-components=1
+    chdir={{ item.path }}
+    creates=index.php
+  with_items: applications.wordpress
+  when: item.install == 1 and (item.options.method is not defined or item.options.method == 'zip') 
+
+#- name: application | remove installer
+#  file: >
+#    path={{ item.path }}/wordpress-{{ item.options.version }}.tar.gz
+#    state=absent
+#  with_items: applications.wordpress
+#  when: item.install == 1 and (item.options.method is not defined or item.options.method == 'zip') 
+
+## Git installation
+
+- name: application | install wordpress via git
+  git: >
+    repo={{ item.options.repo|default('git@github.com:WordPress/WordPress.git') }}
+    dest={{ item.path }}
+    version={{ item.options.revision|default(item.options.version) }}
+  with_items: applications.wordpress
+  when: item.install == 1 and item.options.method is defined and item.options.method == 'git'
+
+#- name: application | add group "wordpress"
+#  group: >
+#    name=wordpress
+
+# TODO : users can potentially share the same home dir
+#- name: application | add user "wordpress"
+#  user: >
+#    name=wordpress_{{ item.name }} 
+#    group=wordpress 
+#    home={{ item.path }}
+#  with_items: applications.wordpress
+#  when: item.install == 1
+
+#- name: application | change ownership of installation
+#  file: >
+#    path={{ item.path }}
+#    owner=wordpress_{{ item.name }}  
+#    group=wordpress 
+#    state=directory 
+#    recurse=yes
+#  with_items: applications.wordpress
+#  when: item.install == 1
+
+- name: application | check for config file
+  stat: path=/usr/src/lemonstand.zip
+  register: lemonstand_installer
+
+# TODO : this doesn't install a database so leave out for now
+#- name: application | fetch random salts for config
+#  command: >
+#    curl https://api.wordpress.org/secret-key/1.1/salt/
+#  register: wordpress_salt 
+
+#- name: application | copy config file
+#  template: >
+#    src={{ item.config|default('wp-config.php.j2') }}
+#    dest={{ item.path }}/wp-config.php
+#  with_items: applications.wordpress
+#  when: item.install == 1

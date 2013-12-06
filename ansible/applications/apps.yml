@@ -4,4 +4,4 @@
     - "../../data/config/common.yml"
   roles:
     - { role: 'lemonstand', dir: 'applications/lemonstand', when: "applications.lemonstand is defined" }
-    #- { role: 'wordpress', dir: 'applications/wordpress', when: "applications.wordpress is defined" }
+    - { role: 'wordpress', dir: 'applications/wordpress', when: "applications.wordpress is defined" }
