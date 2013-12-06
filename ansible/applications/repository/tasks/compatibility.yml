@@ -1,0 +1,9 @@
+- name: compatibility | check for install path
+  fail: msg="Repository - {{ item.name }} - Install path missing"
+  with_items: applications.repository
+  when: item.path is not defined
+
+- name: compatibility | check for options
+  fail: msg="Repository - {{ item.name }} - Options are missing"
+  with_items: applications.repository
+  when: item.options is not defined

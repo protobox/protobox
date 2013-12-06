@@ -5,4 +5,5 @@
   with_items:
     - curl
     - php5-curl
+    - git-core
   sudo: yes

@@ -1,0 +1,48 @@
+- name: composer | require composer
+  fail: msg="PHP - Composer is required"
+  when: php.composer is not defined or php.composer.install != 1
+
+- name: composer | check for project
+  fail: msg="Repository - {{ item.name }} - Project is missing"
+  with_items: applications.repository
+  when: item.install == 1 and item.options.provider is defined and item.options.provider == 'composer' and item.options.project is not defined
+
+- name: composer | verify install paths
+  file: >
+    path={{ item.path }}
+    state=directory
+  with_items: applications.repository
+  when: item.install == 1 and item.options.provider is defined and item.options.provider == 'composer'
+
+- name: composer | debug pre-installation
+  debug: >
+    msg="{{ item.options.pre_install|join(' && ') }}"
+  with_items: applications.repository
+  when: item.install == 1 and item.options.provider is defined and item.options.provider == 'git' and item.options.pre_install is defined and item.options.pre_install
+
+#- name: composer | pre-installation commands
+#  command: >
+#    {{ item.options.pre_install|join(' && ') }}
+#    chdir={{ item.path }}
+#  with_items: applications.repository
+#  when: item.install == 1 and item.options.provider is defined and item.options.provider == 'composer' and item.options.pre_install is defined
+
+- name: composer | install composer application
+  command: > 
+    composer create-project {{ item.project }} . --prefer-dist
+    chdir={{ item.path }}
+  with_items: applications.repository
+  when: item.install == 1 and item.options.provider is defined and item.options.provider == 'composer'
+
+- name: composer | debug post-installation
+  debug: >
+    msg="{{ item.options.post_install|join(' && ') }}"
+  with_items: applications.repository
+  when: item.install == 1 and item.options.provider is defined and item.options.provider == 'git' and item.options.post_install is defined and item.options.post_install
+
+#- name: composer | post-installation commands
+#  command: >
+#    {{ item.options.post_install|join(' && ') }}
+#    chdir={{ item.path }}
+#  with_items: applications.repository
+#  when: item.install == 1 and item.options.provider is defined and item.options.provider == 'composer' and item.options.post_install is defined
