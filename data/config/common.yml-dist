@@ -60,31 +60,35 @@ vagrant:
 server:
   packages:
     - vim
-  dotfiles:
-    git: ''
-    files:
-      - 
-    bash_aliases: null
   ssh:
-    authorized_keys:
-      #user:
-      #  key: ''
-      #  type: 'ssh-rsa'
-      #user2:
-      #  key_file: '/srv/www/data/ssh/known_hosts'
-      #  type: 'ssh-rsa'
-      #  user: username
-    config:
-      #all:
-      #  config_file: '/srv/www/data/ssh/git_config'
-      #github:
-      #  config: 'host *\n\tIdentityFile ~/.ssh/git_id_rsa'
-    keys:
-      #user:
-      #  key: ''
-      #user2:
-      #  key_file: '/srv/www/data/ssh/github_id_rsa'
-      #  filename: 'github_id_rsa'
+    #authorized_keys are public keys for remote machines
+    #authorized_keys:
+    #  - name: patrick
+    #    #key: '1234'
+    #    file: /srv/www/data/ssh/github_id_rsa
+    #  - name: test2
+    #    #key: '1234'
+    #    file: /srv/www/data/ssh/github_id_rsa
+    #keys are private keys to add to the machine
+    #private_keys:
+    #  - name: patrick
+    #    file: /srv/www/data/ssh/github_id_rsa
+    #  - name: patrick
+    #    entry: 'test\n\ttest2'
+    #ssh config entries
+    #config:
+    #  - name: github
+    #    file: /srv/www/data/ssh/git_config
+    #  - name: github
+    #    entry: 'host *\n\tIdentityFile ~/.ssh/github_id_rsa'
+  dotfiles:
+    install: 0
+    #git:
+    #  - repo: git@github.com:patrickheeney/dotfiles.git
+    #    path: '/home/{{ ansible_user_id }}'
+    #files:
+    #  - /srv/www/data/dot/file
+    #bash_aliases: null
 
 apache:
   install: 1

@@ -3,6 +3,14 @@
   notify:
     - ntpd-restart
 
+- name: main | install dependencies
+  apt: >
+    pkg={{ item }} 
+    state=latest
+  with_items:
+    - git-core
+  sudo: yes
+
 #- name: Copy the EPEL repository definition
 #  copy: src=epel.repo dest=/etc/yum.repos.d/epel.repo
 

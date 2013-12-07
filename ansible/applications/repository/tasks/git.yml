@@ -1,11 +1,3 @@
-- name: git | install dependencies
-  apt: >
-    pkg={{ item }} 
-    state=latest
-  with_items:
-    - git-core
-  sudo: yes
-
 # TODO : check for ssh keys for github
 
 - name: git | check for source repo

@@ -1,4 +1,4 @@
-# {{ ansible_managed }}
+; {{ ansible_managed }}
 [xdebug]
 {% if php.xdebug.settings.default_enable is defined %}
 xdebug.default_enable = {{ php.xdebug.settings.default_enable|default("1") }}

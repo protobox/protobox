@@ -7,4 +7,4 @@
   when: server.ssh is defined
 
 - include: dotfiles.yml
-  when: server.dotfiles is defined
+  when: server.dotfiles is defined and server.dotfiles.install == 1

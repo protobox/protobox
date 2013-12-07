@@ -54,3 +54,5 @@
   with_items: node.gems
   sudo: yes
   when: node.gems is defined
+
+# TODO : run 'npm install' inside the project directories
