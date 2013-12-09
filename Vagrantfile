@@ -61,7 +61,11 @@ Vagrant.configure("2") do |config|
       grp = !folder['group'].nil? ? folder['group'] : ''
       opt = !folder['mount_options'].nil? ? folder['mount_options'] : Array.new
 
-      config.vm.synced_folder folder['source'], folder['target'], id: id, disabled: dis, owner: own, group: grp, :nfs => nfs, :mount_options => opt
+      if nfs
+        config.vm.synced_folder folder['source'], folder['target'], id: id, disabled: dis, :nfs => { :mount_options => opt }
+      else
+        config.vm.synced_folder folder['source'], folder['target'], id: id, disabled: dis, owner: own, group: grp
+      end
     end
   end
 
