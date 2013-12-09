@@ -1,7 +1,29 @@
-- name: main | ensure ntpd is at the latest version
-  apt: pkg=ntp state=latest
+- name: main | ensure ntp is at the latest version
+  apt: >
+    pkg=ntp
+    state=latest
   notify:
-    - ntpd-restart
+    - ntp-restart
+
+- name: main | set ntp facts
+  set_fact: >
+    ntpserver="192.168.1.2"
+
+- name: main | configure ntp
+  template: >
+    src=ntp.conf.j2
+    dest=/etc/ntp.conf
+    owner=root
+    group=root
+    mode=0644
+  notify:
+    - ntp-restart
+
+- name: main | ntp should be running
+  service: >
+    name=ntp
+    state=started
+    enabled=yes
 
 - name: main | install dependencies
   apt: >

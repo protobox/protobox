@@ -1,6 +1,6 @@
-- name: ntpd-restart
+- name: ntp-restart
   service: >
-    name=ntpd 
+    name=ntp
     state=restarted
   sudo: yes
 
