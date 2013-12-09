@@ -3,11 +3,11 @@
 OS=$(/bin/bash /vagrant/ansible/shell/os-detect.sh ID)
 CODENAME=$(/bin/bash /vagrant/ansible/shell/os-detect.sh CODENAME)
 
-PUPPET_DATA=/vagrant/data/config/common.yml
+PUPPET_LOCATION=( $( /bin/cat /vagrant/data/config/.protobox ) )
+PUPPET_DATA="/vagrant/$PUPPET_LOCATION"
 PROTOBOX_LOGO=/vagrant/ansible/shell/logo.txt
 
 # process arguments
-
 while getopts ":a:" opt; do
   case $opt in
     a)

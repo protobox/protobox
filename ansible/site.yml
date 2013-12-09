@@ -3,7 +3,7 @@
 - name: Core
   hosts: all
   vars_files:
-    - "../data/config/common.yml"
+    - [ $protobox_config ]
   roles:
     # Common functionality
     - { role: 'common' }

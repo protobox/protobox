@@ -5,15 +5,39 @@ require 'yaml'
 
 dir = Dir.pwd
 vagrant_dir = File.expand_path(File.dirname(__FILE__))
-vagrant_file = 'data/config/common.yml'
+protobox_boot = 'data/config/.protobox'
 
+# Check if protobox boot file exists, if it doesn't create it here
+if !File.file?(protobox_boot)
+  File.open(protobox_boot, 'w') do |file|
+    file.write('data/config/common.yml')
+  end
+end
+
+# Check for boot file
+if !File.file?(protobox_boot)
+  puts "Boot file is missing: #{protobox_boot}\n"
+  exit
+end
+
+# Open config file location
+vagrant_file = ''
+File.open(protobox_boot, 'r') do |f1|  
+  while line = f1.gets  
+    vagrant_file += line  
+  end  
+end 
+
+# Check for missing data file
 if !File.file?(vagrant_file)
   puts "Data file is missing: #{vagrant_file}\n"
   exit
 end
 
+# Load settings into memory
 settings = YAML.load_file(vagrant_file)
 
+# Start vagrant configuration
 Vagrant.configure("2") do |config|
 
   # Store the current version of Vagrant for use in conditionals when dealing
@@ -22,6 +46,12 @@ Vagrant.configure("2") do |config|
 
   # Vagrant settings variable
   vagrant_vm = 'vagrant'
+
+  # Check for box settings
+  if settings[vagrant_vm].nil? or settings[vagrant_vm].nil?
+    puts "Invalid yml data: #{vagrant_file}\n"
+    exit
+  end
 
   # Default Box
   config.vm.box = settings[vagrant_vm]['vm']['box']
@@ -84,23 +114,33 @@ Vagrant.configure("2") do |config|
   if settings[vagrant_vm]['vm']['provision'].has_key?("ansible")
     ansible = settings[vagrant_vm]['vm']['provision']['ansible']
     playbook = "/vagrant/" + ansible['playbook']
-    params = "#{playbook}"
+
+    params = Array.new
+    params << playbook
 
     if !ansible['inventory'].nil?
-      params = "#{params} -i \\\"" + ansible['inventory'] + "\\\""
+      params << "-i \\\"" + ansible['inventory'] + "\\\""
     end
 
     if !ansible['verbose'].nil?
       if ansible['verbose'] == 'vv' or ansible['verbose'] == 'vvv' or ansible['verbose'] == 'vvvv'
-        params = "#{params} -" + ansible['verbose']
+        params << "-" + ansible['verbose']
       else
-        params = "#{params} --verbose"
+        params << "--verbose"
       end
     end
 
-    params = "#{params} --connection=local"
+    params << "--connection=local"
 
-    config.vm.provision :shell, :path => "ansible/shell/initial-setup.sh", :args => "-a \"#{params}\""
+    if ansible['extra-vars'].nil?
+      extra_vars = Hash.new
+    end
+
+    extra_vars['protobox_config'] = "/vagrant/" + vagrant_file
+
+    params << "--extra-vars=\\\"" + extra_vars.map{|k,v| "#{k}=#{v}"}.join(' ').gsub("\"","\\\"") + "\\\"" unless extra_vars.empty?
+    
+    config.vm.provision :shell, :path => "ansible/shell/initial-setup.sh", :args => "-a \"" + params.join(" ") + "\""
   end 
 
   # SSH Configuration
