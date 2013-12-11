@@ -60,7 +60,8 @@
 #  with_nested:
 #    - php.xdebug.settings
 #    - php.xdebug.settings
-      
+
+# php 5.3 does not have php5enmod 
 - name: xdebug | enable xdebug config
   shell: >
     chdir=/etc/php5/mods-available
@@ -68,5 +69,14 @@
   sudo: yes
   notify:
     - php-restart
+  when: php.version != '53'
+
+- name: xdebug | enable xdebug config on php 5.3
+  file: >
+    src=/etc/php5/mods-available/xdebug-options.ini
+    dest=/etc/php5/conf.d/xdebug-options.ini
+    state=link
+  when: php.version == '53'
+
 
 # TODO : add webgrind

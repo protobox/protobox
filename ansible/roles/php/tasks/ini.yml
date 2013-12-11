@@ -30,3 +30,13 @@
   when: php.ini is defined and apache is defined and apache.install == 1
   notify:
     - php-restart
+
+# php 5.3 does not have php5enmod so manually create it
+- name: ini | ensure directory exists
+  file: >
+    path=/etc/php5/mods-available
+    state=directory
+    owner=root
+    group=root
+    mode=0755
+  when: php.version == '53'
