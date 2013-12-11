@@ -1,20 +1,23 @@
 ; {{ ansible_managed }}
 [xdebug]
 {% if php.xdebug.settings.default_enable is defined %}
-xdebug.default_enable = {{ php.xdebug.settings.default_enable|default("1") }}
+xdebug.default_enable={{ php.xdebug.settings.default_enable|default("1") }}
 {% endif %}
 {% if php.xdebug.settings.remote_autostart is defined %}
-xdebug.remote_autostart = {{ php.xdebug.settings.remote_autostart|default("0") }}
+xdebug.remote_autostart={{ php.xdebug.settings.remote_autostart|default("0") }}
 {% endif %}
 {% if php.xdebug.settings.remote_connect_back is defined %}
-xdebug.remote_connect_back = {{ php.xdebug.settings.remote_connect_back|default("1") }}
+xdebug.remote_connect_back={{ php.xdebug.settings.remote_connect_back|default("1") }}
 {% endif %}
 {% if php.xdebug.settings.remote_enable is defined %}
-xdebug.remote_enable = {{ php.xdebug.settings.remote_enable|default("1") }}
+xdebug.remote_enable={{ php.xdebug.settings.remote_enable|default("1") }}
 {% endif %}
 {% if php.xdebug.settings.remote_handler is defined %}
-xdebug.remote_handler = {{ php.xdebug.settings.remote_handler|default("dbgp") }}
+xdebug.remote_handler={{ php.xdebug.settings.remote_handler|default("dbgp") }}
 {% endif %}
 {% if php.xdebug.settings.remote_port is defined %}
-xdebug.remote_port = {{ php.xdebug.settings.remote_port|default("9000") }}
+xdebug.remote_port={{ php.xdebug.settings.remote_port|default("9000") }}
+{% endif %}
+{% if php.xdebug.settings.max_nesting_level is defined %}
+xdebug.max_nesting_level={{ php.xdebug.settings.max_nesting_level|default("100") }}
 {% endif %}
