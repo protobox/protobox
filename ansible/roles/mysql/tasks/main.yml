@@ -25,11 +25,6 @@
 #    - mytop
 #    - mysqltuner
 
-- name: main | check for installation
-  shell: "[ -f /usr/sbin/mysqld ]"
-  ignore_errors: true
-  register: mysql_exists
-
 #- name: insert iptables rule
 #  lineinfile: >
 #    dest=/etc/sysconfig/iptables 
@@ -132,7 +127,26 @@
   with_items: mysql.databases
   when: mysql.databases is defined
 
-- name: main | import mysql databases
+# TODO : temp path to vagrant folder
+- name: main | check for mysql files
+  stat: >
+    path=/vagrant/data/sql/{{ item.name }}.sql
+  register: mysql_import_db
+  with_items: mysql.databases
+  when: mysql.databases is defined
+
+# TODO : switch target location to use register path from above
+- name: main | import stored mysql databases
+  mysql_db: >
+    name={{ item.0.name }}
+    target=/vagrant/data/sql/{{ item.0.name }}.sql
+    state=import
+  with_together: 
+    - mysql.databases
+    - mysql_import_db.results
+  when: mysql.databases is defined and item.1.stat.exists
+
+- name: main | import custom mysql databases
   mysql_db: >
     name={{ item.name }}
     target={{ item.sql_file|default('') }}

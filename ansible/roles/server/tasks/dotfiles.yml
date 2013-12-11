@@ -1,3 +1,6 @@
+# TODO :
+# - loop through file system and add all keys in /vagrant/dot/
+
 # TODO : change this from vagrant to {{ ansible_user_id }} or some variable
 # to equal vagrant right now {{ ansible_user_id }} is root
 - name: dotfiles | set facts

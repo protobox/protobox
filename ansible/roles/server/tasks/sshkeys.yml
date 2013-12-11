@@ -1,3 +1,6 @@
+# TODO :
+# - loop through file system and add all keys in /vagrant/ssh/
+
 # TODO : change this from vagrant to {{ ansible_user_id }} or some variable
 # to equal vagrant right now {{ ansible_user_id }} is root
 # {{ lookup('env', 'USER') }} ?
@@ -61,10 +64,6 @@
   when: server.ssh.authorized_keys is defined and item.key is defined
 
 ## SSH Private Keys
-
-#- shell: "echo -e -n \"test\n\ttest2\" >> test creates=test"
-
-- command: "echo -e -n \"test\n\ttest2\" >> test creates=test"
 
 # copy key files into place
 - name: sshkeys | add private keys from files
