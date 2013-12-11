@@ -1,7 +1,7 @@
 - name: Applications
   hosts: all
   vars_files:
-    - "../../data/config/common.yml"
+    - [ $protobox_config ]
   roles:
     - { role: 'repository', dir: 'applications/repository', when: "applications.repository is defined" }
     - { role: 'lemonstand', dir: 'applications/lemonstand', when: "applications.lemonstand is defined" }
