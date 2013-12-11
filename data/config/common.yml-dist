@@ -224,20 +224,22 @@ node:
     - sass
     - compass
 
-ngrok:
+localtunnel:
   install: 1
-  port: 80
-  #subdomain: protoboxapp
-  #httpauth: 'user:password'
-  #proto: 'tcp 22'
-  #client: 'client1 client2 client3'
-  #hostname: 'your.domain.com'
-  #tunnels:
-  #  client:
-  #    httpauth: 'user:password'
-  #    proto: 'https 8080'
-  #  ssh:
-  #    proto: 'tcp: 22'
+  ngrok:
+    install: 1
+    port: 80
+    #subdomain: protoboxapp
+    #httpauth: 'user:password'
+    #proto: 'tcp 22'
+    #client: 'client1 client2 client3'
+    #hostname: 'your.domain.com'
+    #tunnels:
+    #  client:
+    #    httpauth: 'user:password'
+    #    proto: 'https 8080'
+    #  ssh:
+    #    proto: 'tcp: 22'
 
 applications:
   install: 1
