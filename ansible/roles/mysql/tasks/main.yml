@@ -81,19 +81,16 @@
   notify:
     - mysql-restart
 
-# TODO : Temp to get vagrant my.cnf file in
 - name: main | add user credentials
   template: >
     src=my.user.cnf.j2
-    dest=/home/{{ item }}/.my.cnf
-    owner={{ item }}
+    dest=/home/vagrant/.my.cnf
+    owner=vagrant
     mode=0600
   sudo: yes
-  with_items:
-    #- ansible_user_id
-    - vagrant
   notify:
     - mysql-restart
+  when: protobox_env == 'vagrant'
 
 - name: main | remove anonymous user
   mysql_user: >
@@ -127,15 +124,13 @@
   with_items: mysql.databases
   when: mysql.databases is defined
 
-# TODO : temp path to vagrant folder
 - name: main | check for mysql files
   stat: >
     path=/vagrant/data/sql/{{ item.name }}.sql
   register: mysql_import_db
   with_items: mysql.databases
-  when: mysql.databases is defined
+  when: protobox_env == 'vagrant' and mysql.databases is defined
 
-# TODO : switch target location to use register path from above
 - name: main | import stored mysql databases
   mysql_db: >
     name={{ item.0.name }}
@@ -144,7 +139,7 @@
   with_together: 
     - mysql.databases
     - mysql_import_db.results
-  when: mysql.databases is defined and item.1.stat.exists
+  when: protobox_env == 'vagrant' and mysql.databases is defined and item.1.stat.exists
 
 - name: main | import custom mysql databases
   mysql_db: >

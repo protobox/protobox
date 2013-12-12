@@ -136,6 +136,7 @@ Vagrant.configure("2") do |config|
       extra_vars = Hash.new
     end
 
+    extra_vars['protobox_env'] = 'vagrant'
     extra_vars['protobox_config'] = "/vagrant/" + vagrant_file
 
     params << "--extra-vars=\\\"" + extra_vars.map{|k,v| "#{k}=#{v}"}.join(' ').gsub("\"","\\\"") + "\\\"" unless extra_vars.empty?

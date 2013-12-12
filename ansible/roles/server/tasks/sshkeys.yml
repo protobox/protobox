@@ -1,30 +1,26 @@
-# TODO :
-# - loop through file system and add all keys in /vagrant/ssh/
-
-# TODO : change this from vagrant to {{ ansible_user_id }} or some variable
-# to equal vagrant right now {{ ansible_user_id }} is root
-# {{ lookup('env', 'USER') }} ?
 - name: sshkeys | set facts
   set_fact: >
-    sshkeys_path="/home/vagrant"
+    sshkeys_path="{{ '/root' if protobox_env == 'vagrant' else '/home/' ~ ansible_user_id }}"
     sshkeys_user="{{ ansible_user_id }}"
 
 # make sure ssh config exists
-
 - name: sshkeys | ensure directory exists
   file: >
-    path=/{{ ansible_user_id }}/.ssh
+    path=/{{ sshkeys_path }}/.ssh
     state=directory
-    owner={{ ansible_user_id }}
-    group={{ ansible_user_id }}
+    owner={{ sshkeys_user }}
+    group={{ sshkeys_user }}
     mode=0644
+
+# TODO : configs later could replace this, so we need to create the ssh/config
+# so that later in the steps we can concat onto it
 
 - name: sshkeys | ensure config exists
   template: >
     src=ssh_config.j2 
-    dest=/{{ ansible_user_id }}/.ssh/config 
-    owner={{ ansible_user_id }} 
-    group={{ ansible_user_id }} 
+    dest={{ sshkeys_path }}/.ssh/config 
+    owner={{ sshkeys_user }} 
+    group={{ sshkeys_user }} 
     mode=0644
   notify:
     - ssh-restart
@@ -68,8 +64,8 @@
 # copy key files into place
 - name: sshkeys | add private keys from files
   shell: >
-    cp {{ item.file }} /{{ ansible_user_id }}/.ssh/{{ item.file|basename }} && 
-    chmod 600 /{{ ansible_user_id }}/.ssh/{{ item.file|basename }}
+    cp {{ item.file }} {{ sshkeys_path }}/.ssh/{{ item.file|basename }} && 
+    chmod 600 {{ sshkeys_path }}/.ssh/{{ item.file|basename }}
   with_items: server.ssh.private_keys
   sudo: yes
   when: server.ssh.private_keys is defined and item.file is defined
@@ -77,10 +73,26 @@
 # copy key entries into place
 - name: sshkeys | add private keys entries
   shell: >
-    echo -e "{{ item.entry }}" >> /{{ ansible_user_id }}/.ssh/{{ item.entry|md5 }} &&
-    chmod 600 /{{ ansible_user_id }}/.ssh/{{ item.entry|md5 }} &&
-    echo -e "\nhost *\n\tIdentityFile '/{{ ansible_user_id }}/.ssh/{{ item.entry|md5 }}'" >> /{{ ansible_user_id }}/.ssh/config
-    creates=/{{ ansible_user_id }}/.ssh/{{ item.entry|md5 }}
+    echo -e "{{ item.entry }}" >> {{ sshkeys_path }}/.ssh/{{ item.entry|md5 }} &&
+    chmod 600 {{ sshkeys_path }}/.ssh/{{ item.entry|md5 }} &&
+    echo -e "\nhost *\n\tIdentityFile '{{ sshkeys_path }}/.ssh/{{ item.entry|md5 }}'" >> {{ sshkeys_path }}/.ssh/config
+    creates={{ sshkeys_path }}/.ssh/{{ item.entry|md5 }}
   with_items: server.ssh.private_keys
   sudo: yes
   when: server.ssh.private_keys is defined and item.entry is defined and item.entry
+
+## Filesystem 
+
+- name: sshkeys | copy ssh keys
+  command: >
+    cp {{ item }} {{ sshkeys_path }}/.ssh/{{ item|basename }}
+  with_fileglob: /vagrant/data/ssh/*
+  sudo: yes
+  when: protobox_env == 'vagrant' and item != '.gitignore'
+
+- name: sshkeys | copy ssh keys
+  command: >
+    chmod 600 {{ sshkeys_path }}/.ssh/{{ item|basename }}
+  with_fileglob: /vagrant/data/ssh/*
+  sudo: yes
+  when: protobox_env == 'vagrant' and item != '.gitignore'
