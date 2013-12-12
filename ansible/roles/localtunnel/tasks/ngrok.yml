@@ -1,5 +1,3 @@
-# TODO : need to create an upstart script like /etc/init.d to run this in the background
-
 - name: ngrok | install unzip
   apt: >
     pkg={{ item }} 
@@ -19,7 +17,7 @@
     ngrok_proto="{{ '-proto=' ~ localtunnel.ngrok.proto if localtunnel.ngrok.proto is defined else '' }}"
     ngrok_hostname="{{ '-hostname=' ~ localtunnel.ngrok.hostname if localtunnel.ngrok.hostname is defined else '' }}"
     ngrok_config="{{ '-config=' ~ localtunnel.ngrok.config if localtunnel.ngrok.config is defined else '' }}"
-    ngrok_log="-log=stdout"
+    ngrok_log="{{ '-log=stdout' ~ localtunnel.ngrok.log if localtunnel.ngrok.log is defined else '' }}"
 
 - name: ngrok | check if installed
   stat: >
@@ -32,12 +30,6 @@
     dest=/usr/src/ngrok.zip
     force=yes
   when: not ngrok_installed.stat.exists
-
-#- name: ngrok | extract package
-#  unarchive: >
-#    src=/usr/src/ngrok.zip
-#    dest=/usr/src
-#  sudo: yes
 
 - name: ngrok | extract package
   command: >
@@ -53,21 +45,16 @@
     state=absent
   when: not ngrok_installed.stat.exists
 
-- name: ngrok | install symlink
-  file: >
-    src=/usr/src/ngrok
+#- name: ngrok | install symlink
+#  file: >
+#    src=/usr/src/ngrok
+#    dest=/usr/local/bin/ngrok
+#    state=link
+#  when: not ngrok_installed.stat.exists
+
+- name: ngrok | add ngrok start script
+  template: >
+    src=ngrok.sh.j2
     dest=/usr/local/bin/ngrok
-    state=link
-  when: not ngrok_installed.stat.exists
-
-- name: ngrok | start client service
-  command: > 
-    ngrok {{ ngrok_config }} {{ ngrok_log }} start {{ ngrok_client }} &
+    mode=0755
   sudo: yes
-  when: localtunnel.ngrok.config is defined
-
-- name: ngrok | start service
-  command: > 
-    ngrok {{ ngrok_subdomain }} {{ ngrok_httpauth }} {{ ngrok_proto }} {{ ngrok_hostname }} {{ ngrok_log }} {{ ngrok_port }} &
-  sudo: yes
-  when: localtunnel.ngrok.config is not defined

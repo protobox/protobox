@@ -1,0 +1,6 @@
+#!/bin/bash
+{% if ngrok_config %}
+/usr/src/ngrok {{ ngrok_config }} {{ ngrok_log }} start {{ ngrok_client }}
+{% else %}
+/usr/src/ngrok {{ ngrok_subdomain }} {{ ngrok_httpauth }} {{ ngrok_proto }} {{ ngrok_hostname }} {{ ngrok_log }} {{ ngrok_port }}
+{% endif %}

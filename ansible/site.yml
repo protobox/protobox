@@ -27,7 +27,7 @@
     #- { role: 'beanstalkd', when: "beanstalkd is defined and beanstalkd.install == 1" }
 
     # Dev tools
-    - { role: 'localtunnel', when: "localtunnel is defined and localtunnel.install == 1" }
+    - { role: 'localtunnel', when: "localtunnel is defined and localtunnel.install == 1 and protobox_env == 'vagrant'" }
 
 - include: applications/apps.yml
   when: applications is defined and applications.install == 1
