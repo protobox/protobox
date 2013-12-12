@@ -129,7 +129,7 @@ fi
 
 if [[ ! -f /.protobox/run-ansible ]]; then
     echo "Running ansible-playbook $PARAMS"
-    sudo ansible-playbook $PARAMS
+    sh -c "sudo ansible-playbook $PARAMS"
     echo "Finished ansible-playbook"
 
     touch /.protobox/run-ansible

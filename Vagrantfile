@@ -132,15 +132,17 @@ Vagrant.configure("2") do |config|
 
     params << "--connection=local"
 
-    if ansible['extra-vars'].nil?
+    if !ansible['extra_vars'].nil?
+      extra_vars = ansible['extra_vars']
+    else
       extra_vars = Hash.new
     end
 
-    extra_vars['protobox_env'] = 'vagrant'
+    extra_vars['protobox_env'] = "vagrant"
     extra_vars['protobox_config'] = "/vagrant/" + vagrant_file
 
-    params << "--extra-vars=\\\"" + extra_vars.map{|k,v| "#{k}=#{v}"}.join(' ').gsub("\"","\\\"") + "\\\"" unless extra_vars.empty?
-    
+    params << "--extra-vars=\\\"" + extra_vars.map{|k,v| "#{k}=#{v}"}.join(" ").gsub("\"","\\\\\"") + "\\\"" unless extra_vars.empty?
+
     config.vm.provision :shell, :path => "ansible/shell/initial-setup.sh", :args => "-a \"" + params.join(" ") + "\""
   end 
 
