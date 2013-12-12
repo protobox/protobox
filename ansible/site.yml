@@ -26,6 +26,9 @@
     # Workers
     #- { role: 'beanstalkd', when: "beanstalkd is defined and beanstalkd.install == 1" }
 
+    # Monitoring
+    - { role: 'monitoring', when: "monitoring is defined and monitoring.install == 1" }
+
     # Dev tools
     - { role: 'localtunnel', when: "localtunnel is defined and localtunnel.install == 1 and protobox_env == 'vagrant'" }
 

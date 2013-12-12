@@ -36,24 +36,49 @@ Protobox has built in support for the following functionality:
 
 Protobox has built in support for the following modules:
 
+#### OS
+
 - [Any Distro](http://www.vagrantbox.es/)
-- [PHP](http://php.net)
+
+#### Web Server
+
 - [Apache](http://httpd.apache.org/)
 - [Nginx](http://wiki.nginx.org/Main)
+
+#### PHP
+
+- [PHP](http://php.net) 5.3, 5.4, 5.5
 - [Composer](http://getcomposer.org/)
-- [XDebug](http://xdebug.org/)
-- [Xhprof](http://pecl.php.net/package/xhprof)
-- [Mailcatcher](http://mailcatcher.me/)
+
+#### Node
+
+- [Node](http://nodejs.org/)
+- [Bower](http://bower.io/)
+- [Grunt](http://gruntjs.com/)
+- Any Node Modules
+
+#### Data Store
+
 - [MySQL](http://www.mysql.com/)
 - [PostgreSQL](http://www.postgresql.org/)
 - [Mongodb](http://www.mongodb.org/)
 - [Riak](http://basho.com/riak/)
 - [Redis](http://redis.io/)
+
+#### Queues
+
 - [Beanstalkd](http://kr.github.io/beanstalkd/)
+
+#### Monitoring
+
+- [New Relic](http://newrelic.com/)
+
+#### Dev Tools
+
+- [XDebug](http://xdebug.org/)
+- [Xhprof](http://pecl.php.net/package/xhprof)
+- [Mailcatcher](http://mailcatcher.me/)
 - [Ngrok](https://ngrok.com/)
-- [Node](http://nodejs.org/)
-- [Bower](http://bower.io/)
-- [Grunt](http://gruntjs.com/)
 
 ## Applications ##
 
@@ -70,6 +95,7 @@ Protobox has built in support for installing any of these applications:
 - [Akeneo](http://www.akeneo.com/) (Coming Soon)
 - [Oro CRM](http://www.orocrm.com/) (Coming Soon)
 - [Prestashop](http://www.prestashop.com/) (Coming Soon)
+- Any public / private GIT repository
 
 ## License ##
 

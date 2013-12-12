@@ -1,0 +1,95 @@
+- name: newrelic | check for license
+  fail: msg="New Relic license is required"
+  when: monitoring.newrelic.license is not defined or not monitoring.newrelic.license
+
+## Debian
+
+- name: newrelic | check for new relic system
+  stat: >
+    path=/etc/init.d/newrelic-sysmond
+  sudo: yes
+  register: newrelic_system
+
+- name: newrelic | get the key
+  command: >
+    wget -O - http://download.newrelic.com/548C16BF.gpg | sudo apt-key add -
+  sudo: yes
+  when: not newrelic_system.stat.exists
+
+- name: newrelic | add the repository
+  command: > 
+    sh -c 'echo "deb http://apt.newrelic.com/debian/ newrelic non-free" > /etc/apt/sources.list.d/newrelic.list'
+  sudo: yes
+  when: not newrelic_system.stat.exists
+
+- name: newrelic | updates apt cache
+  apt: update_cache=true
+  sudo: yes
+  when: not newrelic_system.stat.exists
+
+## Server Agent
+
+- name: newrelic | installs the system agent
+  apt: >
+    pkg=newrelic-sysmond
+    state=latest
+  sudo: yes
+  when: not newrelic_system.stat.exists
+
+- name: newrelic | configure the system agent
+  command: >
+    nrsysmond-config --set license_key={{ monitoring.newrelic.license }}
+  sudo: yes
+  when: not newrelic_system.stat.exists
+
+- name: newrelic | start the service
+  service: >
+    name=newrelic-sysmond
+    state=started
+
+## PHP Agent
+
+- name: newrelic | installs the php agent
+  apt: >
+    pkg=newrelic-php5
+    state=latest
+  sudo: yes
+  when: >
+    monitoring.newrelic.php is defined and 
+    monitoring.newrelic.php == '1' and
+    php is defined and 
+    php.install == '1'
+
+#- name: newrelic | configure the php agent
+#  command: >
+#    newrelic-install install
+#  sudo: yes
+#  when: >
+#    monitoring.newrelic.php is defined and 
+#    monitoring.newrelic.php == '1' and
+#    php is defined and 
+#    php.install == '1'
+
+#- name: newrelic | configure the php agent
+#  lineinfile: dest=/path/to/file line="string to append" insertafter=EOF
+
+## Node Agent
+
+- name: newrelic | installs the node agent
+  npm: >
+    name=newrelic
+    global=yes
+    state=latest
+  sudo: yes
+  when: >
+    monitoring.newrelic.node is defined and 
+    monitoring.newrelic.node == '1' and
+    node is defined and 
+    node.install == '1'
+
+#Copy newrelic.js from node_modules/newrelic into the root directory of your application
+#Set a value for app_name
+#Replace the license_key value with your New Relic license key from Step 2
+#Make this the first line of your app's startup script: require('newrelic');
+
+#- name: newrelic | configures the node agent
