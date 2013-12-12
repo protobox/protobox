@@ -1,23 +1,54 @@
-# TODO : remove directories if they are blank but for now remove .DS_Store and other files so composer can work
-- name: application | remove if blank
+- name: application | check for laravel
+  stat: >
+    path=/usr/local/bin/laravel
+  register: laravel_phar
+
+- name: application | download package
+  get_url: >
+    url=http://laravel.com/laravel.phar
+    dest=/usr/src/laravel.phar
+    force=yes
+  when: not laravel_phar.stat.exists
+
+- name: application | move package
+  command: >
+    mv laravel.phar /usr/local/bin/laravel
+    chdir=/usr/src/
+  sudo: yes
+  when: not laravel_phar.stat.exists
+
+- name: application | set permissions
   file: >
-    path={{ item.path }}/.DS_Store
-    state=absent
+    path=/usr/local/bin/laravel
+    owner=vagrant
+    group=vagrant
+    mode=0755
+  sudo: yes
+  when: not laravel_phar.stat.exists
+
+- name: application | check installation
+  stat: >
+    path={{ item.path }}
+  register: laravel_install
   with_items: applications.laravel
-  when: item.install == 1
 
 - name: application | verify install paths
   file: >
-    path={{ item.path }}
+    path={{ item.0.path|dirname }}
     state=directory
-  with_items: applications.laravel
-  when: item.install == 1
+  with_together:
+    - applications.laravel
+    - laravel_install.results 
+  when: item.0.install == 1 and not item.1.stat.exists
 
-- name: install laravel
+- name: application | install laravel
   command: > 
-    composer create-project laravel/laravel . --prefer-dist
-    chdir={{ item.path }}
-  with_items: applications.laravel
-  when: item.install == 1
+    laravel new {{ item.0.path|basename }}
+    chdir={{ item.0.path|dirname }}
+  with_together:
+    - applications.laravel
+    - laravel_install.results 
+  sudo: yes
+  when: item.0.install == 1 and not item.1.stat.exists
 
 # TODO : set apache + nginx virtual host document root to /public folder or verify it as part of compatibility
