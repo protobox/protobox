@@ -224,6 +224,14 @@ node:
     - sass
     - compass
 
+monitoring:
+  install: 1
+  newrelic:
+    install: 0
+    license: ''
+    php: 1
+    node: 1
+
 localtunnel:
   install: 1
   ngrok:
