@@ -150,13 +150,10 @@ EOABORT
 ohai "Starting installation at: #{install_folder}"
 
 if File.directory? install_folder
-  system "/bin/chmod", "g+rwx", *chmods unless chmods.empty?
-  #system "/usr/bin/chgrp", "admin", *chgrps unless chgrps.empty?
+  system "/bin/chmod g+rwx #{install_folder}"
 else
   system "/bin/mkdir #{install_folder}"
   system "/bin/chmod g+rwx #{install_folder}"
-  # the group is set to wheel by default for some reason
-  #system "/usr/bin/chgrp admin #{install_folder}"
 end
 
 ohai "Downloading and installing protobox..."

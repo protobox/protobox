@@ -6,7 +6,9 @@ Protobox easily allows you to setup a development environment with PHP, Apache, 
 
 ## Installation ##
 
-	ruby -e "$(curl -fsSL https://raw.github.com/protobox/protobox/ansible/bootstrap)"
+Installation - OSX, *nix
+
+	ruby -e "$(curl -fsSL https://raw.github.com/protobox/protobox/master/ansible/shell/bootstrap)"
 
 Alternatively, you can install it via git manually.
 
