@@ -21,7 +21,7 @@
 
 - name: ngrok | check if installed
   stat: >
-    path=/usr/src/ngrok
+    path=/usr/local/bin/ngrok
   register: ngrok_installed
 
 - name: ngrok | download package
@@ -56,5 +56,8 @@
   template: >
     src=ngrok.sh.j2
     dest=/usr/local/bin/ngrok
+    owner=vagrant
+    group=vagrant
     mode=0755
   sudo: yes
+  when: not ngrok_installed.stat.exists
