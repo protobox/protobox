@@ -60,7 +60,7 @@ Protobox has built in support for the following modules:
 - [Node](http://nodejs.org/)
 - [Bower](http://bower.io/)
 - [Grunt](http://gruntjs.com/)
-- Any Node Modules
+- Any [Node Modules](https://npmjs.org/)
 
 #### Data Store
 
@@ -91,7 +91,7 @@ Protobox has built in support for installing any of these applications:
 
 - [Wordpress](http://wordpress.org/)
 - [Magento](http://magento.com/) (Coming Soon)
-- [Drupal](https://drupal.org/) (Coming Soon)
+- [Drupal](https://drupal.org/)
 - [Laravel](http://laravel.com/)
 - [Lemonstand](http://lemonstand.com/)
 - [Symfony](http://symfony.com/) (Coming Soon)

@@ -1,0 +1,7 @@
+- name: dependencies | install dependencies
+  apt: >
+    pkg={{ item }} 
+    state=latest
+  with_items:
+    - unzip
+  sudo: yes

@@ -1,0 +1,9 @@
+- include: compatibility.yml
+
+- include: dependencies.yml
+
+- include: drush.yml
+
+- include: application.yml
+
+- include: modules.yml

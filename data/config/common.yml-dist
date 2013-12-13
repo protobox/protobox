@@ -280,6 +280,26 @@ applications:
   #      dbname: lemonstand
   #      dbuser: root
   #      dbpass: root
+  #drupal:
+  #  - name: drupalsite
+  #    install: 1
+  #    path: /srv/www/web/drupal
+  #    options:
+  #      drush_version: '6.0.0'
+  #      drupal_version: '6.22'
+  #      download_args: ''
+  #      install_args: ''
+  #      modules:
+  #        - ctools
+  #        - wysiwyg
+  #    settings:
+  #      dbhost: localhost
+  #      dbname: app
+  #      dbuser: root
+  #      dbpass: root
+  #      user_email: 'admin@admin.com'
+  #      user_name: 'admin'
+  #      user_password: 'admin'
   #repo:
   #  - name: protobox-web
   #    install: 1

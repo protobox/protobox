@@ -1,0 +1,95 @@
+- name: application | drush status
+  shell: >
+    /home/vagrant/drush/drush-{{ item.options.drush_version }}/drush status | grep Successful;
+    chdir={{ item.path }}
+  ignore_errors: True
+  register: drush_status
+  with_items: applications.drupal
+  when: item.install == 1
+
+- name: application | create directory
+  file: >
+    path={{ item.path }}
+    state=directory
+  with_items: applications.drupal
+  when: item.install == 1
+
+- name: application | download drupal
+  command: >
+    /home/vagrant/drush/drush-{{ item.options.drush_version }}/drush dl -y
+    --drupal-project-rename={{ item.path|basename }}
+    --destination={{ item.path|dirname }}
+    {{ item.download_args|default('') }} 
+    {{ 'drupal-' ~ item.options.drupal_version if item.options.drupal_version is defined else 'drupal' }}
+    creates={{ item.path }}/index.php
+  with_items: applications.drupal
+  when: protobox_env == 'vagrant' and item.install == 1
+
+- name: application | make writable
+  file: >
+    path={{ item.path }}/sites/default
+    state=directory
+    mode=0777
+  with_items: applications.drupal
+  when: item.install == 1
+
+- name: application | create files directory
+  file: >
+    path={{ item.path }}/sites/default/files
+    state=directory
+    mode=0777
+  with_items: applications.drupal
+  when: item.install == 1
+
+#- name: application | create the settings file
+#  file: src=./www/sites/default/default.settings.php dest=./www/sites/default/settings.php
+
+- name: application | site install
+  shell: >
+    /home/vagrant/drush/drush-{{ item.0.options.drush_version }}/drush -y 
+    --db-su={{ item.0.settings.dbuser|default('root') }}
+    --db-su-pw={{ item.0.settings.dbpass|default('') }}
+    {{ '--db-prefix=' if item.0.settings.dbprefix|default('') else '' }}
+    --db-url=mysql://{{ item.0.settings.dbuser|default('root') }}:{{ item.0.settings.dbpass|default('') }}@{{ item.0.settings.dbhost|default('127.0.0.1') }}/{{ item.0.settings.dbname|default('') }} 
+    --account-mail={{ item.0.settings.user_email|default('admin@admin.com') }}
+    --account-name={{ item.0.settings.user_name|default('admin') }}
+    --account-pass={{ item.0.settings.user_password|default('admin') }}
+    {{ item.install_args|default('') }}
+    site-install
+    chdir={{ item.0.path }}
+  with_together:
+    - applications.drupal
+    - drush_status.results
+  when: item.0.install == 1 and item.1.rc != 0
+
+## cleanup
+
+- name: application | reset site permissions
+  file: >
+    path={{ item.path }}/sites/default
+    state=directory
+    mode=0755
+  with_items: applications.drupal
+  when: item.install == 1
+
+- name: application | reset settings permissions
+  file: >
+    path={{ item.path }}/sites/default/settings.php
+    state=file
+    mode=0644
+  with_items: applications.drupal
+  when: item.install == 1
+
+#- name: application | get user
+#  shell: ls -l |grep www | awk '{print $3}'
+#  register: app_user
+
+#- name: application | change ownership of application
+#  local_action: shell chown -R ${app_user.stdout}:${app_user.stdout} {{ item.path }}
+#  with_items: applications.drupal
+#  when: item.install == 1
+
+- name: application | clean drush cache
+  file: >
+    path=/home/vagrant/.drush
+    state=absent
