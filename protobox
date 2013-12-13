@@ -55,20 +55,6 @@ if !File.file?(boot_file)
   exit
 end
 
-# Open config file location
-vagrant_file = ''
-File.open(boot_file, 'r') do |f1|  
-  while line = f1.gets  
-    vagrant_file += line  
-  end  
-end 
-
-# Check for missing data file
-if !File.file?(vagrant_file)
-  puts "Data file is missing: #{vagrant_file}\n"
-  exit
-end
-
 # Process actions
 case action
   # Switch between configurations
