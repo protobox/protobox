@@ -1,0 +1,34 @@
+- name: application | check installation
+  stat: >
+    path={{ item.path }}
+  register: symfony_install
+  with_items: applications.sylius
+
+- name: application | verify install paths
+  file: >
+    path={{ item.0.path|dirname }}
+    state=directory
+  with_together:
+    - applications.sylius
+    - symfony_install.results 
+  when: item.0.install == 1 and not item.1.stat.exists
+
+- name: application | install sylius
+  command: > 
+    composer create-project sylius/sylius {{ item.0.path|basename }} -s dev
+    chdir={{ item.0.path|dirname }}
+  with_together:
+    - applications.sylius
+    - symfony_install.results 
+  sudo: yes
+  when: item.0.install == 1 and not item.1.stat.exists
+
+- name: application | configure sylius
+  shell: >
+    app/console sylius:install
+    chdir={{ item.0.path }}
+  with_together:
+    - applications.sylius
+    - symfony_install.results 
+  sudo: yes
+  when: item.0.install == 1 and not item.1.stat.exists
