@@ -25,7 +25,3 @@
   with_items: applications.wordpress
   when: item.options.version is not defined or item.options.version == ''
 
-- name: compatibility | check for settings
-  fail: msg="Wordpress - {{ item.name }} - Settings are missing"
-  with_items: applications.wordpress
-  when: item.settings is not defined

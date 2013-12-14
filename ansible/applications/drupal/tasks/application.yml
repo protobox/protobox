@@ -47,13 +47,13 @@
 - name: application | site install
   shell: >
     /home/vagrant/drush/drush-{{ item.0.options.drush_version }}/drush -y 
-    --db-su={{ item.0.settings.dbuser|default('root') }}
-    --db-su-pw={{ item.0.settings.dbpass|default('') }}
-    {{ '--db-prefix=' if item.0.settings.dbprefix|default('') else '' }}
-    --db-url=mysql://{{ item.0.settings.dbuser|default('root') }}:{{ item.0.settings.dbpass|default('') }}@{{ item.0.settings.dbhost|default('127.0.0.1') }}/{{ item.0.settings.dbname|default('') }} 
-    --account-mail={{ item.0.settings.user_email|default('admin@admin.com') }}
-    --account-name={{ item.0.settings.user_name|default('admin') }}
-    --account-pass={{ item.0.settings.user_password|default('admin') }}
+    --db-su={{ item.0.options.dbuser|default('root') }}
+    --db-su-pw={{ item.0.options.dbpass|default('') }}
+    {{ '--db-prefix=' if item.0.options.dbprefix|default('') else '' }}
+    --db-url=mysql://{{ item.0.options.dbuser|default('root') }}:{{ item.0.options.dbpass|default('') }}@{{ item.0.options.dbhost|default('127.0.0.1') }}/{{ item.0.settings.dbname|default('') }} 
+    --account-mail={{ item.0.options.user_email|default('admin@admin.com') }}
+    --account-name={{ item.0.options.user_name|default('admin') }}
+    --account-pass={{ item.0.options.user_password|default('admin') }}
     {{ item.install_args|default('') }}
     site-install
     chdir={{ item.0.path }}

@@ -260,7 +260,6 @@ applications:
   #      sha: 'cf3dac69cd1810d8f4880b2c982fee869a0c56e1c4f793bbfc6d7021fd6da97c'
   #      revision: 'master'
   #      method: zip
-  #    settings:
   #      dbhost: localhost
   #      dbname: wordpress
   #      dbuser: root
@@ -273,7 +272,7 @@ applications:
   #  - name: test4
   #    install: 1
   #    path: /srv/www/web/lemonstand
-  #    settings:
+  #    options:
   #      holder: 
   #      serial: 
   #      dbhost: localhost
@@ -289,10 +288,6 @@ applications:
   #      drupal_version: '6.22'
   #      download_args: ''
   #      install_args: ''
-  #      modules:
-  #        - ctools
-  #        - wysiwyg
-  #    settings:
   #      dbhost: localhost
   #      dbname: app
   #      dbuser: root
@@ -300,6 +295,9 @@ applications:
   #      user_email: 'admin@admin.com'
   #      user_name: 'admin'
   #      user_password: 'admin'
+  #      modules:
+  #        - ctools
+  #        - wysiwyg
   #repo:
   #  - name: protobox-web
   #    install: 1
