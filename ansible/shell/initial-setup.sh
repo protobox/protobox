@@ -3,7 +3,7 @@
 OS=$(/bin/bash /vagrant/ansible/shell/os-detect.sh ID)
 CODENAME=$(/bin/bash /vagrant/ansible/shell/os-detect.sh CODENAME)
 
-PUPPET_LOCATION=( $( /bin/cat /vagrant/data/config/.protobox ) )
+PUPPET_LOCATION=( $( /bin/cat /vagrant/.protobox/config ) )
 PUPPET_DATA="/vagrant/$PUPPET_LOCATION"
 PROTOBOX_LOGO=/vagrant/ansible/shell/logo.txt
 
