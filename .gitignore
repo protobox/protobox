@@ -5,6 +5,7 @@ package.box
 # Ansible Files
 vagrant_ansible*
 .my.cnf
+.protobox
 
 # Web Files
 index.html

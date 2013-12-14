@@ -5,7 +5,13 @@ require 'yaml'
 
 dir = Dir.pwd
 vagrant_dir = File.expand_path(File.dirname(__FILE__))
-protobox_boot = 'data/config/.protobox'
+protobox_dir = vagrant_dir + '/.protobox'
+protobox_boot = protobox_dir + '/config'
+
+# Create protobox dir if it doesn't exist
+if !Dir.exist?(protobox_dir)
+  Dir.mkdir(protobox_dir)
+end
 
 # Check if protobox boot file exists, if it doesn't create it here
 if !File.file?(protobox_boot)

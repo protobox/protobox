@@ -39,13 +39,20 @@ end
 # Setup vars
 action = ARGV[0]
 dir = Dir.pwd
-config_dir = dir + '/data/config'
-boot_file = config_dir + '/.protobox'
+protobox_dir = dir + '/.protobox'
+boot_file = protobox_dir + '/config'
+config_path = 'data/config'
+config_dir = dir + '/' + config_path
+
+# Create protobox dir if it doesn't exist
+if !Dir.exist?(protobox_dir)
+  Dir.mkdir(protobox_dir)
+end
 
 # Check if protobox boot file exists, if it doesn't create it here
 if !File.file?(boot_file)
   File.open(boot_file, 'w') do |file|
-    file.write(config_dir + '/common.yml')
+    file.write(config_path + '/common.yml')
   end
 end
 
@@ -76,7 +83,7 @@ case action
 
     # Write the boot file
     File.open(boot_file, 'w') do |file|
-        file.write('data/config/' + config_name + '.yml')
+        file.write(config_path + '/' + config_name + '.yml')
     end
 
     puts "You can now 'vagrant up' using the '#{config_name}' configuration"
@@ -153,7 +160,7 @@ case action
 
     # Write the boot file
     File.open(boot_file, 'w') do |file|
-      file.write('data/config/' + document + '.yml')
+      file.write(config_path + '/' + document + '.yml')
     end
 
     puts "You can now 'vagrant up' using the '#{document}' configuration"
