@@ -105,12 +105,23 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # Virtual Box Configuration
-  settings[vagrant_vm]['vm']['provider'].each do |prov, options|
-    config.vm.provider prov.to_sym do |params|
-      options.each do |type, values|
-        values.each do |key, value|
-          params.customize [type, :id, "--#{key}", value]
+  # Provider Configuration
+  if settings[vagrant_vm]['vm'].has_key?("provider") and !settings[vagrant_vm]['vm']['provider'].nil?
+    # Loop through provders
+    settings[vagrant_vm]['vm']['provider'].each do |prov, options|
+      # Set specific provider info
+      config.vm.provider prov.to_sym do |params|
+        # Loop through provider options
+        options.each do |type, values|
+          # Check if option has suboptions
+          if values.is_a?(Hash) 
+            values.each do |key, value|
+              params.customize [type, :id, "--#{key}", value]
+            end
+          # Set key=value options
+          else
+            params.send("#{type}=", values)
+          end
         end
       end
     end
