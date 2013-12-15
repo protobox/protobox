@@ -1,20 +1,22 @@
 - name: modules | download modules
   shell: >
-    /home/vagrant/drush/drush-{{ item.0.options.drush_version }}/drush dl -y 
+    drush dl -y 
     --destination={{ item.0.path }}/sites/all/modules
     {{ item.0.options.modules|join(' ') }}
     chdir={{ item.0.path }}
   with_together:
     - applications.drupal
     - drush_status.results
+  sudo: yes
   when: item.0.install == 1 and item.0.options.modules is defined
 
 - name: modules | enable modules
   shell: >
-    /home/vagrant/drush/drush-{{ item.0.options.drush_version }}/drush en -y
+    drush en -y
     {{ item.0.options.modules|join(' ') }}
     chdir={{ item.0.path }}
   with_together:
     - applications.drupal
     - drush_status.results
+  sudo: yes
   when: item.0.install == 1 and item.0.options.modules is defined

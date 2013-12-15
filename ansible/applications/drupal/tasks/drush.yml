@@ -1,12 +1,12 @@
-#- name: drush | setup pear channel
-#  command: >
-#    pear channel-discover pear.drush.org
-#    creates=/usr/share/php/.channels/pear.drush.org.reg
+- name: drush | setup pear channel
+  command: >
+    pear channel-discover pear.drush.org
+    creates=/usr/share/php/.channels/pear.drush.org.reg
 
-#- name: drush | install drush
-#  command: >
-#    pear install drush/drush
-#    creates=/usr/bin/drush
+- name: drush | install drush
+  command: >
+    pear install drush/drush
+    creates=/usr/bin/drush
 
 #- name: drush | install drush version
 #  command: >
@@ -14,63 +14,63 @@
 #  with_items: applications.drupal
 #  when: item.options.drush_version is defined
 
-- name: drush | verify directory
-  file: >
-    path=/home/vagrant/drush/
-    state=directory
-    owner=vagrant
-    group=vagrant
-    mode=0755
-  when: protobox_env == 'vagrant'
+#- name: drush | verify directory
+#  file: >
+#    path=/home/vagrant/drush/
+#    state=directory
+#    owner=vagrant
+#    group=vagrant
+#    mode=0755
+#  when: protobox_env == 'vagrant'
 
-- name: drush | verify drush
-  stat: >
-    path=/home/vagrant/drush/drush-{{ item.options.drush_version }}
-  with_items: applications.drupal
-  register: drush_install
-  when: protobox_env == 'vagrant'
+#- name: drush | verify drush
+#  stat: >
+#    path=/home/vagrant/drush/drush-{{ item.options.drush_version }}
+#  with_items: applications.drupal
+#  register: drush_install
+#  when: protobox_env == 'vagrant'
 
-- name: drush | download drush
-  get_url: >
-    url=https://github.com/drush-ops/drush/archive/{{ item.0.options.drush_version }}.zip
-    dest=/home/vagrant/drush/drush-{{ item.0.options.drush_version }}.zip
-    mode=0755
-  with_together: 
-    - applications.drupal
-    - drush_install.results
-  when: protobox_env == 'vagrant' and not item.1.stat.exists
+#- name: drush | download drush
+#  get_url: >
+#    url=https://github.com/drush-ops/drush/archive/{{ item.0.options.drush_version }}.zip
+#    dest=/home/vagrant/drush/drush-{{ item.0.options.drush_version }}.zip
+#    mode=0755
+#  with_together: 
+#    - applications.drupal
+#    - drush_install.results
+#  when: protobox_env == 'vagrant' and not item.1.stat.exists
 
-- name: drush | unzip
-  command: > 
-    unzip drush-{{ item.0.options.drush_version }}.zip
-    chdir=/home/vagrant/drush/
-  with_together: 
-    - applications.drupal
-    - drush_install.results
-  when: protobox_env == 'vagrant' and not item.1.stat.exists
+#- name: drush | unzip
+#  command: > 
+#    unzip drush-{{ item.0.options.drush_version }}.zip
+#    chdir=/home/vagrant/drush/
+#  with_together: 
+#    - applications.drupal
+#    - drush_install.results
+#  when: protobox_env == 'vagrant' and not item.1.stat.exists
 
-- name: drush | fix permissions
-  file: >
-    path=/home/vagrant/drush
-    owner=vagrant
-    group=vagrant
-    recurse=yes
-  when: protobox_env == 'vagrant'
+#- name: drush | fix permissions
+#  file: >
+#    path=/home/vagrant/drush
+#    owner=vagrant
+#    group=vagrant
+#    recurse=yes
+#  when: protobox_env == 'vagrant'
 
-- name: drush | fix cache directory
-  file: >
-    path=/home/vagrant/.drush
-    state=directory
-    owner=vagrant
-    group=vagrant
-    recurse=yes
-  when: protobox_env == 'vagrant'
+#- name: drush | fix cache directory
+#  file: >
+#    path=/home/vagrant/.drush
+#    state=directory
+#    owner=vagrant
+#    group=vagrant
+#    recurse=yes
+#  when: protobox_env == 'vagrant'
 
-- name: drush | add aliases
-  template: >
-    src=alias.drupal.j2
-    dest=/etc/profile.d/drupal
-  sudo: yes
+#- name: drush | add aliases
+#  template: >
+#    src=alias.drupal.j2
+#    dest=/etc/profile.d/drupal.sh
+#  sudo: yes
 
 #- name: drush | run drush to download dependencies
 #  command: drush

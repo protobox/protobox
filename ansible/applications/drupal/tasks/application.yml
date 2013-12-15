@@ -1,10 +1,11 @@
 - name: application | drush status
   shell: >
-    /home/vagrant/drush/drush-{{ item.options.drush_version }}/drush status | grep Successful;
+    drush status | grep Successful;
     chdir={{ item.path }}
   ignore_errors: True
   register: drush_status
   with_items: applications.drupal
+  sudo: yes
   when: item.install == 1
 
 - name: application | create directory
@@ -16,13 +17,14 @@
 
 - name: application | download drupal
   command: >
-    /home/vagrant/drush/drush-{{ item.options.drush_version }}/drush dl -y
+    drush dl -y
     --drupal-project-rename={{ item.path|basename }}
     --destination={{ item.path|dirname }}
     {{ item.download_args|default('') }} 
     {{ 'drupal-' ~ item.options.drupal_version if item.options.drupal_version is defined else 'drupal' }}
     creates={{ item.path }}/index.php
   with_items: applications.drupal
+  sudo: yes
   when: protobox_env == 'vagrant' and item.install == 1
 
 - name: application | make writable
@@ -46,7 +48,7 @@
 
 - name: application | site install
   shell: >
-    /home/vagrant/drush/drush-{{ item.0.options.drush_version }}/drush -y 
+    drush -y 
     --db-su={{ item.0.options.dbuser|default('root') }}
     --db-su-pw={{ item.0.options.dbpass|default('') }}
     {{ '--db-prefix=' if item.0.options.dbprefix|default('') else '' }}
@@ -60,6 +62,7 @@
   with_together:
     - applications.drupal
     - drush_status.results
+  sudo: yes
   when: item.0.install == 1 and item.1.rc != 0
 
 ## cleanup
@@ -89,7 +92,7 @@
 #  with_items: applications.drupal
 #  when: item.install == 1
 
-- name: application | clean drush cache
-  file: >
-    path=/home/vagrant/.drush
-    state=absent
+#- name: application | clean drush cache
+#  file: >
+#    path=/home/vagrant/.drush
+#    state=absent
