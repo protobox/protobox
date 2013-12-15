@@ -50,7 +50,7 @@
     --db-su={{ item.0.options.dbuser|default('root') }}
     --db-su-pw={{ item.0.options.dbpass|default('') }}
     {{ '--db-prefix=' if item.0.options.dbprefix|default('') else '' }}
-    --db-url=mysql://{{ item.0.options.dbuser|default('root') }}:{{ item.0.options.dbpass|default('') }}@{{ item.0.options.dbhost|default('127.0.0.1') }}/{{ item.0.settings.dbname|default('') }} 
+    --db-url=mysql://{{ item.0.options.dbuser|default('root') }}:{{ item.0.options.dbpass|default('') }}@{{ item.0.options.dbhost|default('127.0.0.1') }}/{{ item.0.options.dbname|default('') }} 
     --account-mail={{ item.0.options.user_email|default('admin@admin.com') }}
     --account-name={{ item.0.options.user_name|default('admin') }}
     --account-pass={{ item.0.options.user_password|default('admin') }}
