@@ -1,7 +1,7 @@
-- name: drush | setup pear channel
-  command: >
-    pear channel-discover pear.drush.org
-    creates=/usr/share/php/.channels/pear.drush.org.reg
+#- name: drush | setup pear channel
+#  command: >
+#    pear channel-discover pear.drush.org
+#    creates=/usr/share/php/.channels/pear.drush.org.reg
 
 #- name: drush | install drush
 #  command: >
@@ -60,6 +60,7 @@
 - name: drush | fix cache directory
   file: >
     path=/home/vagrant/.drush
+    state=directory
     owner=vagrant
     group=vagrant
     recurse=yes
