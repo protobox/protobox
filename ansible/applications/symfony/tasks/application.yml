@@ -15,7 +15,7 @@
 
 - name: application | install symfony
   command: > 
-    composer create-project symfony/framework-standard-edition {{ item.0.path|basename }} --prefer-dist
+    composer create-project symfony/framework-standard-edition {{ item.0.path|basename }} --prefer-source --no-interaction
     chdir={{ item.0.path|dirname }}
   with_together:
     - applications.symfony

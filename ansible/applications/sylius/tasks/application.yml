@@ -15,12 +15,11 @@
 
 - name: application | install sylius
   command: > 
-    composer create-project sylius/sylius {{ item.0.path|basename }} -s dev
+    composer create-project sylius/sylius {{ item.0.path|basename }} --prefer-source --no-interaction --dev
     chdir={{ item.0.path|dirname }}
   with_together:
     - applications.sylius
     - symfony_install.results 
-  sudo: yes
   when: item.0.install == 1 and not item.1.stat.exists
 
 - name: application | configure sylius
@@ -30,5 +29,4 @@
   with_together:
     - applications.sylius
     - symfony_install.results 
-  sudo: yes
   when: item.0.install == 1 and not item.1.stat.exists
