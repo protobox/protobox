@@ -1,0 +1,28 @@
+- name: compatibility | check for ssh config
+  stat: > 
+    path=/vagrant/.ssh/config
+  register: ssh_config
+  when: protobox_env == 'protobox'
+
+- name: compatibility | check for ssh keys
+  fail: msg="Please add some SSH keys. Sylius requires composer which needs ssh key to connect to github."
+  when: >
+    (not ssh_config.stat.exists and server.ssh is not defined) or 
+    (server.ssh is defined and (server.ssh.config is not defined or server.ssh.private_keys is not defined))
+
+- name: compatibility | require php
+  fail: msg="PHP is required"
+  when: php is not defined or php.install != 1
+
+- name: compatibility | require apache or nginx
+  fail: msg="Apache or Nginx is required"
+  when: (apache is not defined or apache.install != 1) and (nginx is not defined or nginx.install != 1)
+
+- name: compatibility | require composer
+  fail: msg="PHP - Composer is required"
+  when: php.composer is not defined or php.composer.install != 1
+
+- name: compatibility | check for install path
+  fail: msg="Sylius - {{ item.name }} - Install path missing"
+  with_items: applications.symfony
+  when: item.path is not defined

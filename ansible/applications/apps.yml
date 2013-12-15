@@ -8,3 +8,5 @@
     - { role: 'wordpress', dir: 'applications/wordpress', when: "applications.wordpress is defined" }
     - { role: 'laravel', dir: 'applications/laravel', when: "applications.laravel is defined" }
     - { role: 'drupal', dir: 'applications/drupal', when: "applications.drupal is defined" }
+    - { role: 'symfony', dir: 'applications/symfony', when: "applications.symfony is defined" }
+    - { role: 'sylius', dir: 'applications/sylius', when: "applications.sylius is defined" }

@@ -1,0 +1,23 @@
+- name: application | check installation
+  stat: >
+    path={{ item.path }}
+  register: symfony_install
+  with_items: applications.symfony
+
+- name: application | verify install paths
+  file: >
+    path={{ item.0.path|dirname }}
+    state=directory
+  with_together:
+    - applications.symfony
+    - symfony_install.results 
+  when: item.0.install == 1 and not item.1.stat.exists
+
+- name: application | install symfony
+  command: > 
+    composer create-project symfony/framework-standard-edition {{ item.0.path|basename }} --prefer-dist
+    chdir={{ item.0.path|dirname }}
+  with_together:
+    - applications.symfony
+    - symfony_install.results 
+  when: item.0.install == 1 and not item.1.stat.exists
