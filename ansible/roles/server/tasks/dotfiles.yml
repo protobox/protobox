@@ -39,4 +39,4 @@
     cp {{ item }} {{ dotfiles_path }}/{{ item|basename }}
   with_fileglob: /vagrant/data/dot/*
   sudo: yes
-  when: protobox_env == 'vagrant' and item != '.gitignore'
+  when: protobox_env == 'vagrant' and item|basename != '.gitignore'
