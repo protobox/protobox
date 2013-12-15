@@ -22,6 +22,10 @@ vagrant:
           memory: '1024'
         setextradata:
           VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root: 1
+      #parallels:
+      #  name: protobox
+      #  set:
+      #    memsize: '1024'
     provision:
       ansible:
         playbook: "ansible/site.yml"
