@@ -47,11 +47,22 @@
   sudo: yes
   when: node.npm is defined
 
-- name: main | install gem modules
-  gem: >
-    name={{ item }}
+- name: main | install dependencies
+  apt: >
+    name={{ item }} 
     state=latest
-  with_items: node.gems
+  with_items:
+    - libsqlite3-dev
+    - rubygems
+  sudo: yes
+  when: node.gems is defined
+
+- name: main | install gem modules
+  command: >
+    gem install {{ item }} --no-ri --no-rdoc
+  with_items: 
+    - rdoc
+    - node.gems
   sudo: yes
   when: node.gems is defined
 

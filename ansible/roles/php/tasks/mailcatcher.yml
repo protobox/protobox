@@ -1,21 +1,37 @@
-- name: mailcatcher | install packages
-  gem: >
+- name: mailcatcher | install dependencies
+  apt: >
     name={{ item }} 
     state=latest
   with_items:
+    - libsqlite3-dev
+    - rubygems
+  sudo: yes
+
+- name: mailcatcher | install packages
+  command: >
+    gem install {{ item }} --no-ri --no-rdoc
+  with_items:
+    - rdoc
     - mailcatcher
   sudo: yes
 
 #--smtp-ip= --http-ip=
-- set_fact: >
-    mailcatcher_ip: "--ip={{ php.mailcatcher.ip|default('0.0.0.0') }}"
-    mailcatcher_port: "--smtp-port={{ php.mailcatcher.smtp_port|default('') }}"
-    mailcatcher_http: "--http-port={{ php.mailcatcher.http_port|default('') }}"
-    mailcatcher_no_quit: "--no-quit"
+#--no-quit
+- name: mailcatcher | set facts
+  set_fact: >
+    mailcatcher_ip="--ip={{ php.mailcatcher.ip|default('0.0.0.0') }}"
+    mailcatcher_port="{{ '--smtp-port=' ~ php.mailcatcher.smtp_port if php.mailcatcher.smtp_port is defined else '' }}"
+    mailcatcher_http="{{ '--http-port=' ~ php.mailcatcher.http_port if php.mailcatcher.http_port is defined else '' }}"
+    mailcatcher_no_quit=""
+
+#- name: mailcatcher | start service
+#  service: > 
+#    name=mailcatcher
+#    state=started
+#    arguments="{{ mailcatcher_ip }} {{ mailcatcher_port }} {{ mailcatcher_http }} {{ mailcatcher_no_quit }}"
+#  sudo: yes
 
 - name: mailcatcher | start service
-  service: > 
-    name=mailcatcher
-    state=started
-    arguments="mailcatcher_ip mailcatcher_port mailcatcher_http mailcatcher_no_quit"
+  command: > 
+    mailcatcher {{ mailcatcher_ip }} {{ mailcatcher_port }} {{ mailcatcher_http }} {{ mailcatcher_no_quit }}
   sudo: yes
