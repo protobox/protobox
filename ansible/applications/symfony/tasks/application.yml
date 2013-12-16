@@ -13,10 +13,20 @@
     - symfony_install.results 
   when: item.0.install == 1 and not item.1.stat.exists
 
-- name: application | install symfony
-  command: > 
-    composer create-project symfony/framework-standard-edition {{ item.0.path|basename }} --prefer-source --no-interaction
-    chdir={{ item.0.path|dirname }}
+#- name: application | install symfony
+#  command: > 
+#    composer create-project symfony/framework-standard-edition {{ item.0.path|basename }} --prefer-source --no-interaction
+#    chdir={{ item.0.path|dirname }}
+#  with_together:
+#    - applications.symfony
+#    - symfony_install.results 
+#  when: item.0.install == 1 and not item.1.stat.exists
+
+- name: application | install via git
+  git: >
+    repo={{ item.0.options.source|default('git@github.com:symfony/symfony-standard.git') }}
+    dest={{ item.0.path }}
+    version={{ item.0.options.revision|default('master') }}
   with_together:
     - applications.symfony
     - symfony_install.results 

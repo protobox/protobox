@@ -1,7 +1,7 @@
 - name: sshkeys | set facts
   set_fact: >
-    sshkeys_path="{{ '/home/vagrant' if protobox_env == 'vagrant' else '/home/' ~ ansible_user_id }}"
-    sshkeys_user="{{ 'vagrant' if protobox_env == 'vagrant' else ansible_user_id }}"
+    sshkeys_path="{{ '/root' if protobox_env == 'vagrant' else '/home/' ~ ansible_user_id }}"
+    sshkeys_user="{{ 'root' if protobox_env == 'vagrant' else ansible_user_id }}"
 
 # make sure ssh config exists
 - name: sshkeys | ensure directory exists
@@ -76,6 +76,16 @@
   sudo: yes
   when: server.ssh.private_keys is defined and item.entry is defined and item.entry
 
+## Known Hosts
+
+#- name: Install known_hosts file
+#  copy: src=known_hosts dest=/home/${ansible_ssh_user}/.ssh/known_hosts owner=${ansible_ssh_user} group=${ansible_ssh_user}
+
+#- name: sshkeys | add known hosts to known_hosts file
+#  lineinfile: dest=/home/${ansible_ssh_user}/.ssh/known_hosts regexp=^${item.host} line="${item.line}"
+#  with_items:
+#   - { "host": "github.com", "line": "github.com,207.97.227.239 ssh-rsa 123" }
+
 ## Filesystem 
 
 - name: sshkeys | copy custom ssh keys
@@ -108,15 +118,19 @@
 
 ## Permissions
 
-- name: sshkeys | fix permissions
+- name: sshkeys | fix folder permissions
   file: >
     path={{ sshkeys_path }}/.ssh
     owner={{ sshkeys_user }} 
     group={{ sshkeys_user }} 
-    mode=0600
-    recurse=yes
-
-- name: sshkeys | fix folder permission
-  file: >
-    path={{ sshkeys_path }}/.ssh
     mode=0700
+
+- name: sshkeys | fix file permission
+  file: >
+    path={{ item }}
+    owner={{ sshkeys_user }} 
+    group={{ sshkeys_user }} 
+    mode=0600
+  with_fileglob: sshkeys_path + '/.ssh/*'
+  when: item|basename not in [ '.gitignore' ]
+

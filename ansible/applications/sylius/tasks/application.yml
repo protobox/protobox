@@ -1,7 +1,7 @@
 - name: application | check installation
   stat: >
     path={{ item.path }}
-  register: symfony_install
+  register: sylius_install
   with_items: applications.sylius
 
 - name: application | verify install paths
@@ -10,23 +10,52 @@
     state=directory
   with_together:
     - applications.sylius
-    - symfony_install.results 
+    - sylius_install.results 
   when: item.0.install == 1 and not item.1.stat.exists
 
-- name: application | install sylius
-  command: > 
-    composer create-project sylius/sylius {{ item.0.path|basename }} --prefer-source --no-interaction --dev
-    chdir={{ item.0.path|dirname }}
+#- name: application | create sylius project
+#  command: > 
+#    composer create-project sylius/sylius {{ item.0.path|basename }} --prefer-source --no-interaction --dev
+#    chdir={{ item.0.path|dirname }}
+#  with_together:
+#    - applications.sylius
+#    - sylius_install.results 
+#  when: item.0.install == 1 and not item.1.stat.exists
+
+- name: application | install via git
+  git: >
+    repo={{ item.0.options.source|default('git@github.com:Sylius/Sylius.git') }}
+    dest={{ item.0.path }}
+    version={{ item.0.options.revision|default('master') }}
   with_together:
     - applications.sylius
-    - symfony_install.results 
+    - sylius_install.results 
   when: item.0.install == 1 and not item.1.stat.exists
 
-- name: application | configure sylius
+# create parameters since composer install will try to prompt for it
+- name: application | create parameters
+  template: >
+    src=parameters.yml.j2
+    dest={{ item.0.path }}/app/config/parameters.yml
+  with_together:
+    - applications.sylius
+    - sylius_install.results 
+  when: item.0.install == 1 and not item.1.stat.exists
+
+- name: application | install dev
   shell: >
-    app/console sylius:install
+    composer install --dev
     chdir={{ item.0.path }}
   with_together:
     - applications.sylius
-    - symfony_install.results 
+    - sylius_install.results 
+  when: item.0.install == 1 and not item.1.stat.exists
+
+- name: application | install sylius
+  shell: >
+    php app/console sylius:install
+    chdir={{ item.0.path }}
+  with_together:
+    - applications.sylius
+    - sylius_install.results 
   when: item.0.install == 1 and not item.1.stat.exists

@@ -1,0 +1,29 @@
+# {{ ansible_managed }}
+# This file is auto-generated during the composer install
+parameters:
+    sylius.database.driver: {{ item.0.options.dbdriver|default('pdo_mysql') }}
+    sylius.database.host: {{ item.0.options.dbhost|default('127.0.0.1') }}
+    sylius.database.port: {{ item.0.options.dbport|default('null') }}
+    sylius.database.name: {{ item.0.options.dbname|default('sylius') }}
+    sylius.database.user: {{ item.0.options.dbuser|default('root') }}
+    sylius.database.password: {{ item.0.options.dbpass|default('null') }}
+    sylius.mailer.transport: smtp
+    sylius.mailer.host: 127.0.0.1
+    sylius.mailer.user: null
+    sylius.mailer.password: null
+    sylius.locale: {{ item.0.options.sylius_locale|default('en') }}
+    sylius.secret: abc
+    sylius.currency: {{ item.0.options.sylius_currency|default('EUR') }}
+    sylius.cache: file_system
+    paypal.express_checkout.username: EDITME
+    paypal.express_checkout.password: EDITME
+    paypal.express_checkout.signature: EDITME
+    paypal.express_checkout.sandbox: true
+    stripe.secret_key: EDITME
+    stripe.test_mode: true
+    sylius.oauth.amazon.clientid: '<amazon_client_id>'
+    sylius.oauth.amazon.clientsecret: '<amazon_client_secret>'
+    sylius.oauth.facebook.clientid: '<facebook_client_id>'
+    sylius.oauth.facebook.clientsecret: '<facebook_client_secret>'
+    sylius.oauth.google.clientid: '<google_client_id>'
+    sylius.oauth.google.clientsecret: '<google_client_secret>'
