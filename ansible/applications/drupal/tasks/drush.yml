@@ -8,6 +8,10 @@
     pear install drush/drush
     creates=/usr/bin/drush
 
+- name: drush | install console table
+  command: >
+    pear install Console_Table
+
 #- name: drush | install drush version
 #  command: >
 #    pear install drush/{{ item.options.drush_version|default('drush') }}
