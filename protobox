@@ -4,6 +4,7 @@ require 'optparse'
 require 'yaml'
 require 'net/http'
 require 'uri'
+require 'open3'
 
 options = {}
 
@@ -164,6 +165,79 @@ case action
     end
 
     puts "You can now 'vagrant up' using the '#{document}' configuration"
+
+  # Run provisioner
+  when "provision"
+
+    # Open config file location
+    vagrant_file = ''
+    File.open(boot_file, 'r') do |f1|  
+      while line = f1.gets  
+        vagrant_file += line  
+      end  
+    end 
+
+    # Check for missing data file
+    if !File.file?(vagrant_file)
+      puts "Data file is missing: #{vagrant_file}\n"
+      exit
+    end
+
+    # Load settings into memory
+    settings = YAML.load_file(vagrant_file)
+
+    # Vagrant settings variable
+    vagrant_vm = 'vagrant'
+
+    params = Array.new
+
+    # Ansible Provisioning
+    if settings[vagrant_vm]['vm']['provision'].has_key?("ansible")
+      ansible = settings[vagrant_vm]['vm']['provision']['ansible']
+      playbook = "/vagrant/" + ansible['playbook']
+
+      params << playbook
+
+      if !ansible['inventory'].nil?
+        params << "-i \\\"" + ansible['inventory'] + "\\\""
+      end
+
+      if !ansible['verbose'].nil?
+        if ansible['verbose'] == 'vv' or ansible['verbose'] == 'vvv' or ansible['verbose'] == 'vvvv'
+          params << "-" + ansible['verbose']
+        else
+          params << "--verbose"
+        end
+      end
+
+      params << "--connection=local"
+
+      if !ansible['extra_vars'].nil?
+        extra_vars = ansible['extra_vars']
+      else
+        extra_vars = Hash.new
+      end
+
+      extra_vars['protobox_env'] = "vagrant"
+      extra_vars['protobox_config'] = "/vagrant/" + vagrant_file
+
+      params << "--extra-vars=\\\"" + extra_vars.map{|k,v| "#{k}=#{v}"}.join(" ").gsub("\"","\\\\\"") + "\\\"" unless extra_vars.empty?
+    end 
+
+    command = "vagrant ssh -c \"sudo ansible-playbook " + params.join(" ") + "\""
+
+    #provision = %x{ #{command} }
+
+    Open3.popen3(command) do |stdin, stdout, stderr, wait_thr|
+      while line = stdout.gets
+        puts line
+      end
+
+      #exit_status = wait_thr.value
+      #unless exit_status.success?
+      #  abort "FAILED !!! #{cmd}"
+      #end
+    end
 
   # Invalid option
   else 

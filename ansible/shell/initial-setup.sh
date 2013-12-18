@@ -127,17 +127,17 @@ if [[ ! -f /.protobox/install-ansible-hosts ]]; then
     fi
 fi
 
-if [[ ! -f /.protobox/run-ansible ]]; then
+#if [[ ! -f /.protobox/run-ansible ]]; then
     echo "Running ansible-playbook $PARAMS"
     sh -c "sudo ansible-playbook $PARAMS"
     echo "Finished ansible-playbook"
 
-    touch /.protobox/run-ansible
-fi
+    #touch /.protobox/run-ansible
+#fi
 
-if [[ ! -f /.protobox/finish-protobox ]]; then
+#if [[ ! -f /.protobox/finish-protobox ]]; then
     echo "Finishing protobox"
     ruby /vagrant/ansible/shell/finish-setup.rb -s "$PUPPET_DATA" -l "$PROTOBOX_LOGO"
 
-    touch /.protobox/finish-protobox
-fi
+    #touch /.protobox/finish-protobox
+#fi
