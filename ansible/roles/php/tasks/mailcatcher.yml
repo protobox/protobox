@@ -24,6 +24,7 @@
     mailcatcher_http="{{ '--http-port=' ~ php.mailcatcher.http_port if php.mailcatcher.http_port is defined else '' }}"
     mailcatcher_no_quit=""
 
+# service not found:
 #- name: mailcatcher | start service
 #  service: > 
 #    name=mailcatcher
@@ -35,3 +36,4 @@
   command: > 
     mailcatcher {{ mailcatcher_ip }} {{ mailcatcher_port }} {{ mailcatcher_http }} {{ mailcatcher_no_quit }}
   sudo: yes
+  ignore_errors: True
