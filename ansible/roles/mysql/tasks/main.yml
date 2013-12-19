@@ -124,6 +124,11 @@
   with_items: mysql.databases
   when: mysql.databases is defined
 
+# TODO : check for db existance
+# mysql -e "show databases" | fgrep <name>
+# register: check_result
+# when: check_result.rc == 0
+
 - name: main | check for mysql files
   stat: >
     path=/vagrant/data/sql/{{ item.name }}.sql
