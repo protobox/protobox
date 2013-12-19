@@ -117,17 +117,20 @@
   with_items: mysql.databases
   when: mysql.databases is defined
 
+- name: main | check for db existence
+  shell: >
+    mysql -e "show databases" | fgrep {{ item.name }}
+  register: mysql_exist
+  with_items: mysql.databases
+  ignore_errors: True
+  when: mysql.databases is defined
+
 - name: main | create mysql databases
   mysql_db: >
     name={{ item.name }}
     state=present
   with_items: mysql.databases
   when: mysql.databases is defined
-
-# TODO : check for db existance
-# mysql -e "show databases" | fgrep <name>
-# register: check_result
-# when: check_result.rc == 0
 
 - name: main | check for mysql files
   stat: >
@@ -144,12 +147,15 @@
   with_together: 
     - mysql.databases
     - mysql_import_db.results
-  when: protobox_env == 'vagrant' and mysql.databases is defined and item.1.stat.exists
+    - mysql_exist.results
+  when: protobox_env == 'vagrant' and mysql.databases is defined and item.1.stat.exists and item.2.rc == 1
 
 - name: main | import custom mysql databases
   mysql_db: >
-    name={{ item.name }}
-    target={{ item.sql_file|default('') }}
+    name={{ item.0.name }}
+    target={{ item.0.sql_file|default('') }}
     state=import
-  with_items: mysql.databases
-  when: mysql.databases is defined and item.sql_file is defined and item.sql_file != ''
+  with_together: 
+    - mysql.databases
+    - mysql_exist.results
+  when: mysql.databases is defined and item.0.sql_file is defined and item.0.sql_file != '' and item.1.rc == 1
