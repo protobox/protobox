@@ -1,28 +1,22 @@
 # {{ ansible_managed }}
 <VirtualHost *:{{ item.port|default('80') }}>
     ServerName {{ item.servername }}
-
-    {% if item.serveraliases %}
-    ServerAlias{% for alias in item.serveraliases %} {{ alias }}{% endfor %}
-    {% endif %}
-
-    {% if item.serveradmin is defined %}
-    ServerAdmin {{ item.serveradmin }}
-    {% endif %}
+    {% if item.serveraliases %}ServerAlias{% for alias in item.serveraliases %} {{ alias }}{% endfor %}{% endif %}
+    {% if item.serveradmin is defined %}ServerAdmin {{ item.serveradmin }}{% endif %}
 
     DocumentRoot {{ item.docroot }}
 
     <Directory />
-            Options FollowSymLinks
-            AllowOverride None
+        Options FollowSymLinks
+        AllowOverride None
     </Directory>
 
     <Directory {{ item.docroot }}>
-            Options Indexes FollowSymLinks MultiViews
-            #AllowOverride None
-            AllowOverride All
-            Order allow,deny
-            allow from all
+        Options Indexes FollowSymLinks MultiViews
+        #AllowOverride None
+        AllowOverride All
+        Order allow,deny
+        allow from all
     </Directory>
 
     # Values: debug, info, notice, warn, error, crit, alert, emerg
@@ -30,4 +24,8 @@
 
     ErrorLog ${APACHE_LOG_DIR}/error.log
     CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+    {% if item.setenv is defined %}{% for env in item.setenv %}
+    SetEnv {{ env }}
+    {% endfor %}{% endif %}
 </VirtualHost>
