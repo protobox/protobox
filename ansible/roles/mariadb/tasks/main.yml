@@ -15,7 +15,7 @@
 
 - name: main | add the repository
   copy: >
-    content="deb {{ mariadb.repository|default('http://mirror.jmu.edu/pub/mariadb/repo/10.0/ubuntu') }} {{ ansible_lsb.codename }} main" 
+    content="deb {{ mariadb.repository|default('http://mirror.jmu.edu/pub/mariadb/repo/5.5/ubuntu') }} {{ ansible_lsb.codename }} main" 
     dest=/etc/apt/sources.list.d/mariadb.list
   sudo: yes
   when: ansible_os_family == 'Debian'
