@@ -186,4 +186,4 @@ Dir.chdir install_folder do
 end
 
 ohai "Installation successful! Now type:"
-puts "cd #{install_folder}/ && protobox -help"
+puts "cd #{install_folder}/ && ruby protobox -help"
