@@ -13,6 +13,7 @@
 
     # Database handling
     - { role: 'mysql', when: "mysql is defined and mysql.install == 1" }
+    - { role: 'mariadb', when: "mariadb is defined and mariadb.install == 1" }
     #- { role: 'postgres', when: "postgres is defined and postgres.install == 1" }
     #- { role: 'mongodb', when: "mongodb is defined and mongodb.install == 1" }
     #- { role: 'redis', when: "redis is defined and redis.install == 1" }

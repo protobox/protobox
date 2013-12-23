@@ -216,6 +216,10 @@ redis:
 riak:
   install: 0
 
+mariadb:
+  install: 0
+  #repository: ''
+
 beanstalkd:
   install: 0
   listen_addr: '127.0.0.1'
