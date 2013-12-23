@@ -30,10 +30,10 @@
 
 - name: compatibility | check for install path
   fail: msg="Lemonstand - {{ item.name }} - Install path missing"
-  with_items: applications.wordpress
+  with_items: applications.lemonstand
   when: item.path is not defined
 
-- name: compatibility | check for settings
-  fail: msg="Lemonstand - {{ item.name }} - Settings are missing"
-  with_items: applications.wordpress
-  when: item.settings is not defined
+- name: compatibility | check for options
+  fail: msg="Lemonstand - {{ item.name }} - Options are missing"
+  with_items: applications.lemonstand
+  when: item.options is not defined
