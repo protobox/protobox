@@ -1,0 +1,12 @@
+- name: nginx | updates apt cache
+  apt: update_cache=true
+  sudo: yes
+
+- name: nginx | installs nginx packages
+  apt: >
+    pkg={{ item }} 
+    state=latest
+    force=yes
+  with_items:
+    - hhvm-fastcgi
+  sudo: yes

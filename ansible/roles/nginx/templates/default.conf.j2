@@ -24,11 +24,11 @@ server {
                 try_files $uri =404;
                 fastcgi_split_path_info ^(.+\.php)(/.+)$;
 
-                # With php5-cgi alone:
-                #fastcgi_pass 127.0.0.1:9000;
-
-                # With php5-fpm:
+                {% if hhvm is defined and hhvm.install == 1 %}
+                fastcgi_pass 127.0.0.1:9000;
+                {% else %}
                 fastcgi_pass unix:/var/run/php5-fpm.sock;
+                {% endif %}
 
                 fastcgi_index index.php;
 

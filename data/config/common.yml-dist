@@ -131,6 +131,9 @@ nginx:
       envvars:
         - 'APP_ENV dev'
 
+hhvm:
+  install: 0
+
 php:
   install: 1
   version: '54'

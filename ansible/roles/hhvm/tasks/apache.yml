@@ -1,0 +1,37 @@
+- name: apache | updates apt cache
+  apt: update_cache=true
+  sudo: yes
+
+- name: apache | installs apache packages
+  apt: >
+    pkg={{ item }} 
+    state=latest
+    force=yes
+  with_items:
+    - hhvm-fastcgi
+  sudo: yes
+
+- name: apache | enables apache modules
+  command: a2enmod {{ item }}
+  with_items: 
+    - proxy
+    - proxy_fcgi
+  sudo: yes
+  when: "'2.3' not in apache_version.stdout and '2.2' not in apache_version.stdout"
+  notify:
+    - apache-restart
+
+# apache 2.2 does not have this functionality
+#- name: apache | enables apache modules manual
+#  file: >
+#    src=/etc/apache2/mods-available/{{ item }}
+#    dest=/etc/apache2/mods-enabled/{{ item }}
+#    state=link
+#  with_items: 
+#    - 'mod_proxy.load'
+#    - 'mod_proxy.conf'
+#    - 'mod_proxy_fcgi.load'
+#  sudo: yes
+#  when: "'2.3' in apache_version.stdout or '2.2' in apache_version.stdout"
+#  notify:
+#    - apache-restart

@@ -43,6 +43,7 @@ Protobox has built in support for the following modules:
 
 #### OS
 
+- [Ubuntu](http://www.ubuntu.com/server) 12.04, 13.10
 - [Any Distro](http://www.vagrantbox.es/)
 
 #### Web Server
@@ -50,10 +51,16 @@ Protobox has built in support for the following modules:
 - [Apache](http://httpd.apache.org/)
 - [Nginx](http://wiki.nginx.org/Main)
 
-#### PHP
+#### Languages
+
+**PHP**
 
 - [PHP](http://php.net) 5.3, 5.4, 5.5
+- [HHVM - HipHop Virtual Machine](http://www.hiphop-php.com/)
 - [Composer](http://getcomposer.org/)
+- [XDebug](http://xdebug.org/)
+- [Xhprof](http://pecl.php.net/package/xhprof)
+- [Mailcatcher](http://mailcatcher.me/)
 
 #### Node
 
@@ -80,9 +87,6 @@ Protobox has built in support for the following modules:
 
 #### Dev Tools
 
-- [XDebug](http://xdebug.org/)
-- [Xhprof](http://pecl.php.net/package/xhprof)
-- [Mailcatcher](http://mailcatcher.me/)
 - [Ngrok](https://ngrok.com/)
 
 ## Applications ##

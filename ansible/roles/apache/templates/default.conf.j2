@@ -10,6 +10,11 @@
     ServerAdmin {{ item.serveradmin }}
     {% endif %}
 
+    {% if hhvm is defined and hhvm.install == 1 %}
+    ProxyPass / fcgi://127.0.0.1:9000{{ item.docroot }}/
+    #ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9000{{ item.docroot }}/$1
+    {% endif %}
+
     DocumentRoot {{ item.docroot }}
 
     <Directory />

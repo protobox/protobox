@@ -1,3 +1,11 @@
 - name: compatibility | check for multiple web servers
   fail: msg="Either Apache or Nginx must be installed (not both)"
   when: apache is defined and apache.install == 1 and nginx is defined and nginx.install == 1
+
+- name: compatibility | check for multiple php 
+  fail: msg="Either PHP or HHVM must be installed (not both)"
+  when: php is defined and php.install == 1 and hhvm is defined and hhvm.install == 1
+
+- name: compatibility | check for multiple mysql 
+  fail: msg="Either Mysql or MariaDB must be installed (not both)"
+  when: mysql is defined and mysql.install == 1 and mariadb is defined and mariadb.install == 1

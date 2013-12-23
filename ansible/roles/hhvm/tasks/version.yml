@@ -1,0 +1,22 @@
+
+# Debian / Ubuntu
+
+- name: version | add dotdeb debian
+  shell: >
+    echo deb http://dl.hhvm.com/ubuntu {{ ansible_lsb.codename }} main | sudo tee /etc/apt/sources.list.d/hhvm.list
+  sudo: yes
+  when: ansible_os_family == 'Debian'
+
+# Package
+
+- name: version | updates apt cache
+  apt: update_cache=true
+  sudo: yes
+
+- name: version | install hhvm
+  apt: >
+    pkg={{ item }} 
+    state=installed
+    force=yes
+  with_items:
+    - hhvm

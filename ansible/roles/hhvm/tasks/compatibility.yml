@@ -1,0 +1,10 @@
+- name: apache | get version
+  command: apache2 -v | fgrep version
+  register: apache_version
+  when: apache is defined and apache.install == 1
+
+- name: compatibility | require apache 2.4 or greater
+  fail: msg="Apache 2.4 or greater is required"
+  when: >
+    apache is defined and apache.install == 1 and 
+    '2.3' in apache_version.stdout and '2.2' in apache_version.stdout"
