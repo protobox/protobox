@@ -6,7 +6,7 @@ protobox:
 vagrant:
   vm:
     box: ubuntu-precise12042-x64-vbox43
-    box_url: 'http://box.puphpet.com/ubuntu-precise12042-x64-vbox43.box'
+    box_url: 'http://files.vagrantup.com/precise64.box'
     hostname: protobox
     network:
       private_network: 192.168.5.10
