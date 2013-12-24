@@ -87,9 +87,7 @@ server:
     #    entry: 'host *\n\tIdentityFile ~/.ssh/github_id_rsa'
   dotfiles:
     install: 0
-    #git:
-    #  - repo: git@github.com:patrickheeney/dotfiles.git
-    #    path: '/home/{{ ansible_user_id }}'
+    repo: git@github.com:patrickheeney/dotfiles.git
     #files:
     #  - /srv/www/data/dot/file
     #bash_aliases: null
@@ -180,7 +178,6 @@ php:
 
 mysql:
   install: 1
-  phpmyadmin: 0
   root_password: 'root'
   databases:
     - name: app
@@ -315,7 +312,7 @@ applications:
   #    path: /srv/www/web/protobox-web
   #    options:
   #      provider: git
-  #      source: 'git@github.com:protobox/web-install.git'
+  #      source: 'git@github.com:protobox/protobox-web.git'
   #      revision: 'master'
   #      pre_install:
   #        -

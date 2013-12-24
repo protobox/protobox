@@ -4,10 +4,9 @@
 
 - name: dotfiles | install dotfiles
   git: >
-    repo={{ item.repo }}
-    dest={{ item.path|default(dotfiles_path) }}
-  with_items: server.dotfiles.git
-  when: server.dotfiles.git is defined
+    repo={{ server.dotfiles.repo }}
+    dest={{ server.dotfiles.repo_path|default(dotfiles_path) }}
+  when: server.dotfiles.repo is defined
 
 # check for vimrc if we are not in the root folder to symlink
 #- name: dotfiles | check for vimrc

@@ -72,6 +72,7 @@ Protobox has built in support for the following modules:
 #### Data Store
 
 - [MySQL](http://www.mysql.com/)
+- [MariaDB](https://mariadb.org/)
 - [PostgreSQL](http://www.postgresql.org/)
 - [Mongodb](http://www.mongodb.org/)
 - [Riak](http://basho.com/riak/)
