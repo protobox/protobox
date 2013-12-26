@@ -306,7 +306,7 @@ applications:
   #      modules:
   #        - ctools
   #        - wysiwyg
-  #repo:
+  #repository:
   #  - name: protobox-web
   #    install: 1
   #    path: /srv/www/web/protobox-web
