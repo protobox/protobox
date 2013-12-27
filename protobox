@@ -116,10 +116,10 @@ case action
     end
 
     # Store response
-    body = response.body
+    body = response.body.to_s
 
     # Convert tabs to spaces
-    body = body.gsub!(/\t/, "  ")
+    body = body.gsub!(/(?:^ {2})|\G {2}/m, "  ")
 
     # Check for yaml document starter
     #if !!yaml[/^---/m]
@@ -134,9 +134,9 @@ case action
       #puts "Failed parse yaml for #{url_name}"
       exit(-1)
     end
-
+    
     # Validate yaml
-    if !yaml_data.instance_of(Hash)
+    if !yaml_data.instance_of?(Hash)
       puts "Invalid yaml for #{url_name}"
     end
 
