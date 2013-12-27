@@ -35,7 +35,7 @@ server {
                 fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
 
                 {% if item.envvars is defined %}{% for env in item.envvars %}
-                fastcgi_param {{ env }}
+                fastcgi_param {{ env }};
                 {% endfor %}{% endif %}
 
                 include fastcgi_params;

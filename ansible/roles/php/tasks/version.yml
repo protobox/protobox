@@ -1,48 +1,36 @@
 
-# Debian
-
-- name: version | add dotdeb package for php 5.4 squeeze
-  apt_repository: >
-    repo='deb http://packages.dotdeb.org squeeze-php54 all' 
-    state=present
-  sudo: yes
-  when: "php.version == '54' and ansible_lsb.codename == 'squeeze'"
-
-- name: version | add dotdeb package sources for php 5.4 squeeze
-  apt_repository: >
-    repo='deb-src http://packages.dotdeb.org squeeze-php54 all' 
-    state=present
-  sudo: yes
-  when: "php.version == '54' and ansible_lsb.codename == 'squeeze'"
-
-- name: version | add dotdeb package for php 5.4 wheezy
-  apt_repository: >
-    repo='deb http://packages.dotdeb.org wheezy all' 
-    state=present
-  sudo: yes
-  when: "php.version == '54' and ansible_lsb.codename == 'wheezy'"
-
-- name: version | add dotdeb package sources for php 5.4 wheezy
-  apt_repository: >
-    repo='deb-src http://packages.dotdeb.org wheezy all' 
-    state=present
-  sudo: yes
-  when: "php.version == '54' and ansible_lsb.codename == 'wheezy'"
-
 # Debian / Ubuntu
 
-- name: version | add dotdeb apt key for php 5.4
-  apt_key: >
-    url=http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x7E3F070089DF5277 
-    state=present
-  sudo: yes
-  when: "php.version == '54' and ansible_os_family == 'Debian'"
+#- name: version | add dotdeb package for php 5.4
+#  apt_repository: >
+#    repo='deb http://packages.dotdeb.org {{ ansible_lsb.codename }}-php54 all' 
+#    state=present
+#  sudo: yes
+#  when: ansible_os_family == 'Debian' and php.version == '54'
+
+#- name: version | add dotdeb package sources for php 5.4
+#  apt_repository: >
+#    repo='deb-src http://packages.dotdeb.org {{ ansible_lsb.codename }}-php54 all' 
+#    state=present
+#  sudo: yes
+#  when: ansible_os_family == 'Debian' and php.version == '54'
+
+#- name: version | add dotdeb apt key for php 5.4
+#  apt_key: >
+#    url=http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x7E3F070089DF5277 
+#    state=present
+#  sudo: yes
+#  when: ansible_os_family == 'Debian' and php.version == '54'
 
 - name: version | add php 5.4 repository
-  apt_repository: >
-    repo=ppa:ondrej/php5-oldstable
+  apt_repository: repo=ppa:ondrej/php5-oldstable
   sudo: yes
-  when: "php.version == '54' and ansible_os_family == 'Debian'"
+  when: ansible_os_family == 'Debian' and php.version == '54'
+
+- name: version | updates apt cache
+  apt: update_cache=true
+  sudo: yes
+  when: ansible_os_family == 'Debian' and php.version == '54'
 
 # php
 

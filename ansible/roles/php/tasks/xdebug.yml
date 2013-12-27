@@ -29,6 +29,11 @@
 #  notify:
 #    - restart php
 
+- name: xdebug | verify ini directory
+  file: >
+    path=/etc/php5/mods-available
+    state=directory
+
 - name: xdebug | set ini 
   template: >
     src=xdebug.ini.j2
