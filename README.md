@@ -79,9 +79,10 @@ Protobox has built in support for the following modules:
 - [Riak](http://basho.com/riak/)
 - [Redis](http://redis.io/)
 
-#### Queues
+#### Queues / Messaging
 
 - [Beanstalkd](http://kr.github.io/beanstalkd/)
+- [RabbitMQ](http://www.rabbitmq.com/)
 
 #### Monitoring
 

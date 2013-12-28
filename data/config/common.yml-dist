@@ -225,6 +225,9 @@ beanstalkd:
   listen_addr: '127.0.0.1'
   listen_port: '11300'
 
+rabbitmq:
+  install: 0
+
 node:
   install: 0
   npm:

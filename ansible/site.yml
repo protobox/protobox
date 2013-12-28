@@ -26,8 +26,9 @@
     - { role: node, when: "node is defined and node.install == 1" }
     - { role: phalcon, when: "phalcon is defined and phalcon.install == 1" }
 
-    # Workers
+    # Queues / Messaging
     #- { role: 'beanstalkd', when: "beanstalkd is defined and beanstalkd.install == 1" }
+    - { role: 'rabbitmq', when: "rabbitmq is defined and rabbitmq.install == 1" }
 
     # Monitoring
     - { role: 'monitoring', when: "monitoring is defined and monitoring.install == 1" }
