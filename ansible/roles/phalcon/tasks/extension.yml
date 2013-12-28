@@ -1,0 +1,44 @@
+
+- name: extension | make temp directory
+  command: mktemp --tmpdir -d cphalcon.XXXXXX
+  register: phalcon_path
+
+- name: extension | grab the code
+  git: >
+    repo=https://github.com/phalcon/cphalcon.git
+    dest={{ phalcon_path.stdout }}
+    depth=1
+
+- name: extension | run the installer
+  shell: >
+    sudo ./install
+    chdir={{ phalcon_path.stdout }}/build
+  sudo: yes
+
+- name: extension | verify directory
+  file: >
+    path=/etc/php5/mods-available
+    state=directory
+
+- name: extension | add the extension
+  template: >
+    src=phalcon.ini.j2
+    dest=/etc/php5/mods-available/phalcon.ini
+  sudo: yes
+
+# php 5.3 does not have php5enmod 
+- name: extension | enable extension
+  shell: >
+    chdir=/etc/php5/mods-available
+    php5enmod phalcon;
+  sudo: yes
+  notify:
+    - php-restart
+  when: php.version != '53'
+
+- name: extension | enable extension on php 5.3
+  file: >
+    src=/etc/php5/mods-available/phalcon.ini
+    dest=/etc/php5/conf.d/phalcon.ini
+    state=link
+  when: php.version == '53'

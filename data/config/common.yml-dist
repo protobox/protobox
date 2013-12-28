@@ -176,6 +176,9 @@ php:
     short_open_tag: 'On'
   timezone: America/Chicago
 
+phalcon:
+  install: 1
+
 mysql:
   install: 1
   root_password: 'root'

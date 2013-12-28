@@ -24,6 +24,7 @@
     - { role: nginx, when: "nginx is defined and nginx.install == 1" }
     - { role: hhvm, when: "hhvm is defined and hhvm.install == 1" }
     - { role: node, when: "node is defined and node.install == 1" }
+    - { role: phalcon, when: "phalcon is defined and phalcon.install == 1" }
 
     # Workers
     #- { role: 'beanstalkd', when: "beanstalkd is defined and beanstalkd.install == 1" }

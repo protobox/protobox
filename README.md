@@ -57,6 +57,7 @@ Protobox has built in support for the following modules:
 
 - [PHP](http://php.net) 5.3, 5.4, 5.5
 - [HHVM - HipHop Virtual Machine](http://www.hiphop-php.com/)
+- [Phalcon](http://phalconphp.com/)
 - [Composer](http://getcomposer.org/)
 - [XDebug](http://xdebug.org/)
 - [Xhprof](http://pecl.php.net/package/xhprof)

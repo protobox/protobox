@@ -1,0 +1,5 @@
+- include: compatibility.yml
+
+- include: dependencies.yml
+
+- include: extension.yml
