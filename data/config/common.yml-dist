@@ -324,3 +324,13 @@ applications:
   #        -
   #      post_install:
   #        - composer update
+  #pyrocms:
+  #  - name: pyrocms-test
+  #    install: 1
+  #    path: /srv/www/web/pyrocms
+  #    options:
+  #      version: 'v2.2.3'
+  #      dbhost: localhost
+  #      dbname: app
+  #      dbuser: root
+  #      dbpass: root

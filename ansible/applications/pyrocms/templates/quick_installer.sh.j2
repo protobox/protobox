@@ -1,0 +1,17 @@
+#!/bin/bash
+export TERM=dumb
+
+export pyrocms_database="{{ item.0.options.dbname|default(pyrocms_database) }}"
+export pyrocms_hostname="{{ item.0.options.dbhost|default(pyrocms_hostname) }}"
+export pyrocms_username="{{ item.0.options.dbuser|default(pyrocms_username) }}"
+export pyrocms_password="{{ item.0.options.dbpass|default(pyrocms_password) }}"
+export pyrocms_port="{{ item.0.options.dbport|default(pyrocms_port) }}"
+export pyrocms_http_server="{{ item.0.options.http_server|default(pyrocms_http_server) }}"
+export pyrocms_site_ref="{{ item.0.options.site|default(pyrocms_site_ref) }}"
+export pyrocms_user_name="{{ item.0.options.user_name|default(pyrocms_user_name) }}"
+export pyrocms_user_firstname="{{ item.0.options.user_firstname|default(pyrocms_user_firstname) }}"
+export pyrocms_user_lastname="{{ item.0.options.user_lastname|default(pyrocms_user_lastname) }}"
+export pyrocms_user_email="{{ item.0.options.user_email|default(pyrocms_user_email) }}"
+export pyrocms_user_password="{{ item.0.options.user_password|default(pyrocms_user_password) }}"
+
+cd installer && php index.php quick_installer

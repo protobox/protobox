@@ -1,0 +1,77 @@
+- name: application | check installation
+  stat: >
+    path={{ item.path }}
+  register: pyrocms_install
+  with_items: applications.pyrocms
+
+- name: application | verify install paths
+  file: >
+    path={{ item.0.path|dirname }}
+    state=directory
+  with_together:
+    - applications.pyrocms
+    - pyrocms_install.results 
+  when: item.0.install == 1 and not item.1.stat.exists
+
+- name: application | download via git
+  git: >
+    repo={{ item.0.options.source|default('git@github.com:pyrocms/pyrocms.git') }}
+    dest={{ item.0.path }}
+    version={{ item.0.options.version|default('master') }}
+  with_together:
+    - applications.pyrocms
+    - pyrocms_install.results 
+  when: item.0.install == 1 and not item.1.stat.exists
+
+- name: application | set facts
+  set_fact: >
+    pyrocms_database="pyrocms"
+    pyrocms_hostname="localhost"
+    pyrocms_username="root"
+    pyrocms_password="root"
+    pyrocms_port="3306"
+    pyrocms_http_server="apache_w"
+    pyrocms_site_ref="default"
+    pyrocms_user_name="admin"
+    pyrocms_user_firstname="Admin"
+    pyrocms_user_lastname="Admin"
+    pyrocms_user_email="admin@admin.com"
+    pyrocms_user_password="admin"
+
+- name: application | add quick installer
+  template: >
+    src=quick_installer.php.j2
+    dest={{ item.0.path }}/installer/controllers/quick_installer.php
+    mode=0755
+  with_together:
+    - applications.pyrocms
+    - pyrocms_install.results 
+  when: item.0.install == 1 and not item.1.stat.exists
+
+- name: application | add quick installer script
+  template: >
+    src={{ item.0.installer|default('quick_installer.sh.j2') }}
+    dest={{ item.0.path }}/quick_installer.sh
+    mode=0755
+  with_together:
+    - applications.pyrocms
+    - pyrocms_install.results 
+  when: item.0.install == 1 and not item.1.stat.exists
+
+- name: application | run quick installer
+  shell: > 
+    chdir={{ item.0.path }}
+    ./quick_installer.sh
+  with_together:
+    - applications.pyrocms
+    - pyrocms_install.results 
+  when: item.0.install == 1 and not item.1.stat.exists
+
+- name: application | remove quick installer script
+  file: >
+    path={{ item.0.path }}/quick_installer.sh
+    state=absent
+  with_together:
+    - applications.pyrocms
+    - pyrocms_install.results 
+  when: item.0.install == 1 and not item.1.stat.exists

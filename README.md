@@ -107,6 +107,7 @@ Protobox has built in support for installing any of these applications:
 - [Akeneo](http://www.akeneo.com/) (Coming Soon)
 - [Oro CRM](http://www.orocrm.com/) (Coming Soon)
 - [Prestashop](http://www.prestashop.com/) (Coming Soon)
+- [PyroCMS](https://www.pyrocms.com/)
 - Any public / private GIT repository
 
 ## License ##

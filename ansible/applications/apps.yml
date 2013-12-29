@@ -10,3 +10,4 @@
     - { role: 'drupal', dir: 'applications/drupal', when: "applications.drupal is defined" }
     - { role: 'symfony', dir: 'applications/symfony', when: "applications.symfony is defined" }
     - { role: 'sylius', dir: 'applications/sylius', when: "applications.sylius is defined" }
+    - { role: 'pyrocms', dir: 'applications/pyrocms', when: "applications.pyrocms is defined" }
