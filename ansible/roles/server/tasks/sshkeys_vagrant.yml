@@ -1,0 +1,90 @@
+# Vagrant runs ansible as the root user, so we need to
+# add the ssh keys to the root user so it can access
+# any servers it needs to during provision.
+
+- name: sshkeys_vagrant | set facts
+  set_fact: >
+    sshkeys_user="root"
+    sshkeys_path="/root"
+
+- name: sshkeys_vagrant | ensure directory exists
+  file: >
+    path={{ sshkeys_path }}/.ssh
+    owner={{ sshkeys_user }}
+    group={{ sshkeys_user }}
+    mode=0700
+    state=directory
+
+- name: sshkeys_vagrant | ensure config exists
+  template: >
+    src=ssh_config.j2 
+    dest={{ sshkeys_path }}/.ssh/config 
+    owner={{ sshkeys_user }} 
+    group={{ sshkeys_user }} 
+    mode=0600
+  notify:
+    - ssh-restart
+
+## Known Hosts
+
+- name: sshkeys_vagrant | ensure config exists
+  template: >
+    src=known_hosts.j2 
+    dest={{ sshkeys_path }}/.ssh/known_hosts 
+    owner={{ sshkeys_user }} 
+    group={{ sshkeys_user }} 
+    mode=0600
+  notify:
+    - ssh-restart
+
+- name: sshkeys_vagrant | add keyscan
+  shell: >
+    ssh-keyscan rsa github.com >> {{ sshkeys_path }}/.ssh/known_hosts
+  sudo: yes
+
+## Copy keys from the filesystem 
+
+- name: sshkeys_vagrant | copy custom ssh keys
+  shell: >
+    cp {{ item }} {{ sshkeys_path }}/.ssh/{{ item|basename }}
+  with_fileglob: /vagrant/data/ssh/*
+  when: item|basename not in [ '.gitignore', 'config', 'authorized_keys' ]
+
+- name: sshkeys_vagrant | check if config exists
+  stat: > 
+    path=/vagrant/data/ssh/config
+  register: ssh_config
+
+- name: sshkeys_vagrant | install config entries
+  shell: > 
+    cat /vagrant/data/ssh/config >> {{ sshkeys_path }}/.ssh/config
+  when: ssh_config.stat.exists
+
+- name: sshkeys_vagrant | check if authorized_keys exists
+  stat: > 
+    path=/vagrant/data/ssh/authorized_keys
+  register: ssh_authorized_keys
+
+- name: sshkeys_vagrant | install authorized_keys entries
+  shell: > 
+    cat /vagrant/data/ssh/authorized_keys >> {{ sshkeys_path }}/.ssh/authorized_keys
+  when: ssh_authorized_keys.stat.exists
+
+## Correct the Permissions
+
+- name: sshkeys_vagrant | fix folder permissions
+  file: >
+    path={{ sshkeys_path }}/.ssh
+    owner={{ sshkeys_user }} 
+    group={{ sshkeys_user }} 
+    mode=0700
+
+- name: sshkeys_vagrant | fix file permission
+  file: >
+    path={{ item }}
+    owner={{ sshkeys_user }} 
+    group={{ sshkeys_user }} 
+    mode=0600
+  with_fileglob: sshkeys_path + '/.ssh/*'
+  when: item|basename not in [ '.gitignore' ]
+

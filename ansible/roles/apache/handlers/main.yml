@@ -13,5 +13,5 @@
 - name: apache-stop
   service: >
     name=apache2 
-    state=restarted
+    state=stopped
   sudo: yes

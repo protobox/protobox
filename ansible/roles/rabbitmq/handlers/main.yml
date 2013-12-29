@@ -1,21 +1,17 @@
 - name: rabbitmq-restart
   service: >
-    name=rabbitmqctl 
+    name=rabbitmq-server 
     state=restarted
   sudo: yes
 
 - name: rabbitmq-start
   service: >
-    name=rabbitmqctl 
+    name=rabbitmq-server 
     state=started
   sudo: yes
 
 - name: rabbitmq-stop
   service: >
-    name=rabbitmqctl 
+    name=rabbitmq-server 
     state=stopped
-  sudo: yes
-
-- name: rabbitmq-status
-  command: rabbitmqctl status
   sudo: yes

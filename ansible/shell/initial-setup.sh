@@ -115,10 +115,15 @@ if [[ ! -f /.protobox/install-ansible-hosts ]]; then
     if [ "$OS" == 'debian' ] || [ "$OS" == 'ubuntu' ]; then
         echo "Installing ansible hosts"
         mkdir -p /etc/ansible
+
+        # Setup hosts
         touch /etc/ansible/hosts
         #echo "localhost" > /etc/ansible/hosts
         #echo "127.0.0.1" > /etc/ansible/hosts
         echo "localhost ansible_connection=local" > /etc/ansible/hosts
+
+        # Setup config
+        cp /vagrant/ansible/ansible.cfg /etc/ansible/ansible.cfg
 
         touch /.protobox/install-ansible-hosts
     elif [ "$OS" == 'centos' ]; then
@@ -129,7 +134,7 @@ fi
 
 #if [[ ! -f /.protobox/run-ansible ]]; then
     echo "Running ansible-playbook $PARAMS"
-    sh -c "sudo ansible-playbook $PARAMS"
+    sh -c "ansible-playbook $PARAMS"
     echo "Finished ansible-playbook"
 
     #touch /.protobox/run-ansible

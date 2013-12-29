@@ -1,2 +1,5 @@
 - include: debian.yml
   when: ansible_os_family == 'Debian'
+
+- include: rpm.yml
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']

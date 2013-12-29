@@ -1,0 +1,12 @@
+# {{ ansible_managed }}
+
+# ssh.config entries
+{% if server.ssh.config is defined %}
+{% for con in server.ssh.config %}
+{% if con.entry is defined %}
+{{ con.entry|replace("\\n", "\n")|replace("\\t", "\t")|replace("\\r", "") }}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+# custom entries below

@@ -6,5 +6,8 @@
 - include: sshkeys.yml
   when: server.ssh is defined
 
+- include: sshkeys_vagrant.yml
+  when: server.ssh is defined and protobox_env == 'vagrant'
+
 - include: dotfiles.yml
   when: server.dotfiles is defined and server.dotfiles.install == 1

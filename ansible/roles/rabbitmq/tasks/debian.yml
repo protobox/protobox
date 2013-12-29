@@ -22,4 +22,3 @@
     pkg=rabbitmq-server
     state=latest
   sudo: yes
-  register: rabbitmq_apt
