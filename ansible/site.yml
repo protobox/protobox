@@ -31,10 +31,10 @@
     - { role: 'rabbitmq', when: "rabbitmq is defined and rabbitmq.install == 1" }
 
     # Monitoring
-    - { role: 'monitoring', when: "monitoring is defined and monitoring.install == 1" }
+    - { role: 'newrelic', when: "newrelic is defined and newrelic.install == 1" }
 
     # Dev tools
-    - { role: 'localtunnel', when: "localtunnel is defined and localtunnel.install == 1 and protobox_env == 'vagrant'" }
+    - { role: 'ngrok', when: "ngrok is defined and ngrok.install == 1 and protobox_env == 'vagrant'" }
 
 - include: applications/apps.yml
   when: applications is defined and applications.install == 1

@@ -1,2 +1,0 @@
-- include: newrelic.yml
-  when: monitoring.newrelic is defined and monitoring.newrelic.install == 1
