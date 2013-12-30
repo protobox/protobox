@@ -39,7 +39,7 @@
 
 - name: sshkeys_vagrant | add keyscan
   shell: >
-    ssh-keyscan rsa github.com >> {{ sshkeys_path }}/.ssh/known_hosts
+    ssh-keyscan github.com >> {{ sshkeys_path }}/.ssh/known_hosts
   sudo: yes
 
 ## Copy keys from the filesystem 
