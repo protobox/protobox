@@ -46,7 +46,7 @@ config_path = 'data/config'
 config_dir = dir + '/' + config_path
 
 # Create protobox dir if it doesn't exist
-if !Dir.exist?(protobox_dir)
+if !File.directory?(protobox_dir)
   Dir.mkdir(protobox_dir)
 end
 

@@ -9,7 +9,7 @@ protobox_dir = vagrant_dir + '/.protobox'
 protobox_boot = protobox_dir + '/config'
 
 # Create protobox dir if it doesn't exist
-if !Dir.exist?(protobox_dir)
+if !File.directory?(protobox_dir)
   Dir.mkdir(protobox_dir)
 end
 
