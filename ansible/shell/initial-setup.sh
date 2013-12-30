@@ -81,7 +81,7 @@ fi
 if [[ ! -f /.protobox/add-ansible-repo ]]; then
     if [ "$OS" == 'debian' ] || [ "$OS" == 'ubuntu' ]; then
         echo "Running add-apt-repository ansible"
-        add-apt-repository -y ppa:rquillo/ansible >/dev/null 2>&1
+        add-apt-repository ppa:rquillo/ansible >/dev/null 2>&1
         echo "Finished add-apt-repository ansible"
 
         echo "Running apt-get update"
