@@ -1,11 +1,15 @@
-- name: main | installs dependencies
+- name: debian | set facts
+  set_fact: >
+    mysql_version="{{ '55' if ansible_lsb.codename != 'lucid' else '51' }}"
+
+- name: debian | installs dependencies
   apt: >
     pkg=python-mysqldb
     state=latest
     update_cache=yes
   sudo: yes
 
-- name: main | installs mysql packages
+- name: debian | installs mysql packages
   apt: >
     pkg=mysql-server
     state=latest
@@ -30,9 +34,9 @@
 #    line="-A INPUT -p tcp  --dport {{ mysql_port }} -j  ACCEPT"
 #  notify: restart iptables
 
-- name: main | create mysql configuration file
+- name: debian | create mysql configuration file
   template: >
-    src=my.cnf.j2
+    src={{ mysql_version }}/my.cnf.j2
     dest=/etc/mysql/my.cnf
     owner=root
     group=root
@@ -41,7 +45,7 @@
   notify:
     - mysql-restart
 
-#- name: main | remove root user from hosts
+#- name: debian | remove root user from hosts
 #  mysql_user: >
 #    name=root
 #    host={{ item }}
@@ -55,7 +59,7 @@
 
 # 'localhost' needs to be the last item for idempotency, see
 # http://ansible.cc/docs/modules.html#mysql-user
-- name: main | update root password for all hosts
+- name: debian | update root password for all hosts
   mysql_user: >
     name=root
     host={{ item }}
@@ -66,9 +70,9 @@
     - ::1
     - localhost
 
-- name: main | add root credentials
+- name: debian | add root credentials
   template: >
-    src=my.user.cnf.j2
+    src=common/my.user.cnf.j2
     dest=/root/.my.cnf
     owner=root
     mode=0600
@@ -77,9 +81,9 @@
   notify:
     - mysql-restart
 
-- name: main | add user credentials
+- name: debian | add user credentials
   template: >
-    src=my.user.cnf.j2
+    src=common/my.user.cnf.j2
     dest=/home/vagrant/.my.cnf
     owner=vagrant
     mode=0600
@@ -88,7 +92,7 @@
     - mysql-restart
   when: protobox_env == 'vagrant'
 
-- name: main | remove anonymous user
+- name: debian | remove anonymous user
   mysql_user: >
     name=''
     host={{ item }}
@@ -97,14 +101,14 @@
     - localhost
     - ansible_fqdn
 
-- name: main | remove the test database
+- name: debian | remove the test database
   mysql_db: >
     name=test 
     state=absent
 
 # TODO : priv={{ item.name }}:{{ item.grant }}
 # priv=*.*:ALL host='%'
-- name: main | install all users
+- name: debian | install all users
   mysql_user: >
     name={{ item.user }}
     password={{ item.password }}
@@ -113,7 +117,7 @@
   with_items: mysql.databases
   when: mysql.databases is defined
 
-- name: main | check for db existence
+- name: debian | check for db existence
   shell: >
     mysql -e "show databases" | fgrep {{ item.name }}
   register: mysql_exist
@@ -121,21 +125,21 @@
   ignore_errors: True
   when: mysql.databases is defined
 
-- name: main | create mysql databases
+- name: debian | create mysql databases
   mysql_db: >
     name={{ item.name }}
     state=present
   with_items: mysql.databases
   when: mysql.databases is defined
 
-- name: main | check for mysql files
+- name: debian | check for mysql files
   stat: >
     path=/vagrant/data/sql/{{ item.name }}.sql
   register: mysql_import_db
   with_items: mysql.databases
   when: protobox_env == 'vagrant' and mysql.databases is defined
 
-- name: main | import stored mysql databases
+- name: debian | import stored mysql databases
   mysql_db: >
     name={{ item.0.name }}
     target=/vagrant/data/sql/{{ item.0.name }}.sql
@@ -146,7 +150,7 @@
     - mysql_exist.results
   when: protobox_env == 'vagrant' and mysql.databases is defined and item.1.stat.exists and item.2.rc == 1
 
-- name: main | import custom mysql databases
+- name: debian | import custom mysql databases
   mysql_db: >
     name={{ item.0.name }}
     target={{ item.0.sql_file|default('') }}
