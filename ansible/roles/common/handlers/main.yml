@@ -2,7 +2,5 @@
   service: >
     name=ntp
     state=restarted
+    enabled=yes
   sudo: yes
-
-#- name: restart iptables
-#  service: name=iptables state=restarted

@@ -1,0 +1,31 @@
+- name: debian | install ntp
+  apt: >
+    pkg=ntp
+    state=latest
+    update_cache=yes
+  notify:
+    - ntp-restart
+
+- name: debian | configure ntp
+  template: >
+    src=ntp.conf.j2
+    dest=/etc/ntp.conf
+    owner=root
+    group=root
+    mode=0644
+  notify:
+    - ntp-restart
+
+- name: debian | ntp is running
+  service: >
+    name=ntp
+    state=started
+    enabled=yes
+
+- name: debian | install dependencies
+  apt: >
+    pkg={{ item }} 
+    state=latest
+  with_items:
+    - git-core
+  sudo: yes

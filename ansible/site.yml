@@ -6,35 +6,68 @@
     - [ $protobox_config ]
   roles:
     # Common functionality
-    - { role: 'common' }
+    
+    - role: common
 
     # Server handling
-    - { role: 'server', when: "server is defined" }
+    
+    - role: server
+      when: server is defined
 
     # Database handling
-    - { role: 'mysql', when: "mysql is defined and mysql.install == 1" }
-    - { role: 'mariadb', when: "mariadb is defined and mariadb.install == 1" }
-    #- { role: 'postgres', when: "postgres is defined and postgres.install == 1" }
-    #- { role: 'mongodb', when: "mongodb is defined and mongodb.install == 1" }
-    #- { role: 'redis', when: "redis is defined and redis.install == 1" }
+    
+    - role: mysql
+      when: mysql is defined and mysql.install == 1
+
+    - role: mariadb
+      when: mariadb is defined and mariadb.install == 1
+
+    #- role: postgres
+    #  when: postgres is defined and postgres.install == 1
+    
+    #- role: mongodb
+    #  when: mongodb is defined and mongodb.install == 1
+    
+    #- role: redis
+    #  when: "redis is defined and redis.install == 1" }
 
     # Web servers
-    - { role: php, when: "php is defined and php.install == 1" }
-    - { role: apache, when: "apache is defined and apache.install == 1" }
-    - { role: nginx, when: "nginx is defined and nginx.install == 1" }
-    - { role: hhvm, when: "hhvm is defined and hhvm.install == 1" }
-    - { role: node, when: "node is defined and node.install == 1" }
-    - { role: phalcon, when: "phalcon is defined and phalcon.install == 1" }
+    
+    - role: php
+      when: php is defined and php.install == 1
+
+    - role: apache
+      when: apache is defined and apache.install == 1
+
+    - role: nginx
+      when: nginx is defined and nginx.install == 1
+
+    - role: hhvm
+      when: hhvm is defined and hhvm.install == 1
+
+    - role: node
+      when: node is defined and node.install == 1
+
+    - role: phalcon
+      when: phalcon is defined and phalcon.install == 1
 
     # Queues / Messaging
-    #- { role: 'beanstalkd', when: "beanstalkd is defined and beanstalkd.install == 1" }
-    - { role: 'rabbitmq', when: "rabbitmq is defined and rabbitmq.install == 1" }
+    
+    #- role: beanstalkd
+    #  when: "beanstalkd is defined and beanstalkd.install == 1
+    
+    - role: rabbitmq
+      when: rabbitmq is defined and rabbitmq.install == 1
 
     # Monitoring
-    - { role: 'newrelic', when: "newrelic is defined and newrelic.install == 1" }
+    
+    - role: newrelic
+      when: newrelic is defined and newrelic.install == 1
 
     # Dev tools
-    - { role: 'ngrok', when: "ngrok is defined and ngrok.install == 1 and protobox_env == 'vagrant'" }
+    
+    - role: ngrok
+      when: ngrok is defined and ngrok.install == 1 and protobox_env == 'vagrant'
 
 - include: applications/apps.yml
   when: applications is defined and applications.install == 1

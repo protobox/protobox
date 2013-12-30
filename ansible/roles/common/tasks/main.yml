@@ -1,44 +1,5 @@
-- name: main | ensure ntp is at the latest version
-  apt: >
-    pkg=ntp
-    state=latest
-  notify:
-    - ntp-restart
+- include: debian.yml
+  when: ansible_os_family == 'Debian'
 
-- name: main | set ntp facts
-  set_fact: >
-    ntpserver="192.168.1.2"
-
-- name: main | configure ntp
-  template: >
-    src=ntp.conf.j2
-    dest=/etc/ntp.conf
-    owner=root
-    group=root
-    mode=0644
-  notify:
-    - ntp-restart
-
-- name: main | ntp should be running
-  service: >
-    name=ntp
-    state=started
-    enabled=yes
-
-- name: main | install dependencies
-  apt: >
-    pkg={{ item }} 
-    state=latest
-  with_items:
-    - git-core
-  sudo: yes
-
-#- name: Copy the EPEL repository definition
-#  copy: src=epel.repo dest=/etc/yum.repos.d/epel.repo
-
-#- name: Create the GPG key for EPEL
-#  copy: src=RPM-GPG-KEY-EPEL-6 dest=/etc/pki/rpm-gpg
-
-#- name: Set up iptables rules
-#  copy: src=iptables-save dest=/etc/sysconfig/iptables
-#  notify: restart iptables
+- include: rpm.yml
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']

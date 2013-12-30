@@ -1,0 +1,7 @@
+- name: rpm | install ntp
+  yum: >
+    pkg=ntp
+    state=latest
+    update_cache=yes
+  notify:
+    - ntp-restart
