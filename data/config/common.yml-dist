@@ -143,12 +143,12 @@ php:
     - php5-gd
   pear:
     install: 1
-    modules:
-      -
+    modules: [ ]
   pecl:
     install: 1
-    modules:
-      - 
+    modules: [ ]
+  apc:
+    install: 1
   composer: 
     install: 1
   mailcatcher: 
@@ -168,7 +168,6 @@ php:
   xhprof:
     install: 0
     xhgui: 1
-    location: /srv/www/web/xhprof
   ini:
     display_errors: 'On'
     display_startup_errors: 'On'

@@ -1,10 +1,22 @@
+# Pear
+
 - name: pear | install pear packages
   apt: >
     pkg={{ item }} 
     state=installed
-  with_items:
-    - php5-dev
-    - php-pear
+  with_items: pkgs_php_pear
+  sudo: yes
+  when: ansible_os_family == 'Debian'
+
+- name: pear | install rpm php
+  yum: >
+    pkg={{ item }} 
+    state=latest
+  with_items: pkgs_php_pear
+  sudo: yes
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
+
+# Pear Update / Configuration
 
 - name: pear | update pear packages
   command: pear upgrade
@@ -12,7 +24,9 @@
 - name: pear | set pear auto-discover
   command: pear config-set auto_discover 1
 
-# this fails often (dns problems, pear problems, etc. So just ignore the errors and continue.)
-#- name: pear | pear install the PHP QA Toolchain
-#  command: pear install pear.phpqatools.org/phpqatools creates=/usr/bin/phpunit
-#  ignore_errors: True
+# Pear Packages 
+
+- name: pear | install packages
+  command: pear install {{ item }}
+  with_items: php.pear.modules
+  when: php.pear.modules is defined

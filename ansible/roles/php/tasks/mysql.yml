@@ -1,7 +1,17 @@
-- name: mysql | install php
+# Package
+
+- name: mysql | install debian php mysql
   apt: >
     pkg={{ item }} 
     state=latest
-  with_items:
-    - php5-mysql
+  with_items: pkgs_php_mysql
   sudo: yes
+  when: ansible_os_family == 'Debian'
+
+- name: mysql | install rpm php mysql
+  yum: >
+    pkg={{ item }} 
+    state=latest
+  with_items: pkgs_php_mysql
+  sudo: yes
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']

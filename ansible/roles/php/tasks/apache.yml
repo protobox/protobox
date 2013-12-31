@@ -1,6 +1,17 @@
-- name: apache | install apache php
+# Package
+
+- name: apache | install debian php apache
   apt: >
     pkg={{ item }} 
     state=installed
-  with_items:
-    - libapache2-mod-php5
+  with_items: pkgs_php_apache
+  sudo: yes
+  when: ansible_os_family == 'Debian'
+
+- name: apache | install rpm php apache
+  yum: >
+    pkg={{ item }} 
+    state=installed
+  with_items: pkgs_php_apache
+  sudo: yes
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']

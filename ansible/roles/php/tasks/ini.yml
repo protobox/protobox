@@ -1,33 +1,14 @@
-#- name: ini | set apache php timezone
-#  ini_file: >
-#    dest=/etc/php5/apache2/php.ini 
-#    section=Date 
-#    option=date.timezone 
-#    value={{ php.timezone }} 
-#  sudo: yes
-#  when: php.timezone is defined and apache is defined and apache.install == 1
-#  notify:
-#    - restart php
-
-#- name: ini | set ini settings
-#  ini_file: >
-#    dest=/etc/php5/apache2/php.ini 
-#    section=PHP
-#    option={{ item.name }} 
-#    value={{ item.value }}
-#    state=present
-#  with_items: php.ini
-#  sudo: yes
-#  when: php.ini is defined and apache is defined and apache.install == 1
-#  notify:
-#    - restart php
+# Configuration
 
 - name: ini | set apache ini 
   template: >
     src=php.ini.j2
     dest=/etc/php5/apache2/php.ini
   sudo: yes
-  when: php.ini is defined and apache is defined and apache.install == 1
+  when: >
+    php.ini is defined and 
+    apache is defined and 
+    apache.install == 1
   notify:
     - php-restart
 
@@ -36,7 +17,10 @@
     src=php.ini.j2
     dest=/etc/php5/fpm/php.ini
   sudo: yes
-  when: php.ini is defined and nginx is defined and nginx.install == 1
+  when: >
+    php.ini is defined and 
+    nginx is defined and 
+    nginx.install == 1
   notify:
     - php-restart
 

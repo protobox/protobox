@@ -1,16 +1,28 @@
-- name: xdebug | install packages
+# Package
+
+- name: xdebug | install debian php xdebug
   apt: >
     pkg={{ item }} 
     state=installed
-  with_items:
-    - php5-xdebug
+  with_items: pkgs_php_xdebug
   sudo: yes
+  when: ansible_os_family == 'Debian'
+
+- name: xdebug | install rpm php xdebug
+  yum: >
+    pkg={{ item }} 
+    state=installed
+  with_items: pkgs_php_xdebug
+  sudo: yes
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
+
+# Configuration
 
 # shortcut for xdebug CLI debugging
 - name: xdebug | add xdebug cli
   template: >
     src=cli_alias.j2
-    dest=/usr/bin/xdebug
+    dest={{ path_php_xdebug }}
     owner=root
     group=root
     mode=0755
@@ -29,18 +41,11 @@
 #  notify:
 #    - restart php
 
-- name: xdebug | verify ini directory
-  file: >
-    path=/etc/php5/mods-available
-    state=directory
-
 - name: xdebug | set ini 
   template: >
     src=xdebug.ini.j2
     dest=/etc/php5/mods-available/xdebug-options.ini
   sudo: yes
-  notify:
-    - php-restart
 
 #- name: xdebug | ensure config file exists
 #  shell: >
@@ -72,9 +77,9 @@
     chdir=/etc/php5/mods-available
     php5enmod xdebug-options;
   sudo: yes
+  when: php.version != '53'
   notify:
     - php-restart
-  when: php.version != '53'
 
 - name: xdebug | enable xdebug config on php 5.3
   file: >
@@ -82,6 +87,7 @@
     dest=/etc/php5/conf.d/xdebug-options.ini
     state=link
   when: php.version == '53'
-
+  notify:
+    - php-restart
 
 # TODO : add webgrind

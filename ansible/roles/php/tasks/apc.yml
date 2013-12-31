@@ -1,0 +1,37 @@
+# Compatibility
+
+- name: apc | require pecl
+  fail: msg="PHP - Pecl is required"
+  when: php.pecl is not defined or php.pecl.install != 1
+
+# Package 
+
+- name: apc | install packages
+  command: pecl install {{ php.apc.package|default('apc') }}
+
+# Configuration
+
+- name: apc | set ini 
+  template: >
+    src=apc.ini.j2
+    dest=/etc/php5/mods-available/apc.ini
+  sudo: yes
+
+# php 5.3 does not have php5enmod 
+- name: apc | enable apc config
+  shell: >
+    chdir=/etc/php5/mods-available
+    php5enmod apc;
+  sudo: yes
+  when: php.version != '53'
+  notify:
+    - php-restart
+
+- name: apc | enable apc config on php 5.3
+  file: >
+    src=/etc/php5/mods-available/apc.ini
+    dest=/etc/php5/conf.d/apc.ini
+    state=link
+  when: php.version == '53'
+  notify:
+    - php-restart

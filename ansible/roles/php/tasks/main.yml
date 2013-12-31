@@ -3,6 +3,8 @@
 
 - include: php.yml
 
+- include: ini.yml
+
 - include: mysql.yml
   when: mysql is defined and mysql.install == 1
 
@@ -12,7 +14,14 @@
 - include: nginx.yml
   when: nginx is defined and nginx.install == 1
 
-- include: ini.yml
+- include: pear.yml
+  when: php.pear is defined and php.pear.install == 1
+
+- include: pecl.yml
+  when: php.pecl is defined and php.pecl.install == 1
+
+- include: apc.yml
+  when: php.apc is defined and php.apc.install == 1
 
 - include: composer.yml
   when: php.composer is defined and php.composer.install == 1
@@ -28,7 +37,3 @@
 
 - include: xhprof.yml
   when: php.xhprof is defined and php.xhprof.install == 1
-
-- include: pear.yml
-  when: php.pear is defined and php.pear.install == 1
-

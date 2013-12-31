@@ -1,9 +1,21 @@
-- name: nginx | install fpm
+# Package
+
+- name: nginx | install debian php fpm
   apt: >
     pkg={{ item }} 
     state=installed
-  with_items:
-    - php5-fpm
+  with_items: pkgs_php_nginx
   sudo: yes
+  when: ansible_os_family == 'Debian'
+  notify:
+    - php-fpm-restart
+
+- name: nginx | install rpm php fpm
+  yum: >
+    pkg={{ item }} 
+    state=installed
+  with_items: pkgs_php_nginx
+  sudo: yes
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
   notify:
     - php-fpm-restart

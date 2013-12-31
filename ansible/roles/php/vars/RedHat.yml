@@ -7,5 +7,28 @@ service_php_fpm: php5-fpm
 pkgs_php:
   - php
 
+pkgs_php_pear:
+  - php-pear
+  - php5-dev
+
+pkgs_php_apache:
+  - libapache2-mod-php5
+
+pkgs_php_nginx:
+  - php5-fpm
+
+pkgs_php_mysql:
+  - php5-mysql
+
+pkgs_php_composer:
+  - php5-curl
+
 pkgs_phpmyadmin:
   - phpmyadmin
+
+pkgs_php_xdebug:
+  - php5-xdebug
+
+path_php_composer: /usr/local/bin/composer
+
+path_php_xdebug: /usr/bin/xdebug

@@ -1,0 +1,16 @@
+# Compatibility
+
+- name: pecl | require pear
+  fail: msg="PHP - Pear is required"
+  when: php.pear is not defined or php.pear.install != 1
+
+#- name: pecl | install pecl
+#  command: pecl install pecl_http
+#  sudo: yes
+
+# PECL Packages 
+
+- name: pecl | install packages
+  command: pecl install {{ item }}
+  with_items: php.pecl.modules
+  when: php.pecl.modules is defined

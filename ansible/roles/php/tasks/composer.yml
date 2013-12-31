@@ -1,14 +1,24 @@
-- name: composer | install dependencies
+# Packages
+
+- name: composer | install debian dependencies
   apt: >
     pkg={{ item }} 
     state=latest
-  with_items:
-    - curl
-    - php5-curl
+  with_items: pkgs_php_composer
   sudo: yes
+
+- name: composer | install rpm dependencies
+  yum: >
+    pkg={{ item }} 
+    state=latest
+  with_items: pkgs_php_composer
+  sudo: yes
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
+
+# Installation
 
 - name: composer | install composer
   shell: >
-    curl -sS https://getcomposer.org/installer | /usr/bin/php && /bin/mv -f ./composer.phar /usr/local/bin/composer
-    creates=/usr/local/bin/composer
+    curl -sS https://getcomposer.org/installer | /usr/bin/php && /bin/mv -f ./composer.phar {{ path_php_composer }}
+    creates={{ path_php_composer }}
   sudo: yes
