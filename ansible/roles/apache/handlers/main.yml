@@ -1,17 +1,17 @@
 - name: apache-restart
   service: >
-    name=apache2 
+    name={{ service_apache }}
     state=restarted
   sudo: yes
 
 - name: apache-start
   service: >
-    name=apache2 
+    name={{ service_apache }} 
     state=started
   sudo: yes
 
 - name: apache-stop
   service: >
-    name=apache2 
+    name={{ service_apache }} 
     state=stopped
   sudo: yes

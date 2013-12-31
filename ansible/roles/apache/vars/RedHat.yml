@@ -1,0 +1,7 @@
+pkgs_apache:
+  - httpd
+  - mod_ssl
+
+service_apache: apachectl
+
+path_apache_httpd: /etc/httpd/conf/httpd.conf

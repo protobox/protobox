@@ -1,0 +1,6 @@
+pkgs_apache:
+  - apache2
+
+service_apache: apache2
+
+path_apache_httpd: /etc/apache2/httpd.conf
