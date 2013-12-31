@@ -1,0 +1,11 @@
+service_apache: apache2
+
+service_nginx: nginx
+
+service_php_fpm: php5-fpm
+
+pkgs_php:
+  - php5
+
+pkgs_phpmyadmin:
+  - phpmyadmin

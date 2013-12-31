@@ -1,19 +1,19 @@
 - name: php-restart
   service: >
-    name=apache2 
+    name={{ service_apache }} 
     state=restarted
   sudo: yes
   when: apache is defined and apache.install == 1
 
 - name: php-restart
   service: >
-    name=nginx 
+    name={{ service_nginx }} 
     state=restarted
   sudo: yes
   when: nginx is defined and nginx.install == 1
 
 - name: php-fpm-restart
   service: >
-    name=php5-fpm 
+    name={{ service_php_fpm }}
     state=restarted
   sudo: yes

@@ -1,0 +1,41 @@
+
+# Package
+
+- name: phpmyadmin | intall debian packages
+  apt: >
+    name={{ item }}
+    state=installed
+    update_cache=yes
+  with_items: pkgs_phpmyadmin
+  sudo: yes
+  when: ansible_os_family == 'Debian'
+
+- name: phpmyadmin | intall rpm packages
+  yum: >
+    name={{ item }}
+    state=installed
+  with_items: pkgs_phpmyadmin
+  sudo: ues
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
+
+# Apache Config
+
+- name: phpmyadmin | install apache conf
+  lineinfile: >
+    dest=/etc/apache2/apache2.conf
+    insertafter=EOF
+    regexp='^Include /etc/phpmyadmin/apache.conf'
+    line='Include /etc/phpmyadmin/apache.conf'
+    state=present
+    backup=yes
+  sudo: yes
+  when: >
+    ansible_os_family == 'Debian' and 
+    apache is defined and 
+    apache.install == 1
+  notify:
+    - php-restart
+
+# Nginx Config
+
+# TODO: Add Nginx Support

@@ -1,5 +1,7 @@
-- include: version.yml
-  when: php.version is defined
+- name: main | add vars
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- include: php.yml
 
 - include: mysql.yml
   when: mysql is defined and mysql.install == 1
@@ -11,7 +13,6 @@
   when: nginx is defined and nginx.install == 1
 
 - include: ini.yml
-  when: php.version is defined
 
 - include: composer.yml
   when: php.composer is defined and php.composer.install == 1

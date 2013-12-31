@@ -1,0 +1,16 @@
+---
+galaxy_info:
+  author: Patrick Heeney
+  company: Protobox
+  license: MIT
+  min_ansible_version: 1.4
+  platforms:
+   - name: Ubuntu
+     versions:
+      - precise
+      - quantal
+      - raring
+      - saucy
+  categories:
+   - development
+dependencies: []

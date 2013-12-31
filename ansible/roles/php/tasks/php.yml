@@ -32,32 +32,39 @@
   sudo: yes
   when: ansible_os_family == 'Debian' and php.version == '54'
 
-# php
+# PHP
 
-- name: version | install php
+- name: version | install debian php
   apt: >
     pkg={{ item }} 
     state=latest
     force=yes
-  with_items:
-    - php5
+  with_items: pkgs_php
   sudo: yes
+  when: ansible_os_family == 'Debian'
 
-# modules
+- name: version | install rpm php
+  yum: >
+    pkg={{ item }} 
+    state=latest
+  with_items: pkgs_php
+  sudo: yes
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
 
-- name: main | install php packages
+# PHP Modules
+
+- name: version | install debian php packages
   apt: >
     pkg={{ item }}
     state=latest
   with_items: php.modules
   sudo: yes
-  when: php.modules is defined
+  when: ansible_os_family == 'Debian' and php.modules is defined
 
-# backup php.ini
-
-#- name: main | make backup of php.ini
-#  sudo: yes
-#  copy: >
-#    src=/etc/php5/apache2/php.ini 
-#    dest=/etc/php5/apache2/php.ini.bak
-#    force=yes
+- name: version | install debian php packages
+  apt: >
+    pkg={{ item }}
+    state=latest
+  with_items: php.modules
+  sudo: yes
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat'] and php.modules is defined
