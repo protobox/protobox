@@ -1,0 +1,41 @@
+# Dependencies
+
+- name: node | install debian node dependencies
+  apt: >
+    pkg={{ item }} 
+    state=installed
+  with_items: pkgs_node_dependencies
+  sudo: yes
+  when: ansible_os_family == 'Debian'
+
+- name: node | install rpm node dependencies
+  yum: >
+    pkg={{ item }} 
+    state=installed
+  with_items: pkgs_node_dependencies
+  sudo: yes
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
+
+# Package
+
+- name: node | add repository
+  apt_repository: repo=ppa:chris-lea/node.js
+  sudo: yes
+  when: ansible_os_family == 'Debian'
+
+- name: node | install debian node
+  apt: >
+    pkg={{ item }} 
+    state=latest
+    update_cache=true
+  with_items: pkgs_node
+  sudo: yes
+  when: ansible_os_family == 'Debian'
+
+- name: node | install rpm node
+  yum: >
+    pkg={{ item }} 
+    state=latest
+  with_items: pkgs_node
+  sudo: yes
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
