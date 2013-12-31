@@ -1,0 +1,9 @@
+pkgs_mysql_dependencies:
+  - python-mysqldb
+
+pkgs_mysql:
+  - mysql-server
+
+service_mysql: mysql
+
+path_mysql_conf: /etc/mysql/my.cnf

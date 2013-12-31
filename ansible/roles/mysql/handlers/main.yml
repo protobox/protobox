@@ -1,21 +1,18 @@
 - name: mysql-restart
   service: >
-    name=mysql
+    name={{ service_mysql }}
     state=restarted
   sudo: yes
 
 - name: mysql-start
   service: >
-    name=mysql 
+    name={{ service_mysql }} 
     state=started
     enabled=true
   sudo: yes
 
 - name: mysql-stop
   service: >
-    name=mysql 
+    name={{ service_mysql }} 
     state=stopped
   sudo: yes
-
-- name: mysql-clear-iblogfiles
-  shell: rm -rf /var/lib/mysql/ib_logfile*
