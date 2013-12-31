@@ -1,0 +1,17 @@
+# Package
+
+- name: dependencies | install debian packages
+  apt: >
+    pkg={{ item }} 
+    state=installed
+  with_items: pkgs_dependencies
+  sudo: yes
+  when: ansible_os_family == 'Debian'
+
+- name: dependencies | install rpm packages
+  yum: >
+    pkg={{ item }} 
+    state=installed
+  with_items: pkgs_dependencies
+  sudo: yes
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']

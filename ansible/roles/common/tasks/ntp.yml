@@ -1,0 +1,43 @@
+# Package
+
+- name: ntp | install debian ntp
+  apt: >
+    pkg={{ item }} 
+    state=latest
+    update_cache=yes
+  with_items: pkgs_ntp
+  sudo: yes
+  when: ansible_os_family == 'Debian'
+  notify:
+    - ntp-restart
+
+- name: ntp | install rpm ntp
+  yum: >
+    pkg={{ item }} 
+    state=latest
+  with_items: pkgs_ntp
+  sudo: yes
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
+  notify:
+    - ntp-restart
+
+# Configuration
+
+- name: debian | configure ntp
+  template: >
+    src=ntp.conf.j2
+    dest={{ path_ntp_conf }}
+    owner=root
+    group=root
+    mode=0644
+  notify:
+    - ntp-restart
+
+# Service
+
+- name: debian | ntp is running
+  service: >
+    name={{ service_ntp }}
+    state=started
+    enabled=yes
+  sudo: yes

@@ -1,5 +1,6 @@
-- include: debian.yml
-  when: ansible_os_family == 'Debian'
+- name: main | add vars
+  include_vars: "{{ ansible_os_family }}.yml"
 
-- include: rpm.yml
-  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
+- include: ntp.yml
+
+- include: dependencies.yml

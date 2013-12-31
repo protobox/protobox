@@ -1,6 +1,6 @@
 - name: ntp-restart
   service: >
-    name=ntp
+    name={{ service_ntp }}
     state=restarted
     enabled=yes
   sudo: yes

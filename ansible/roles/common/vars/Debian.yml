@@ -1,0 +1,10 @@
+service_ntp: ntp
+
+pkgs_ntp:
+  - ntp
+
+pkgs_dependencies:
+  - git-core
+  - curl
+
+path_ntp_conf: /etc/ntp.conf
