@@ -1,23 +1,23 @@
 - name: hhvm-restart
   service: >
-    name=hhvm 
+    name={{ service_hhvm }}
     state=restarted
   sudo: yes
 
 - name: hhvm-start
   service: >
-    name=hhvm 
+    name={{ service_hhvm }}
     state=started
   sudo: yes
 
 - name: hhvm-stop
   service: >
-    name=hhvm 
+    name={{ service_hhvm }}
     state=restarted
   sudo: yes
 
 - name: apache-restart
   service: >
-    name=apache2 
+    name={{ service_apache }}
     state=restarted
   sudo: yes

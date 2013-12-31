@@ -1,6 +1,9 @@
+- name: main | add vars
+  include_vars: "{{ ansible_os_family }}.yml"
+
 - include: compatibility.yml
 
-- include: version.yml
+- include: hhvm.yml
 
 - include: apache.yml
   when: apache is defined and apache.install == 1

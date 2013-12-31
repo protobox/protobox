@@ -1,0 +1,28 @@
+# Repository
+
+- name: hhvm | add the repository
+  copy: >
+    content="deb http://dl.hhvm.com/ubuntu {{ ansible_lsb.codename }} main" 
+    dest=/etc/apt/sources.list.d/hhvm.list
+  sudo: yes
+  when: ansible_os_family == 'Debian'
+
+# Package
+
+- name: hhvm | install debian hhvm
+  apt: >
+    pkg={{ item }} 
+    state=installed
+    update_cache=true
+  with_items: pkgs_hhvm
+  sudo: yes
+  when: ansible_os_family == 'Debian'
+
+- name: hhvm | install rpm hhvm
+  yum: >
+    pkg={{ item }} 
+    state=installed
+  with_items: pkgs_hhvm
+  sudo: yes
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
+

@@ -1,15 +1,23 @@
-- name: apache | updates apt cache
-  apt: update_cache=true
-  sudo: yes
+# Package
 
-- name: apache | installs apache packages
+- name: apache | install debian hhvm apache
   apt: >
     pkg={{ item }} 
     state=latest
-    force=yes
-  with_items:
-    - hhvm-fastcgi
+    update_cache=true
+  with_items: pkgs_hhvm_apache
   sudo: yes
+  when: ansible_os_family == 'Debian'
+
+- name: apache | install rpm hhvm apache
+  yum: >
+    pkg={{ item }} 
+    state=latest
+  with_items: pkgs_hhvm_apache
+  sudo: yes
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
+
+# Modules
 
 - name: apache | enables apache modules
   command: a2enmod {{ item }}
@@ -17,7 +25,9 @@
     - proxy
     - proxy_fcgi
   sudo: yes
-  when: "'2.3' not in apache_version.stdout and '2.2' not in apache_version.stdout"
+  when: >
+    '2.3' not in apache_version.stdout and 
+    '2.2' not in apache_version.stdout
   notify:
     - apache-restart
 

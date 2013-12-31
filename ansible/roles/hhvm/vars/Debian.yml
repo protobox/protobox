@@ -1,0 +1,12 @@
+pkgs_hhvm:
+  - hhvm
+
+pkgs_hhvm_apache:
+  - hhvm-fastcgi
+
+pkgs_hhvm_nginx:
+  - hhvm-fastcgi
+
+service_hhvm: hhvm
+
+service_apache: apache2

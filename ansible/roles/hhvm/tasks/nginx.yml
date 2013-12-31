@@ -1,12 +1,18 @@
-- name: nginx | updates apt cache
-  apt: update_cache=true
-  sudo: yes
+# Package
 
-- name: nginx | installs nginx packages
+- name: nginx | install debian hhvm nginx
   apt: >
     pkg={{ item }} 
     state=latest
-    force=yes
-  with_items:
-    - hhvm-fastcgi
+    update_cache=true
+  with_items: pkgs_hhvm_nginx
   sudo: yes
+  when: ansible_os_family == 'Debian'
+
+- name: nginx | install rpm hhvm nginx
+  yum: >
+    pkg={{ item }} 
+    state=latest
+  with_items: pkgs_hhvm_nginx
+  sudo: yes
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
