@@ -1,23 +1,23 @@
 - name: nginx-restart
   service: >
-    name=nginx 
+    name={{ service_nginx }}
     state=restarted
   sudo: yes
 
 - name: nginx-start
   service: >
-    name=nginx 
+    name={{ service_nginx }} 
     state=started
   sudo: yes
 
 - name: nginx-stop
   service: >
-    name=nginx 
+    name={{ service_nginx }} 
     state=restarted
   sudo: yes
 
 - name: nginx-reload
   service: >
-    name=nginx
+    name={{ service_nginx }}
     state=reloaded
   sudo: yes

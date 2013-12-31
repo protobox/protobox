@@ -1,0 +1,6 @@
+pkgs_nginx:
+  - nginx
+
+service_nginx: nginx
+
+path_nginx_virtualhost: /etc/nginx/sites-enabled

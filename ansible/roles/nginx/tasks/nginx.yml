@@ -1,0 +1,42 @@
+# Uninstall Apache
+
+# TODO : check for apache: 'which apache2' before uninstall
+
+#apt-get remove -y apache.* 
+- name: nginx | uninstall apache packages
+  command: apt-get purge -y apache2* libapache2*
+  sudo: yes
+  when: ansible_os_family == 'Debian'
+
+# TODO : this code will work when 
+# https://github.com/ansible/ansible/issues/5180
+# is fixed
+#- name: main | uninstall apache packages
+#  apt: >
+#    pkg={{ item }} 
+#    state=absent
+#    purge=yes
+#    force=yes
+#  with_items:
+#    - apache2*
+#  sudo: yes
+
+# Package
+
+- name: nginx | install debian nginx
+  apt: >
+    pkg={{ item }} 
+    state=latest
+    update_cache=true
+  with_items: pkgs_nginx
+  sudo: yes
+  when: ansible_os_family == 'Debian'
+
+- name: nginx | install rpm nginx
+  yum: >
+    pkg={{ item }} 
+    state=latest
+  with_items: pkgs_apache
+  sudo: yes
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
+
