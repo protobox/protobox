@@ -13,5 +13,5 @@
 - name: varnish-stop
   service: >
     name={{ service_varnish }}
-    state=restarted
+    state=stopped
   sudo: yes
