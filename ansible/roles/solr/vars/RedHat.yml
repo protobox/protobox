@@ -1,0 +1,9 @@
+pkgs_solr_dependencies:
+  - java
+
+pkgs_solr:
+  - tomcat6
+  - tomcat6-webapps
+  - tomcat6-admin-webapps
+
+service_tomcat: tomcat6

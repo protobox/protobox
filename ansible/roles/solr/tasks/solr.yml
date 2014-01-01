@@ -1,0 +1,36 @@
+# Dependencies
+
+- name: solr | install debian solr dependencies
+  apt: >
+    pkg={{ item }} 
+    state=installed
+  with_items: pkgs_solr_dependencies
+  sudo: yes
+  when: ansible_os_family == 'Debian'
+
+- name: solr | install rpm solr dependencies
+  yum: >
+    pkg={{ item }} 
+    state=installed
+  with_items: pkgs_solr_dependencies
+  sudo: yes
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
+
+# Package
+
+- name: solr | install debian solr
+  apt: >
+    pkg={{ item }} 
+    state=latest
+    update_cache=true
+  with_items: pkgs_solr
+  sudo: yes
+  when: ansible_os_family == 'Debian'
+
+- name: solr | install rpm solr
+  yum: >
+    pkg={{ item }} 
+    state=latest
+  with_items: pkgs_solr
+  sudo: yes
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']

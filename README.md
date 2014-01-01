@@ -43,7 +43,7 @@ Protobox has built in support for the following modules:
 
 #### OS
 
-- [Ubuntu](http://www.ubuntu.com/server) 12.04, 13.10
+- [Ubuntu](http://www.ubuntu.com/server) 10.04, 12.04, 13.10
 - [Any Distro](http://www.vagrantbox.es/)
 
 #### Web Server
@@ -79,6 +79,7 @@ Protobox has built in support for the following modules:
 - [Mongodb](http://www.mongodb.org/)
 - [Riak](http://basho.com/riak/)
 - [Redis](http://redis.io/)
+- [Apache Solr](http://lucene.apache.org/solr/)
 
 #### Queues / Messaging
 

@@ -1,0 +1,7 @@
+pkgs_solr_dependencies:
+  - openjdk-6-jdk
+
+pkgs_solr:
+  - solr-tomcat
+
+service_tomcat: tomcat6

@@ -29,7 +29,10 @@
     #  when: mongodb is defined and mongodb.install == 1
     
     #- role: redis
-    #  when: "redis is defined and redis.install == 1" }
+    #  when: redis is defined and redis.install == 1
+
+    - role: solr
+      when: solr is defined and solr.install == 1
 
     # Web servers
     
