@@ -13,5 +13,5 @@
 - name: newrelic-stop
   service: >
     name=newrelic-sysmond 
-    state=restarted
+    state=stopped
   sudo: yes
