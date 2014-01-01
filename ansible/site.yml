@@ -34,6 +34,9 @@
     - role: solr
       when: solr is defined and solr.install == 1
 
+    - role: elasticsearch
+      when: elasticsearch is defined and elasticsearch.install == 1
+
     # Web servers
     
     - role: php

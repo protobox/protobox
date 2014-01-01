@@ -80,6 +80,7 @@ Protobox has built in support for the following modules:
 - [Riak](http://basho.com/riak/)
 - [Redis](http://redis.io/)
 - [Apache Solr](http://lucene.apache.org/solr/)
+- [Elasticsearch](http://www.elasticsearch.org/)
 
 #### Queues / Messaging
 

@@ -1,0 +1,4 @@
+pkgs_elasticsearch:
+  - elasticsearch
+
+service_elasticsearch: elasticsearch

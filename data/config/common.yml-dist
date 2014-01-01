@@ -225,6 +225,9 @@ mariadb:
 solr:
   install: 0
 
+elasticsearch:
+  install: 0
+
 beanstalkd:
   install: 0
   listen_addr: '127.0.0.1'

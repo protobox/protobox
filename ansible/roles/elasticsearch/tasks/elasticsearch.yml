@@ -1,0 +1,41 @@
+# Package / Debian
+
+- name: elasticsearch | add debian key
+  apt_key: >
+    url=http://packages.elasticsearch.org/GPG-KEY-elasticsearch
+    state=present
+  sudo: yes
+  when: ansible_os_family == 'Debian'
+
+- name: elasticsearch | add debian repository
+  copy: >
+    content="deb {{ elasticsearch.repository|default('http://packages.elasticsearch.org/elasticsearch/1.0/debian') }} stable main" 
+    dest=/etc/apt/sources.list.d/elasticsearch.list
+  sudo: yes
+  when: ansible_os_family == 'Debian'
+
+- name: elasticsearch | install debian elasticsearch
+  apt: >
+    pkg={{ item }} 
+    state=latest
+    update_cache=true
+  with_items: pkgs_elasticsearch
+  sudo: yes
+  when: ansible_os_family == 'Debian'
+
+# Package / RPM
+
+- name: elasticsearch | install rpm key
+  rpm_key: > 
+    key=http://packages.elasticsearch.org/GPG-KEY-elasticsearch
+    state=present
+  sudo: yes
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
+
+- name: elasticsearch | install rpm elasticsearch
+  yum: >
+    pkg={{ item }} 
+    state=latest
+  with_items: pkgs_elasticsearch
+  sudo: yes
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
