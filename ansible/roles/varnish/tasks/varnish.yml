@@ -9,7 +9,7 @@
 
 - name: varnish | add debian repository
   copy: >
-    content="http://repo.varnish-cache.org/ubuntu/ {{ ansible_lsb.codename }} {{ varnish.package|default('varnish-3.0') }}" 
+    content="deb http://repo.varnish-cache.org/ubuntu/ {{ ansible_lsb.codename }} {{ varnish.package|default('varnish-3.0') }}" 
     dest=/etc/apt/sources.list.d/varnish.list
   sudo: yes
   when: ansible_os_family == 'Debian'
