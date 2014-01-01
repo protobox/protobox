@@ -1,0 +1,4 @@
+pkgs_varnish:
+  - varnish
+
+service_varnish: varnish

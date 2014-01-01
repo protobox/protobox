@@ -1,0 +1,41 @@
+# Package / Debian
+
+- name: varnish | add debian key
+  apt_key: >
+    url=http://repo.varnish-cache.org/debian/GPG-key.txt
+    state=present
+  sudo: yes
+  when: ansible_os_family == 'Debian'
+
+- name: varnish | add debian repository
+  copy: >
+    content="http://repo.varnish-cache.org/ubuntu/ {{ ansible_lsb.codename }} {{ varnish.package|default('varnish-3.0') }}" 
+    dest=/etc/apt/sources.list.d/varnish.list
+  sudo: yes
+  when: ansible_os_family == 'Debian'
+
+- name: varnish | install debian varnish
+  apt: >
+    pkg={{ item }} 
+    state=latest
+    update_cache=true
+  with_items: pkgs_varnish
+  sudo: yes
+  when: ansible_os_family == 'Debian'
+
+# Package / RPM
+
+- name: varnish | install rpm key
+  rpm_key: > 
+    key={{ varnish.package|default('http://repo.varnish-cache.org/redhat/varnish-3.0/el6/noarch/varnish-release/varnish-release-3.0-1.el6.noarch.rpm') }}
+    state=present
+  sudo: yes
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
+
+- name: varnish | install rpm varnish
+  yum: >
+    pkg={{ item }} 
+    state=latest
+  with_items: pkgs_varnish
+  sudo: yes
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']

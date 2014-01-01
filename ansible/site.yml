@@ -51,6 +51,9 @@
     - role: phalcon
       when: phalcon is defined and phalcon.install == 1
 
+    - role: varnish
+      when: varnish is defined and varnish.install == 1
+
     # Queues / Messaging
     
     #- role: beanstalkd

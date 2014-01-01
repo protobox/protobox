@@ -50,6 +50,7 @@ Protobox has built in support for the following modules:
 
 - [Apache](http://httpd.apache.org/)
 - [Nginx](http://wiki.nginx.org/Main)
+- [Varnish](https://www.varnish-cache.org/)
 
 #### Languages
 

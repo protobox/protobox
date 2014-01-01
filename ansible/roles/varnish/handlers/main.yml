@@ -1,0 +1,17 @@
+- name: varnish-restart
+  service: >
+    name={{ service_varnish }}
+    state=restarted
+  sudo: yes
+
+- name: varnish-start
+  service: >
+    name={{ service_varnish }}
+    state=started
+  sudo: yes
+
+- name: varnish-stop
+  service: >
+    name={{ service_varnish }}
+    state=restarted
+  sudo: yes

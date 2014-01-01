@@ -129,6 +129,9 @@ nginx:
       envvars:
         - 'APP_ENV dev'
 
+varnish:
+  install: 0
+
 hhvm:
   install: 0
 
