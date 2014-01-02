@@ -96,7 +96,7 @@ end
 def git
   @git ||= if ENV['GIT'] and File.executable? ENV['GIT']
     ENV['GIT']
-  elsif Kernel.system '/usr/bin/which -s git'
+  elsif Kernel.system '/usr/bin/which git'
     'git'
   else
     s = `xcrun -find git 2>/dev/null`.chomp
