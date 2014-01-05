@@ -9,15 +9,15 @@
 
 - name: ngrok | set facts
   set_fact: >
-    ngrok_package="{{ localtunnel.ngrok.download_url|default("https://dl.ngrok.com/linux_386/ngrok.zip") }}"
-    ngrok_port={{ localtunnel.ngrok.port|default('80') }}
-    ngrok_client={{ localtunnel.ngrok.client|default('false') }}
-    ngrok_subdomain="{{ '-subdomain=' ~ localtunnel.ngrok.subdomain if localtunnel.ngrok.subdomain is defined else '' }}"
-    ngrok_httpauth="{{ '-httpauth=' ~ localtunnel.ngrok.httpauth if localtunnel.ngrok.httpauth is defined else '' }}"
-    ngrok_proto="{{ '-proto=' ~ localtunnel.ngrok.proto if localtunnel.ngrok.proto is defined else '' }}"
-    ngrok_hostname="{{ '-hostname=' ~ localtunnel.ngrok.hostname if localtunnel.ngrok.hostname is defined else '' }}"
-    ngrok_config="{{ '-config=' ~ localtunnel.ngrok.config if localtunnel.ngrok.config is defined else '' }}"
-    ngrok_log="{{ '-log=stdout' ~ localtunnel.ngrok.log if localtunnel.ngrok.log is defined else '' }}"
+    ngrok_package="{{ ngrok.download_url|default("https://dl.ngrok.com/linux_386/ngrok.zip") }}"
+    ngrok_port={{ ngrok.port|default('80') }}
+    ngrok_client={{ ngrok.client|default('false') }}
+    ngrok_subdomain="{{ '-subdomain=' ~ ngrok.subdomain if ngrok.subdomain is defined else '' }}"
+    ngrok_httpauth="{{ '-httpauth=' ~ ngrok.httpauth if ngrok.httpauth is defined else '' }}"
+    ngrok_proto="{{ '-proto=' ~ ngrok.proto if ngrok.proto is defined else '' }}"
+    ngrok_hostname="{{ '-hostname=' ~ ngrok.hostname if ngrok.hostname is defined else '' }}"
+    ngrok_config="{{ '-config=' ~ ngrok.config if ngrok.config is defined else '' }}"
+    ngrok_log="{{ '-log=stdout' ~ ngrok.log if ngrok.log is defined else '' }}"
 
 - name: ngrok | check if installed
   stat: >
