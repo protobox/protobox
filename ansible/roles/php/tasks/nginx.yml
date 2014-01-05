@@ -19,3 +19,14 @@
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
   notify:
     - php-fpm-restart
+
+# Configuration 
+
+- name: nginx | set nginx ini 
+  template: >
+    src=php.ini.j2
+    dest=/etc/php5/fpm/php.ini
+  sudo: yes
+  when: php.ini is defined
+  notify:
+    - php-restart

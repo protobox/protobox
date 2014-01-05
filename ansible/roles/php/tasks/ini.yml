@@ -1,29 +1,5 @@
 # Configuration
 
-- name: ini | set apache ini 
-  template: >
-    src=php.ini.j2
-    dest=/etc/php5/apache2/php.ini
-  sudo: yes
-  when: >
-    php.ini is defined and 
-    apache is defined and 
-    apache.install == 1
-  notify:
-    - php-restart
-
-- name: ini | set nginx ini 
-  template: >
-    src=php.ini.j2
-    dest=/etc/php5/fpm/php.ini
-  sudo: yes
-  when: >
-    php.ini is defined and 
-    nginx is defined and 
-    nginx.install == 1
-  notify:
-    - php-restart
-
 # php 5.3 does not have php5enmod so manually create it
 - name: ini | ensure directory exists
   file: >

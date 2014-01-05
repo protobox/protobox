@@ -36,7 +36,7 @@
   yum: >
     pkg={{ item }} 
     state=latest
-  with_items: pkgs_apache
+  with_items: pkgs_nginx
   sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
 
