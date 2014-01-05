@@ -1,6 +1,6 @@
 - name: virtualhosts | deactivates the default virtualhost
   file: >
-    path={{ path_nginx_virtualhost }}/default
+    path={{ path_nginx_virtualhost_enabled }}/default
     state=absent
   sudo: yes
   notify:
@@ -9,7 +9,7 @@
 - name: virtualhosts | add nginx configurations
   template: >
     src={{ item.template|default('default.conf.j2') }}
-    dest={{ path_nginx_virtualhost }}/{{ item.name }}
+    dest={{ path_nginx_virtualhost_available }}/{{ item.name }}
     mode=0640
   with_items: nginx.vhosts
   sudo: yes
@@ -18,8 +18,8 @@
 
 - name: virtualhosts | enable the virtualhost
   file: >
-    src={{ path_nginx_virtualhost }}/{{ item.name }}
-    dest={{ path_nginx_virtualhost }}/{{ item.name }}
+    src={{ path_nginx_virtualhost_available }}/{{ item.name }}
+    dest={{ path_nginx_virtualhost_enabled }}/{{ item.name }}
     state=link
   with_items: nginx.vhosts
   sudo: yes
