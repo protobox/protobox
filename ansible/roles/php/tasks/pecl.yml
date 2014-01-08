@@ -14,3 +14,4 @@
   command: pecl install {{ item }}
   with_items: php.pecl.modules
   when: php.pecl.modules is defined
+  ignore_errors: True

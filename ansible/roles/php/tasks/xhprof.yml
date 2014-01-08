@@ -8,6 +8,7 @@
 
 - name: xhprof | install packages
   command: pecl install {{ php.xhprof.package|default('xhprof-beta') }}
+  ignore_errors: True
 
 # Configuration
 
