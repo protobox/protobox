@@ -1,6 +1,6 @@
 # Protobox #
 
-Protobox is the only [Vagrant](http://vagrantup.com) development box you will ever need. Built on [ansible](http://www.ansibleworks.com/), a single YAML file controls all configuration and software installed on the box. It also contains automatic installation of popular applications and your own private applications via composer or git. It was originally inspired by [puphpet](https://puphpet.com) configuration. 
+Protobox is the only [Vagrant](http://vagrantup.com) development machine you will ever need. Built on [ansible](http://www.ansibleworks.com/), a single YAML file controls all configuration and software installed on the virtual machine. It also contains automatic installation of popular applications and your own private applications via composer or git. [Read more about this project here](http://getprotobox.com/about). 
 
 Protobox easily allows you to setup a development environment with PHP, Apache, MySQL, Grunt and quickly switch to developing the same application in PHP, Nginx, Mongodb, Redis. If you need Node, Beakstalkd, Riak, or any other package just turn it on in the configuration file and `vagrant up`. 
 
@@ -112,6 +112,14 @@ Protobox has built in support for installing any of these applications:
 - [Prestashop](http://www.prestashop.com/) (Coming Soon)
 - [PyroCMS](https://www.pyrocms.com/)
 - Any public / private GIT repository
+
+## Contributing ##
+
+Use [GitHub Issues](https://github.com/protobox/protobox/issues) to file a bug report or new feature request. Please open a issue prior to opening a pull request to make sure it is something we can merge. The roadmap can be determined by looking at issues tagged as `featured request`.
+
+## Help! ##
+
+Use [GitHub Issues](https://github.com/protobox/protobox/issues) or #protobox on irc.freenode.net.
 
 ## License ##
 
