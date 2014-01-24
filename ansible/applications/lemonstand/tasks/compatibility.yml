@@ -37,3 +37,15 @@
   fail: msg="Lemonstand - {{ item.name }} - Options are missing"
   with_items: applications.lemonstand
   when: item.options is not defined
+
+# Check for license information
+
+- name: compatibility | check for license holder
+  fail: msg="Lemonstand - {{ item.name }} - License Holder is missing"
+  with_items: applications.lemonstand
+  when: item.options.holder is not defined or item.options.holder == ''
+
+- name: compatibility | check for serial
+  fail: msg="Lemonstand - {{ item.name }} - Serial is missing"
+  with_items: applications.lemonstand
+  when: item.options.serial is not defined or item.options.serial == ''
