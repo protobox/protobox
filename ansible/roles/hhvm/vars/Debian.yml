@@ -1,6 +1,9 @@
 pkgs_hhvm:
   - hhvm
 
+pkgs_hhvm_nightly:
+  - hhvm-nightly
+
 pkgs_hhvm_apache:
   - hhvm-fastcgi
 

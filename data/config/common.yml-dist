@@ -134,6 +134,7 @@ varnish:
 
 hhvm:
   install: 0
+  nightly: 0
 
 php:
   install: 1

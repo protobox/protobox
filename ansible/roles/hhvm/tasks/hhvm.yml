@@ -9,6 +9,15 @@
 
 # Package
 
+- name: hhvm | install debian hhvm nightly
+  apt: >
+    pkg={{ item }} 
+    state=installed
+    update_cache=true
+  with_items: pkgs_hhvm_nightly
+  sudo: yes
+  when: ansible_os_family == 'Debian' and hhvm.nightly is defined and hhvm.nightly == 1
+
 - name: hhvm | install debian hhvm
   apt: >
     pkg={{ item }} 
@@ -16,7 +25,7 @@
     update_cache=true
   with_items: pkgs_hhvm
   sudo: yes
-  when: ansible_os_family == 'Debian'
+  when: ansible_os_family == 'Debian' and (hhvm.nightly is not defined or hhvm.nightly == 0)
 
 - name: hhvm | install rpm hhvm
   yum: >
