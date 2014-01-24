@@ -8,4 +8,4 @@
     owner=root
     group=root
     mode=0755
-  when: php.version == '53'
+  when: php_version_53

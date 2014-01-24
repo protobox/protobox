@@ -3,6 +3,16 @@
 
 - include: php.yml
 
+- name: main | check version
+  shell: php -i | grep 'PHP Version' | head -1
+  register: php_version
+
+- name: main | set facts
+  set_fact: >
+    php_version_53={{ True if '5.3.' in php_version.stdout else False }}
+    php_version_54={{ True if '5.4.' in php_version.stdout else False }}
+    php_version_55={{ True if '5.5.' in php_version.stdout else False }}
+
 - include: ini.yml
 
 - include: mysql.yml
