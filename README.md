@@ -1,8 +1,6 @@
 # Protobox #
 
-Protobox is the only [Vagrant](http://vagrantup.com) development machine you will ever need. Built on [ansible](http://www.ansibleworks.com/), a single YAML file controls all configuration and software installed on the virtual machine. It also contains automatic installation of popular applications and your own private applications via composer or git. [Read more about this project here](http://getprotobox.com/about). 
-
-Protobox easily allows you to setup a development environment with PHP, Apache, MySQL, Grunt and quickly switch to developing the same application in PHP, Nginx, Mongodb, Redis. If you need Node, Beakstalkd, Riak, or any other package just turn it on in the configuration file and `vagrant up`. 
+Protobox is a layer on top of [vagrant](http://vagrantup.com) and a [web GUI](http://getprotobox.com/about) to setup virtual machines for web development. A single [YAML document](https://github.com/protobox/protobox/blob/master/data/config/common.yml-dist) controls everything that is installed on the virtual machine. You can install [popular languages](#languages), [software](#modules), and even [popular web applications](#applications) or your [own private GIT repositories](#applications) with a simple on/off toggle in YAML. You can read more about why this was developed in our [about document](ABOUT.md) or on our website at [getprotobox.com/about](http://getprotobox.com/about). 
 
 ## Installation ##
 
@@ -121,10 +119,10 @@ Use [GitHub Issues](https://github.com/protobox/protobox/issues) to file a bug r
 
 Use [GitHub Issues](https://github.com/protobox/protobox/issues) or #protobox on irc.freenode.net.
 
+## Credit ##
+
+Protobox was developed by [Patrick Heeney](https://github.com/patrickheeney) and inspired by the [puphpet](https://github.com/puphpet/puphpet) project. A special thanks goes out to our [contributors](https://github.com/protobox/protobox/graphs/contributors) for helping grow this project. Protobox is also made possible by the best orchestration engine in existence: [ansible](http://www.ansibleworks.com/).
+
 ## License ##
 
 Protobox is licensed under the [MIT license](http://opensource.org/licenses/mit-license.php).
-
-## Authors ##
-
-Created by [Patrick Heeney](https://github.com/patrickheeney). 
