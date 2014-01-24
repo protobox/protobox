@@ -36,6 +36,24 @@ module Tty extend self
   def escape n; "\033[#{n}m" if STDOUT.tty? end
 end
 
+module OS
+  def OS.windows?
+    (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
+  end
+
+  def OS.mac?
+   (/darwin/ =~ RUBY_PLATFORM) != nil
+  end
+
+  def OS.unix?
+    !OS.windows?
+  end
+
+  def OS.linux?
+    OS.unix? and not OS.mac?
+  end
+end
+
 class Array
   def shell_s
     cp = dup
@@ -130,7 +148,7 @@ if install_folder.nil? or install_folder.empty?
 end
 
 # Check mac os version
-abort "MacOS too old" if macos_version < "10.5"
+abort "MacOS too old" if OS.mac? and macos_version < "10.5"
 
 # Check for git
 abort "Git is required" if !git
