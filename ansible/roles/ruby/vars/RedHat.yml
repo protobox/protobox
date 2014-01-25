@@ -1,5 +1,6 @@
 pkgs_node_dependencies:
   - python-software-properties
 
-pkgs_node:
-  - nodejs
+pkgs_ruby_gems:
+  - libsqlite3-dev
+  - rubygems

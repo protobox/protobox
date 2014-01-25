@@ -1,0 +1,6 @@
+pkgs_ruby_dependencies:
+  - python-software-properties
+
+pkgs_ruby_gems:
+  - libsqlite3-dev
+  - rubygems
