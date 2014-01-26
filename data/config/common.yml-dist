@@ -180,7 +180,7 @@ php:
   timezone: America/Chicago
 
 phalcon:
-  install: 1
+  install: 0
 
 mysql:
   install: 1
