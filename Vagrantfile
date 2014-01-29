@@ -35,13 +35,13 @@ File.open(protobox_boot, 'r') do |f1|
 end 
 
 # Check for missing data file
-if !File.file?(vagrant_file)
-  puts "Data file is missing: #{vagrant_file}\n"
+if !File.file?(vagrant_dir + '/' + vagrant_file)
+  puts "Data file is missing: #{vagrant_dir}/#{vagrant_file}\n"
   exit
 end
 
 # Load settings into memory
-settings = YAML.load_file(vagrant_file)
+settings = YAML.load_file(vagrant_dir + '/' + vagrant_file)
 
 # Start vagrant configuration
 Vagrant.configure("2") do |config|
