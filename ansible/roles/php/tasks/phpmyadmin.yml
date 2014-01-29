@@ -15,7 +15,7 @@
     name={{ item }}
     state=installed
   with_items: pkgs_phpmyadmin
-  sudo: ues
+  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
 
 # Apache Config
