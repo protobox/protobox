@@ -1,0 +1,8 @@
+pkgs_postgresql_dependencies:
+  - libpq-dev
+  - python-psycopg2
+
+pkgs_postgresql:
+  - postgresql
+
+service_postgresql: postgresql

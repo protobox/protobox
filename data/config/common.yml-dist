@@ -205,7 +205,8 @@ postgresql:
       user: root
       password: root
       grant: 
-        - ALL
+        - CREATEDB
+        - SUPERUSER
       sql_file: ''
 
 mongodb:

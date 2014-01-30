@@ -1,0 +1,22 @@
+- name: users | create group
+  group: >
+    name={{ postgresql.group|default('postgresql') }}
+    state=present
+  sudo: yes
+
+- name: users | create user
+  user: >
+    name={{ postgresql.user|default('postgresql') }}
+    group={{ postgresql.group|default('postgresql') }}
+    state=present
+  sudo: yes
+
+- name: users | create database users
+  sudo_user: {{ postgresql.user|default('postgresql') }}
+  postgresql_user: > 
+    db={{ item.name }}
+    user={{ item.user }}
+    password={{ item.password }}
+    role_attr_flags={{ item.grant|join(',') }}
+    state=present
+  when: postgresql.databases is defined
