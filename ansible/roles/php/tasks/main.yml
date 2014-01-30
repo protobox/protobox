@@ -18,6 +18,9 @@
 - include: mysql.yml
   when: mysql is defined and mysql.install == 1
 
+- include: mariadb.yml
+  when: mariadb is defined and mariadb.install == 1
+
 - include: apache.yml
   when: apache is defined and apache.install == 1
 

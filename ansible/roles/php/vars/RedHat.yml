@@ -20,6 +20,9 @@ pkgs_php_nginx:
 pkgs_php_mysql:
   - php5-mysql
 
+pkgs_php_mariadb:
+  - php5-mysql
+
 pkgs_php_composer:
   - php5-curl
 

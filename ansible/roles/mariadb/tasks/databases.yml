@@ -1,0 +1,45 @@
+- name: databases | remove the test database
+  mysql_db: >
+    name=test 
+    state=absent
+
+- name: databases | check for db existence
+  shell: >
+    mysql -e "show databases" | fgrep {{ item.name }}
+  register: mariadb_exist
+  with_items: mariadb.databases
+  ignore_errors: True
+
+- name: databases | create mariadb databases
+  mysql_db: >
+    name={{ item.name }}
+    state=present
+  with_items: mariadb.databases
+
+- name: databases | check for mariadb files
+  stat: >
+    path=/vagrant/data/sql/{{ item.name }}.sql
+  register: mariadb_import_db
+  with_items: mariadb.databases
+  when: protobox_env == 'vagrant'
+
+- name: databases | import stored mariadb databases
+  mysql_db: >
+    name={{ item.0.name }}
+    target=/vagrant/data/sql/{{ item.0.name }}.sql
+    state=import
+  with_together: 
+    - mariadb.databases
+    - mariadb_import_db.results
+    - mariadb_exist.results
+  when: protobox_env == 'vagrant' and item.1.stat.exists and item.2.rc == 1
+
+- name: databases | import custom mariadb databases
+  mysql_db: >
+    name={{ item.0.name }}
+    target={{ item.0.sql_file|default('') }}
+    state=import
+  with_together: 
+    - mariadb.databases
+    - mariadb_exist.results
+  when: item.0.sql_file is defined and item.0.sql_file != '' and item.1.rc == 1

@@ -1,18 +1,18 @@
 - name: mariadb-restart
   service: >
-    name=mysql
+    name={{ service_mariadb }}
     state=restarted
   sudo: yes
 
 - name: mariadb-start
   service: >
-    name=mysql 
+    name={{ service_mariadb }} 
     state=started
     enabled=true
   sudo: yes
 
 - name: mariadb-stop
   service: >
-    name=mysql 
+    name={{ service_mariadb }} 
     state=stopped
   sudo: yes

@@ -198,7 +198,8 @@ mysql:
 postgresql:
   install: 0
   root_password: 'root'
-  user_group: postgres
+  user: postgres
+  group: postgres
   databases:
     - name: app
       user: root
@@ -221,7 +222,17 @@ riak:
 
 mariadb:
   install: 0
+  version: '5.5'
   #repository: ''
+  root_password: 'root'
+  databases:
+    - name: app
+      host: localhost
+      user: user
+      password: user
+      grant:
+        - ALL
+      sql_file: ''
 
 solr:
   install: 0

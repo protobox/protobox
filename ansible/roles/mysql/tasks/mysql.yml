@@ -23,7 +23,7 @@
 
 # Package
 
-- name: mysql | install debian apache
+- name: mysql | install debian mysql
   apt: >
     pkg={{ item }} 
     state=latest
@@ -31,7 +31,7 @@
   sudo: yes
   when: ansible_os_family == 'Debian'
 
-- name: mysql | install rpm apache
+- name: mysql | install rpm mysql
   yum: >
     pkg={{ item }} 
     state=latest

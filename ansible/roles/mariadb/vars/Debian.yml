@@ -1,0 +1,10 @@
+pkgs_mariadb_dependencies:
+  - software-properties-common
+  - python-mysqldb
+
+pkgs_mariadb:
+  - mariadb-server
+
+service_mariadb: mysql
+
+path_mariadb_conf: /etc/mysql/my.cnf

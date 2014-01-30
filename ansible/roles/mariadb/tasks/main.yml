@@ -1,41 +1,9 @@
-- name: main | installs dependencies
-  apt: >
-    pkg={{ item }} 
-    state=latest
-    update_cache=yes
-  with_items:
-    - software-properties-common
-  sudo: yes
+- name: main | add vars
+  include_vars: "{{ ansible_os_family }}.yml"
 
-- name: main | get the key
-  apt_key: >
-    url=http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xcbcb082a1bb943db
-    state=present
-  sudo: yes
+- include: mariadb.yml
 
-- name: main | add the repository
-  copy: >
-    content="deb {{ mariadb.repository|default('http://mirror.jmu.edu/pub/mariadb/repo/5.5/ubuntu') }} {{ ansible_lsb.codename }} main" 
-    dest=/etc/apt/sources.list.d/mariadb.list
-  sudo: yes
-  when: ansible_os_family == 'Debian'
+- include: users.yml
 
-- name: main | installs mariadb packages
-  apt: >
-    pkg=mariadb-server
-    state=latest
-    update_cache=yes
-  sudo: yes
-  notify: 
-    - mariadb-start
-
-- name: main | create mariadb configuration file
-  template: >
-    src=my.cnf.j2
-    dest=/etc/mysql/my.cnf
-    owner=root
-    group=root
-    mode=0644
-  sudo: yes
-  notify:
-    - mariadb-restart
+- include: databases.yml
+  when: mariadb.databases is defined
