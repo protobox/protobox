@@ -1,0 +1,19 @@
+# Package
+
+- name: ruby | install debian ruby
+  apt: >
+    pkg={{ item }}
+    state=latest
+    update_cache=true
+  with_items: pkgs_ruby
+  sudo: yes
+  when: ansible_os_family == 'Debian'
+
+- name: ruby | install rpm ruby
+  yum: >
+    pkg={{ item }}
+    state=latest
+    update_cache=true
+  with_items: pkgs_ruby
+  sudo: yes
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']

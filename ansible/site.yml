@@ -54,6 +54,9 @@
     - role: node
       when: node is defined and node.install == 1
 
+    - role: ruby
+      when: ruby is defined and ruby.install == 1
+
     - role: phalcon
       when: phalcon is defined and phalcon.install == 1
 

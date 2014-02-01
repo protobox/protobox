@@ -1,0 +1,7 @@
+pkgs_node_dependencies: []
+
+pkgs_ruby:
+  - ruby
+
+pkgs_ruby_gems:
+  - rubygems

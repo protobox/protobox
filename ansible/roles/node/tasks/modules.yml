@@ -9,29 +9,4 @@
   sudo: yes
   when: node.npm is defined
 
-# Gems
-
-- name: node | install debian gem dependencies
-  apt: >
-    name={{ item }} 
-    state=latest
-  with_items: pkgs_ruby_gems
-  sudo: yes
-  when: node.gems is defined
-
-- name: node | install rpm gem dependencies
-  yum: >
-    pkg={{ item }} 
-    state=installed
-  with_items: pkgs_ruby_gems
-  sudo: yes
-  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat'] and node.gems is defined
-
-- name: node | install gems
-  command: >
-    gem install {{ item }} --no-ri --no-rdoc
-  with_items: node.gems
-  sudo: yes
-  when: node.gems is defined
-
 # TODO : run 'npm install' inside the project directories

@@ -1,0 +1,8 @@
+pkgs_ruby_dependencies:
+  - build-essential
+
+pkgs_ruby:
+  - ruby
+
+pkgs_ruby_gems:
+  - rubygems

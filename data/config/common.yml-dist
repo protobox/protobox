@@ -255,6 +255,9 @@ node:
     - grunt
     - grunt-cli
     - bower
+
+ruby:
+  install: 0
   gems:
     - sass
     - compass
