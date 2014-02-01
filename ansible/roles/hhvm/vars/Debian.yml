@@ -10,6 +10,11 @@ pkgs_hhvm_apache:
 pkgs_hhvm_nginx:
   - hhvm-fastcgi
 
+pkgs_hhvm_composer:
+  - php5-curl
+
 service_hhvm: hhvm
 
 service_apache: apache2
+
+path_hhvm_composer: /usr/local/bin/composer

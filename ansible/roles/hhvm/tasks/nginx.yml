@@ -5,6 +5,7 @@
     pkg={{ item }} 
     state=latest
     update_cache=true
+    force=yes
   with_items: pkgs_hhvm_nginx
   sudo: yes
   when: ansible_os_family == 'Debian'
@@ -13,6 +14,7 @@
   yum: >
     pkg={{ item }} 
     state=latest
+    force=yes
   with_items: pkgs_hhvm_nginx
   sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']

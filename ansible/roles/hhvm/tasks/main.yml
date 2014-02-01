@@ -10,3 +10,6 @@
 
 - include: nginx.yml
   when: nginx is defined and nginx.install == 1
+
+- include: composer.yml
+  when: php.composer is defined and php.composer.install == 1

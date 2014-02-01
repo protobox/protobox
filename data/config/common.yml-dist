@@ -135,6 +135,9 @@ varnish:
 hhvm:
   install: 0
   nightly: 0
+  composer:
+    install: 1
+    use_hhvm: 1
 
 php:
   install: 1

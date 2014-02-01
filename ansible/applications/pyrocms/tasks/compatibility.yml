@@ -1,6 +1,8 @@
 - name: compatibility | require php
   fail: msg="PHP is required"
-  when: php is not defined or php.install != 1
+  when: >
+    (php is not defined or php.install != 1) and
+    (hhvm is not defined or hhvm.install != 1)
 
 - name: compatibility | check for install path
   fail: msg="Pyrocms - {{ item.name }} - Install path missing"

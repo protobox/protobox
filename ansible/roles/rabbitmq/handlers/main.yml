@@ -1,17 +1,17 @@
 - name: rabbitmq-restart
   service: >
-    name=rabbitmq-server 
+    name={{ service_rabbitmq }}
     state=restarted
   sudo: yes
 
 - name: rabbitmq-start
   service: >
-    name=rabbitmq-server 
+    name={{ service_rabbitmq }}
     state=started
   sudo: yes
 
 - name: rabbitmq-stop
   service: >
-    name=rabbitmq-server 
+    name={{ service_rabbitmq }}
     state=stopped
   sudo: yes

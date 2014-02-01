@@ -6,6 +6,7 @@
     state=latest
   with_items: pkgs_php_composer
   sudo: yes
+  when: ansible_os_family == 'Debian'
 
 - name: composer | install rpm dependencies
   yum: >

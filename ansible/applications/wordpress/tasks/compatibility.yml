@@ -1,10 +1,14 @@
 - name: compatibility | require php
   fail: msg="PHP is required"
-  when: php is not defined or php.install != 1
+  when: >
+    (php is not defined or php.install != 1) and
+    (hhvm is not defined or hhvm.install != 1)
 
 - name: compatibility | require apache or nginx
   fail: msg="Apache or Nginx is required"
-  when: (apache is not defined or apache.install != 1) and (nginx is not defined or nginx.install != 1)
+  when: >
+    (apache is not defined or apache.install != 1) and 
+    (nginx is not defined or nginx.install != 1)
 
 - name: compatibility | require mysql
   fail: msg="Mysql is required"

@@ -9,7 +9,7 @@
 
 - name: app | add the repository
   copy: >
-    content="deb http://www.rabbitmq.com/debian/ {{ rabbitmq.release|default('stable') }} main" 
+    content="deb http://www.rabbitmq.com/debian/ {{ rabbitmq.release|default('testing') }} main" 
     dest=/etc/apt/sources.list.d/rabbitmq.list
   sudo: yes
   when: ansible_os_family == 'Debian'
