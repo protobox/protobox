@@ -7,6 +7,9 @@ vagrant_ansible*
 .my.cnf
 .protobox
 
+# Packer Files
+packer/*
+
 # Web Files
 index.html
 
