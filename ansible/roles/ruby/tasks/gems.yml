@@ -1,6 +1,6 @@
 # Gems
 
-- name: ruby | install debian gem dependencies
+- name: gems | install debian gem dependencies
   apt: >
     name={{ item }}
     state=latest
@@ -8,7 +8,7 @@
   sudo: yes
   when: ruby.gems is defined
 
-- name: ruby | install rpm gem dependencies
+- name: gems | install rpm gem dependencies
   yum: >
     pkg={{ item }}
     state=installed
@@ -16,7 +16,7 @@
   sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat'] and ruby.gems is defined
 
-- name: ruby | install gems
+- name: gems | install gems
   command: >
     gem install {{ item }} --no-ri --no-rdoc
   with_items: ruby.gems
