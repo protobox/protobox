@@ -1,0 +1,3 @@
+apt_key_rabbitmq: "http://www.rabbitmq.com/rabbitmq-signing-key-public.asc"
+
+pkgs_rabbitmq: rabbitmq-server
