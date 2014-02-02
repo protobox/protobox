@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+server {
+        listen 80;
+        root /srv/www/web/protobox;
+        client_max_body_size 64M;
+
+        location / {
+                index index.html index.htm;
+        }
+}

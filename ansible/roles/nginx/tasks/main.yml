@@ -5,3 +5,6 @@
 
 - include: virtualhosts.yml
   when: nginx.vhosts is defined
+
+- include: protobox.yml
+  when: protobox_env is defined and protobox_env == 'vagrant'

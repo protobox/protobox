@@ -1,0 +1,17 @@
+- name: protobox | add nginx configurations
+  template: >
+    src=protobox.conf.j2
+    dest={{ path_nginx_virtualhost_available }}/00-protobox.conf
+    mode=0640
+  sudo: yes
+  notify:
+    - nginx-restart
+
+- name: protobox | enable the virtualhost
+  file: >
+    src={{ path_nginx_virtualhost_available }}/00-protobox.conf
+    dest={{ path_nginx_virtualhost_enabled }}/00-protobox.conf
+    state=link
+  sudo: yes
+  notify:
+    - nginx-restart
