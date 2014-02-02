@@ -1,3 +1,4 @@
+# {{ ansible_managed }}
 server {
         listen {{ item.listen_port|default('80') }};
         #listen [::]:{{ item.listen_port|default('80') }} ipv6only=on default_server;

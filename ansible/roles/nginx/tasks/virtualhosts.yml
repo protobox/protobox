@@ -9,7 +9,7 @@
 - name: virtualhosts | add nginx configurations
   template: >
     src={{ item.template|default('default.conf.j2') }}
-    dest={{ path_nginx_virtualhost_available }}/{{ item.name }}
+    dest={{ path_nginx_virtualhost_available }}/{{ item.name }}.conf
     mode=0640
   with_items: nginx.vhosts
   sudo: yes
@@ -18,8 +18,8 @@
 
 - name: virtualhosts | enable the virtualhost
   file: >
-    src={{ path_nginx_virtualhost_available }}/{{ item.name }}
-    dest={{ path_nginx_virtualhost_enabled }}/{{ item.name }}
+    src={{ path_nginx_virtualhost_available }}/{{ item.name }}.conf
+    dest={{ path_nginx_virtualhost_enabled }}/{{ item.name }}.conf
     state=link
   with_items: nginx.vhosts
   sudo: yes
