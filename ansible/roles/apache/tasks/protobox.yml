@@ -9,5 +9,5 @@
     - apache-restart
 
 - name: protobox | activates our virtualhost
-  command: a2ensite protobox.conf
+  command: a2ensite 00-protobox.conf
   sudo: yes
