@@ -1,3 +1,7 @@
+- name: protobox | set facts
+  set_fact: >
+    protobox_dashboard_path="{{ protobox.dashboard.path if protobox.dashboard is defined and protobox.dashboard.path is defined else '/srv/www/web/protobox' }}"
+
 - name: protobox | add nginx configurations
   template: >
     src=protobox.conf.j2
@@ -5,7 +9,7 @@
     mode=0640
   sudo: yes
   when: >
-    (protobox.dashboard is not defined) or 
+    (protobox.dashboard is undefined) or 
     (protobox.dashboard is defined and protobox.dashboard.install == 1)
 
 - name: protobox | enable the virtualhost
@@ -17,5 +21,5 @@
   notify:
     - nginx-restart
   when: >
-    (protobox.dashboard is not defined) or 
+    (protobox.dashboard is undefined) or 
     (protobox.dashboard is defined and protobox.dashboard.install == 1)

@@ -57,6 +57,17 @@ end
 # Build json
 #
 
+# Exit out here if the dashboard should not be installed
+if (data['protobox']['dashbard'].nil?) or (!data['protobox']['dashboard']['install'].nil? and data['protobox']['dashboard']['install'].to_i != 1)
+  exit
+end
+
+if !data['protobox']['dashboard'].nil? and !data['protobox']['dashboard']['path'].nil?
+  data_path = data['protobox']['dashboard']['path'] << '/' unless data['protobox']['dashboard']['path'].end_with?('/')
+else
+  data_path = '/srv/www/web/protobox/'
+end
+
 # Websites
 websites = []
 
@@ -115,7 +126,7 @@ document = {
   "databases" => databases
 }
 
-File.open("/srv/www/web/protobox/data.json", "w") do |f|
+File.open(data_path + "data.json", "w") do |f|
   #f.write(document.to_json)
   f.write(JSON.pretty_generate(document))
 end
