@@ -12,18 +12,18 @@
   with_items: applications.repository
   when: item.install == 1 and item.options.provider is defined and item.options.provider == 'git'
 
-- name: git | debug pre-installation
-  debug: >
-    msg="{{ item.options.pre_install|join(' && ') }}"
-  with_items: applications.repository
-  when: item.install == 1 and item.options.provider is defined and item.options.provider == 'git' and item.options.pre_install is defined and item.options.pre_install
-
-#- name: git | pre-installation commands
-#  command: >
-#    {{ item.options.pre_install|join(' && ') }}
-#    chdir={{ item.path }}
+#- name: git | debug pre-installation
+#  debug: >
+#    msg="{{ item.options.pre_install|join(' && ') }}"
 #  with_items: applications.repository
 #  when: item.install == 1 and item.options.provider is defined and item.options.provider == 'git' and item.options.pre_install is defined and item.options.pre_install
+
+- name: git | pre-installation commands
+  shell: >
+    {{ item.options.pre_install|join(' && ') }}
+    chdir={{ item.path }}
+  with_items: applications.repository
+  when: item.install == 1 and item.options.provider is defined and item.options.provider == 'git' and item.options.pre_install is defined and item.options.pre_install
 
 - name: git | install git application
   git: >
@@ -33,15 +33,15 @@
   with_items: applications.repository
   when: item.install == 1 and item.options.provider is defined and item.options.provider == 'git'
 
-- name: git | debug post-installation
-  debug: >
-    msg="{{ item.options.post_install|join(' && ') }}"
-  with_items: applications.repository
-  when: item.install == 1 and item.options.provider is defined and item.options.provider == 'git' and item.options.post_install is defined and item.options.post_install
-
-#- name: git | post-installation commands
-#  command: >
-#    {{ item.options.post_install|join(' && ') }}
-#    chdir={{ item.path }}
+#- name: git | debug post-installation
+#  debug: >
+#    msg="{{ item.options.post_install|join(' && ') }}"
 #  with_items: applications.repository
 #  when: item.install == 1 and item.options.provider is defined and item.options.provider == 'git' and item.options.post_install is defined and item.options.post_install
+
+- name: git | post-installation commands
+  shell: >
+    {{ item.options.post_install|join(' && ') }}
+    chdir={{ item.path }}
+  with_items: applications.repository
+  when: item.install == 1 and item.options.provider is defined and item.options.provider == 'git' and item.options.post_install is defined and item.options.post_install
