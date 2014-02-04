@@ -2,12 +2,12 @@
 <VirtualHost *:80>
         ServerAdmin webmaster@localhost
 
-        DocumentRoot /srv/www/web/protobox
+        DocumentRoot {{ protobox.dashboard.path|default('/srv/www/web/protobox') }}
         <Directory />
                 Options FollowSymLinks
                 AllowOverride None
         </Directory>
-        <Directory /srv/www/web/protobox/>
+        <Directory {{ protobox.dashboard.path|default('/srv/www/web/protobox') }}/>
                 Options Indexes FollowSymLinks MultiViews
                 AllowOverride None
                 Order allow,deny
