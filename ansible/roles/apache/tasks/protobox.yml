@@ -5,11 +5,15 @@
     mode=0640
   with_items: apache.vhosts
   sudo: yes
-  when: protobox.dashboard is not defined or protobox.dashboard.install == 1
+  when: >
+    (protobox.dashboard is not defined) or 
+    (protobox.dashboard is defined and protobox.dashboard.install == 1)
 
 - name: protobox | activates our virtualhost
   command: a2ensite 00-protobox.conf
   sudo: yes
   notify:
     - apache-restart
-  when: protobox.dashboard is not defined or protobox.dashboard.install == 1
+  when: >
+    (protobox.dashboard is not defined) or 
+    (protobox.dashboard is defined and protobox.dashboard.install == 1)

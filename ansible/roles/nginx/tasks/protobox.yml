@@ -4,7 +4,9 @@
     dest={{ path_nginx_virtualhost_available }}/00-protobox.conf
     mode=0640
   sudo: yes
-  when: protobox.dashboard is not defined or protobox.dashboard.install == 1
+  when: >
+    (protobox.dashboard is not defined) or 
+    (protobox.dashboard is defined and protobox.dashboard.install == 1)
 
 - name: protobox | enable the virtualhost
   file: >
@@ -14,4 +16,6 @@
   sudo: yes
   notify:
     - nginx-restart
-  when: protobox.dashboard is not defined or protobox.dashboard.install == 1
+  when: >
+    (protobox.dashboard is not defined) or 
+    (protobox.dashboard is defined and protobox.dashboard.install == 1)
