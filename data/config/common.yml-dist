@@ -31,7 +31,7 @@ vagrant:
       #    memsize: '1024'
     provision:
       ansible:
-        playbook: "ansible/site.yml"
+        playbook: default
         #hosts: "webservers"
         #inventory: "ansible/inventory"
         #verbose: "yes"

@@ -2,11 +2,13 @@
 # vi: set ft=ruby :
 
 require 'yaml'
+require File.expand_path(File.dirname(__FILE__) + '/ansible/shell/build-playbook')
 
 dir = Dir.pwd
 vagrant_dir = File.expand_path(File.dirname(__FILE__))
 protobox_dir = vagrant_dir + '/.protobox'
 protobox_boot = protobox_dir + '/config'
+protobox_playbook = protobox_dir + '/playbook'
 
 # Create protobox dir if it doesn't exist
 if !File.directory?(protobox_dir)
@@ -42,6 +44,9 @@ end
 
 # Load settings into memory
 settings = YAML.load_file(vagrant_dir + '/' + vagrant_file)
+
+# Build the playbook
+playbook = build_playbook(settings, protobox_playbook);
 
 # Start vagrant configuration
 Vagrant.configure("2") do |config|
@@ -130,10 +135,15 @@ Vagrant.configure("2") do |config|
   # Ansible Provisioning
   if settings[vagrant_vm]['vm']['provision'].has_key?("ansible")
     ansible = settings[vagrant_vm]['vm']['provision']['ansible']
-    playbook = "/vagrant/" + ansible['playbook']
+
+    if (ansible['playbook'] == "default" or ansible['playbook'] == "ansible/site.yml") and playbook
+      playbook_path = "/vagrant/.protobox/playbook"
+    else
+      playbook_path = "/vagrant/" + ansible['playbook']
+    end
 
     params = Array.new
-    params << playbook
+    params << playbook_path
 
     if !ansible['inventory'].nil?
       params << "-i \\\"" + ansible['inventory'] + "\\\""

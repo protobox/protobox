@@ -44,6 +44,7 @@ action = ARGV[0]
 dir = Dir.pwd
 protobox_dir = dir + '/.protobox'
 boot_file = protobox_dir + '/config'
+playbook_file = protobox_dir + '/playbook'
 config_path = 'data/config'
 config_dir = dir + '/' + config_path
 
@@ -299,6 +300,25 @@ case action
         end
 
         puts "Config file: " + vagrant_file
+
+      # Playbook to use
+      when "playbook"
+
+        # Check for missing data file
+        if !File.file?(playbook_file)
+          puts "Playbook file is missing: #{playbook_file}\n"
+          exit
+        end
+
+        # Open config file location
+        playbook_contents = ''
+        File.open(playbook_file, 'r') do |f1|  
+          while line = f1.gets  
+            playbook_contents += line  
+          end  
+        end 
+
+        puts playbook_contents
 
       else
         puts "Service not found [" + service + "]"
