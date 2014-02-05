@@ -58,7 +58,7 @@ end
 #
 
 # Exit out here if the dashboard should not be installed
-if (data['protobox']['dashbard'].nil?) or (!data['protobox']['dashboard']['install'].nil? and data['protobox']['dashboard']['install'].to_i != 1)
+if !data['protobox']['dashbard'].nil? and data['protobox']['dashboard']['install'].to_i != 1
   exit
 end
 
