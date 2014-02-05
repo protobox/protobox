@@ -15,6 +15,8 @@ optparse = OptionParser.new do |opts|
   opts.separator  "Commands"
   opts.separator  "     install [url]: install a new configuration from url"
   opts.separator  "     switch [name]: switch the configuration to [name] during vagrant up"
+  opts.separator  "     provision: re-run the playbook to provision the box again"
+  opts.separator  "     which [name]: check verisons and services are running"
   opts.separator  ""
   opts.separator  "Options"
 
@@ -65,7 +67,9 @@ end
 
 # Process actions
 case action
-  # Switch between configurations
+  # 
+  # Switch: Switch between configurations
+  # 
   when "switch" 
     config_name = ARGV[1]
 
@@ -89,7 +93,9 @@ case action
 
     puts "You can now 'vagrant up' using the '#{config_name}' configuration"
 
-  # Install configuration from url
+  # 
+  # Install: Install configuration from url
+  # 
   when "install"
     url_name = ARGV[1]
 
@@ -166,7 +172,9 @@ case action
 
     puts "You can now 'vagrant up' using the '#{document}' configuration"
 
-  # Run provisioner
+  # 
+  # Provision: Run provisioner
+  # 
   when "provision"
 
     # Open config file location
@@ -239,7 +247,66 @@ case action
       #end
     end
 
+  #
+  # Which: Which version of things are running
+  #
+  when "which"
+    service = ARGV[1]
+
+    if service.nil?
+      puts "Missing service: protobox which [service]"
+      exit(-1)
+    end
+
+    case service
+      # Protobox service
+      when "version"
+
+        # Open config file location
+        vagrant_file = ''
+        File.open(boot_file, 'r') do |f1|  
+          while line = f1.gets  
+            vagrant_file += line  
+          end  
+        end 
+
+        # Check for missing data file
+        if !File.file?(vagrant_file)
+          puts "Data file is missing: #{vagrant_file}\n"
+          exit
+        end
+
+        # Load settings into memory
+        settings = YAML.load_file(vagrant_file)
+
+        puts "Protobox version: " + settings['protobox']['version']
+
+      # Config running
+      when "config"
+
+        # Open config file location
+        vagrant_file = ''
+        File.open(boot_file, 'r') do |f1|  
+          while line = f1.gets  
+            vagrant_file += line  
+          end  
+        end 
+
+        # Check for missing data file
+        if !File.file?(vagrant_file)
+          puts "Data file is missing: #{vagrant_file}\n"
+          exit
+        end
+
+        puts "Config file: " + vagrant_file
+
+      else
+        puts "Service not found [" + service + "]"
+    end
+
+  # 
   # Invalid option
+  # 
   else 
     puts optparse
 end
