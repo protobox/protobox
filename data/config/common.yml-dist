@@ -104,10 +104,10 @@ apache:
   default_vhost: false
   mpm_module: prefork
   vhosts:
-    - name: protobox
-      servername: protobox.dev
+    - name: app
+      servername: app.dev
       serveraliases:
-        - 'www.protobox.dev'
+        - 'www.app.dev'
       docroot: /srv/www/web/protobox
       port: '80'
       setenv:
@@ -119,10 +119,10 @@ nginx:
   install: 0
   mpm_module: fpm
   vhosts:
-    - name: protobox
-      server_name: protobox.dev
+    - name: app
+      server_name: app.dev
       server_aliases:
-        - www.protobox.dev
+        - www.app.dev
       www_root: /srv/www/web/protobox
       listen_port: '80'
       index_files:
