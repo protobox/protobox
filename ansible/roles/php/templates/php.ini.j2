@@ -1016,6 +1016,9 @@ smtp_port = 25
 ; For Unix only.  You may supply arguments as well (default: "sendmail -t -i").
 ; http://php.net/sendmail-path
 ;sendmail_path =
+{% if php.ini.sendmail_path is defined %}
+sendmail_path = "{{ php.ini.sendmail_path|default("") }}"
+{% endif %}
 
 ; Force the addition of the specified parameters to be passed as extra parameters
 ; to the sendmail binary. These parameters will always replace the value of
