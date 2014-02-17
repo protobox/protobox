@@ -84,7 +84,7 @@ if !data['nginx'].nil? and data['nginx']['install'] == 1
   data['nginx']['vhosts'].each do |vhost|
     websites.push({
       :name => vhost['name'], 
-      :site => "http://" + vhost['server_name'] + (vhost['port'].to_i != 80 ? ':' + vhost['port'] : '')
+      :site => "http://" + vhost['server_name'] + (vhost['listen_port'].to_i != 80 ? ':' + vhost['listen_port'] : '')
     })
   end
 end
