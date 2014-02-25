@@ -36,7 +36,6 @@ if [[ ! -d /.protobox ]]; then
     echo "Created directory /.protobox"
 fi
 
-if [[ ! -f /.protobox/initial-update ]]; then
     if [ "$OS" == 'debian' ] || [ "$OS" == 'ubuntu' ]; then
         echo "Running initial-setup apt-get update"
         apt-get update -y >/dev/null 2>&1
@@ -54,9 +53,8 @@ if [[ ! -f /.protobox/initial-update ]]; then
 
         touch /.protobox/initial-update
     fi
-fi
 
-if [[ "$OS" == 'ubuntu' && ("$CODENAME" == 'lucid' || "$CODENAME" == 'precise') && ! -f /.protobox/ubuntu-required-libraries ]]; then
+if [[ "$OS" == 'ubuntu' && ("$CODENAME" == 'lucid' || "$CODENAME" == 'precise') ]]; then
     echo 'Installing basic curl packages (Ubuntu only)'
     apt-get install -y libcurl3 libcurl4-gnutls-dev >/dev/null 2>&1
     echo 'Finished installing basic curl packages (Ubuntu only)'
@@ -64,9 +62,8 @@ if [[ "$OS" == 'ubuntu' && ("$CODENAME" == 'lucid' || "$CODENAME" == 'precise') 
     touch /.protobox/ubuntu-required-libraries
 fi
 
-if [[ ! -f /.protobox/python-software-properties ]]; then
     if [ "$OS" == 'debian' ] || [ "$OS" == 'ubuntu' ]; then
-        echo "Running python-software-properties"
+        echo "Installing python-software-properties"
         apt-get -y install python-software-properties >/dev/null 2>&1
         echo "Finished python-software-properties"
 
@@ -76,42 +73,33 @@ if [[ ! -f /.protobox/python-software-properties ]]; then
 
         touch /.protobox/python-software-properties
     fi
-fi
-
-if [[ ! -f /.protobox/add-ansible-repo ]]; then
     if [ "$OS" == 'debian' ] || [ "$OS" == 'ubuntu' ]; then
-        echo "Running add-apt-repository ansible"
-        add-apt-repository ppa:rquillo/ansible >/dev/null 2>&1
-        echo "Finished add-apt-repository ansible"
+        echo "Installing python-pip"
+        apt-get -y install python-pip python-dev >/dev/null 2>&1
+        echo "Finished python-pip"
 
-        echo "Running apt-get update"
-        apt-get update -y >/dev/null 2>&1
-        echo "Finished running apt-get update"
-
-        touch /.protobox/add-ansible-repo
+        touch /.protobox/python-pip
     elif [ "$OS" == 'centos' ]; then
+        echo "Installing python-pip"
+        yum install install python-pip python-devel >/dev/null 2>&1
+        echo "Finished python-pip"
 
-        touch /.protobox/add-ansible-repo
+        touch /.protobox/python-pip
     fi
-fi
 
-if [[ ! -f /.protobox/install-ansible ]]; then
     if [ "$OS" == 'debian' ] || [ "$OS" == 'ubuntu' ]; then
-        echo "Running apt-get install ansible"
-        apt-get -y install ansible >/dev/null 2>&1
-        echo "Finished apt-get install ansible"
+        echo "Running pip install ansible"
+        pip install ansible >/dev/null 2>&1
+        echo "Finished python-software-properties install ansible"
 
         touch /.protobox/install-ansible
     elif [ "$OS" == 'centos' ]; then
-        echo "Running yum install ansible"
-        sudo yum install ansible >/dev/null 2>&1
-        echo "Finished yum install ansible"
+        echo "Running pip install ansible"
+        pip install ansible >/dev/null 2>&1
+        echo "Finished pip install ansible"
 
         touch /.protobox/install-ansible
     fi
-fi
-
-if [[ ! -f /.protobox/install-ansible-hosts ]]; then
     if [ "$OS" == 'debian' ] || [ "$OS" == 'ubuntu' ]; then
         echo "Installing ansible hosts"
         mkdir -p /etc/ansible
@@ -128,21 +116,16 @@ if [[ ! -f /.protobox/install-ansible-hosts ]]; then
         touch /.protobox/install-ansible-hosts
     elif [ "$OS" == 'centos' ]; then
 
+        touch /etc/ansible/hosts
+        echo "localhost ansible_connection=local" > /etc/ansible/hosts
+
+
         touch /.protobox/install-ansible-hosts
     fi
-fi
 
-#if [[ ! -f /.protobox/run-ansible ]]; then
     echo "Running ansible-playbook $PARAMS"
     sh -c "ansible-playbook $PARAMS"
     echo "Finished ansible-playbook"
 
-    #touch /.protobox/run-ansible
-#fi
-
-#if [[ ! -f /.protobox/finish-protobox ]]; then
     echo "Finishing protobox"
     ruby /vagrant/ansible/shell/finish-setup.rb -s "$PUPPET_DATA" -l "$PROTOBOX_LOGO"
-
-    #touch /.protobox/finish-protobox
-#fi
