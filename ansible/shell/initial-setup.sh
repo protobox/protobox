@@ -35,7 +35,7 @@ if [[ ! -d /.protobox ]]; then
     mkdir /.protobox
     echo "Created directory /.protobox"
 fi
-
+if [[ ! -f /.protobox/initial-update ]]; then
     if [ "$OS" == 'debian' ] || [ "$OS" == 'ubuntu' ]; then
         echo "Running initial-setup apt-get update"
         apt-get update -y >/dev/null 2>&1
@@ -53,15 +53,16 @@ fi
 
         touch /.protobox/initial-update
     fi
+fi
 
-if [[ "$OS" == 'ubuntu' && ("$CODENAME" == 'lucid' || "$CODENAME" == 'precise') ]]; then
+if [[ "$OS" == 'ubuntu' && ("$CODENAME" == 'lucid' || "$CODENAME" == 'precise') && ! -f /.protobox/ubuntu-required-libraries ]]; then
     echo 'Installing basic curl packages (Ubuntu only)'
     apt-get install -y libcurl3 libcurl4-gnutls-dev >/dev/null 2>&1
     echo 'Finished installing basic curl packages (Ubuntu only)'
 
     touch /.protobox/ubuntu-required-libraries
 fi
-
+if [[ ! -f /.protobox/python-software-properties ]]; then
     if [ "$OS" == 'debian' ] || [ "$OS" == 'ubuntu' ]; then
         echo "Installing python-software-properties"
         apt-get -y install python-software-properties >/dev/null 2>&1
@@ -73,6 +74,9 @@ fi
 
         touch /.protobox/python-software-properties
     fi
+fi
+
+if [[ ! -f /.protobox/python-pip ]]; then
     if [ "$OS" == 'debian' ] || [ "$OS" == 'ubuntu' ]; then
         echo "Installing python-pip"
         apt-get -y install python-pip python-dev >/dev/null 2>&1
@@ -86,7 +90,9 @@ fi
 
         touch /.protobox/python-pip
     fi
+fi
 
+if [[ ! -f /.protobox/install-ansible ]]; then
     if [ "$OS" == 'debian' ] || [ "$OS" == 'ubuntu' ]; then
         echo "Running pip install ansible"
         pip install ansible >/dev/null 2>&1
@@ -100,6 +106,8 @@ fi
 
         touch /.protobox/install-ansible
     fi
+fi
+if [[ ! -f /.protobox/install-ansible-hosts ]]; then
     if [ "$OS" == 'debian' ] || [ "$OS" == 'ubuntu' ]; then
         echo "Installing ansible hosts"
         mkdir -p /etc/ansible
@@ -122,6 +130,7 @@ fi
 
         touch /.protobox/install-ansible-hosts
     fi
+fi    
 
     echo "Running ansible-playbook $PARAMS"
     sh -c "ansible-playbook $PARAMS"
