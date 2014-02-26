@@ -68,6 +68,12 @@ else
   data_path = '/srv/www/web/protobox/'
 end
 
+# Exit out here if the path does not exist
+if !File.directory?(data_path)
+  #Dir.mkdir(data_path)
+  exit
+end
+
 # Websites
 websites = []
 
@@ -75,7 +81,7 @@ if !data['apache'].nil? and data['apache']['install'] == 1
   data['apache']['vhosts'].each do |vhost|
     websites.push({
       :name => vhost['name'], 
-      :site => "http://" + vhost['servername'] + (vhost['port'].to_i != 80 ? ':' + vhost['port'] : '')
+      :site => "http://" + vhost['servername'] + (vhost['port'].to_i != 80 ? ':' + vhost['port'].to_s : '')
     })
   end
 end
@@ -84,7 +90,7 @@ if !data['nginx'].nil? and data['nginx']['install'] == 1
   data['nginx']['vhosts'].each do |vhost|
     websites.push({
       :name => vhost['name'], 
-      :site => "http://" + vhost['server_name'] + (vhost['listen_port'].to_i != 80 ? ':' + vhost['listen_port'] : '')
+      :site => "http://" + vhost['server_name'] + (vhost['listen_port'].to_i != 80 ? ':' + vhost['listen_port'].to_s : '')
     })
   end
 end
