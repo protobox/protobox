@@ -39,7 +39,7 @@ function custom_cli_install()
 	// CHECK DEFAULTS
 	foreach ($a as $v => $d)
 	{
-		if (empty($d))
+		if (!strlen($d))
 		{
 			cli_print_error('Missing Data: '.$v);
 
