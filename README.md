@@ -41,6 +41,8 @@ Protobox has built in support for popular applications. See the full list by rea
 
 ## Contributing ##
 
+Check out our [roadmap](http://getprotobox.com/docs/roadmap) for upcoming features and how to help.
+
 Use [GitHub Issues](https://github.com/protobox/protobox/issues) to file a bug report or new feature request. Please open a issue prior to opening a pull request to make sure it is something we can merge. The roadmap can be determined by looking at issues tagged as `featured request`.
 
 ## Help! ##
