@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 require 'yaml'
-require File.expand_path(File.dirname(__FILE__) + '/ansible/shell/build-playbook')
+require File.expand_path(File.dirname(__FILE__) + '/lib/shell/build-playbook')
 
 dir = Dir.pwd
 vagrant_dir = File.expand_path(File.dirname(__FILE__))
@@ -170,7 +170,7 @@ Vagrant.configure("2") do |config|
 
     params << "--extra-vars=\\\"" + extra_vars.map{|k,v| "#{k}=#{v}"}.join(" ").gsub("\"","\\\\\"") + "\\\"" unless extra_vars.empty?
 
-    config.vm.provision :shell, :path => "ansible/shell/initial-setup.sh", :args => "-a \"" + params.join(" ") + "\"", :keep_color => true
+    config.vm.provision :shell, :path => "lib/shell/initial-setup.sh", :args => "-a \"" + params.join(" ") + "\"", :keep_color => true
   end 
 
   # SSH Configuration

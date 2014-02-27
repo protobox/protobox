@@ -1,11 +1,11 @@
 #!/bin/bash
 
-OS=$(/bin/bash /vagrant/ansible/shell/os-detect.sh ID)
-CODENAME=$(/bin/bash /vagrant/ansible/shell/os-detect.sh CODENAME)
+OS=$(/bin/bash /vagrant/lib/shell/os-detect.sh ID)
+CODENAME=$(/bin/bash /vagrant/lib/shell/os-detect.sh CODENAME)
 
 PUPPET_LOCATION=( $( /bin/cat /vagrant/.protobox/config ) )
 PUPPET_DATA="/vagrant/$PUPPET_LOCATION"
-PROTOBOX_LOGO=/vagrant/ansible/shell/logo.txt
+PROTOBOX_LOGO=/vagrant/lib/shell/logo.txt
 
 # process arguments
 while getopts ":a:" opt; do
@@ -123,7 +123,7 @@ if [[ ! -f /.protobox/install-ansible-hosts ]]; then
         echo "localhost ansible_connection=local" > /etc/ansible/hosts
 
         # Setup config
-        cp /vagrant/ansible/ansible.cfg /etc/ansible/ansible.cfg
+        cp /vagrant/lib/ansible/ansible.cfg /etc/ansible/ansible.cfg
 
         touch /.protobox/install-ansible-hosts
     elif [ "$OS" == 'centos' ]; then
@@ -142,7 +142,7 @@ fi
 
 #if [[ ! -f /.protobox/finish-protobox ]]; then
     echo "Finishing protobox"
-    ruby /vagrant/ansible/shell/finish-setup.rb -s "$PUPPET_DATA" -l "$PROTOBOX_LOGO"
+    ruby /vagrant/lib/shell/finish-setup.rb -s "$PUPPET_DATA" -l "$PROTOBOX_LOGO"
 
     #touch /.protobox/finish-protobox
 #fi

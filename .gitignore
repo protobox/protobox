@@ -10,6 +10,9 @@ vagrant_ansible*
 # Packer Files
 packer/*
 
+# Gem Files
+gem/*
+
 # Web Files
 index.html
 
