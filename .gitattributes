@@ -1,5 +1,8 @@
 # Autodetect text files
-* text=auto eol=lf
+* text=auto
+
+# Make sure unix shell scripts use the correct line endings
+*.sh eol=lf
 
 # ...Unless the name matches the following
 # overriding patterns
