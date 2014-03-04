@@ -4,7 +4,7 @@
 #    host={{ item }}
 #    state=absent
 #  with_items:
-#    - ansible_hostname
+#    - "{{ ansible_hostname }}"
 #    - ansible_fqdn
 #    - 127.0.0.1
 #    - ::1
@@ -18,7 +18,7 @@
     host={{ item }}
     password={{ mysql.root_password|default('') }}
   with_items:
-    - ansible_hostname
+    - "{{ ansible_hostname }}"
     - 127.0.0.1
     - ::1
     - localhost
