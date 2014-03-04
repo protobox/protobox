@@ -60,6 +60,7 @@
   mysql_user: >
     name={{ item.user }}
     password={{ item.password }}
+    host={{ item.host }}
     priv=*.*:{{ item.grant|join(',') }}
     state=present
   with_items: mysql.databases
