@@ -1,4 +1,6 @@
-def build_playbook(yaml, playbook)
+def build_playbook(yaml, protobox_dir)
+  protobox_playbook = protobox_dir + '/playbook'
+
   out = []
 
   play = {}
@@ -163,7 +165,7 @@ def build_playbook(yaml, playbook)
   out << play
 
   # Dump out the contents
-  File.open(playbook, 'w') do |file|
+  File.open(protobox_playbook, 'w') do |file|
     YAML::dump(out, file)
   end
 

@@ -3,12 +3,12 @@
 
 require 'yaml'
 require File.expand_path(File.dirname(__FILE__) + '/lib/shell/build-playbook')
+require File.expand_path(File.dirname(__FILE__) + '/lib/shell/build-dashboard')
 
 dir = Dir.pwd
 vagrant_dir = File.expand_path(File.dirname(__FILE__))
 protobox_dir = vagrant_dir + '/.protobox'
 protobox_boot = protobox_dir + '/config'
-protobox_playbook = protobox_dir + '/playbook'
 
 # Create protobox dir if it doesn't exist
 if !File.directory?(protobox_dir)
@@ -29,16 +29,12 @@ if !File.file?(protobox_boot)
 end
 
 # Open config file location
-vagrant_file = ''
-File.open(protobox_boot, 'r') do |f1|  
-  while line = f1.gets  
-    vagrant_file += line  
-  end  
-end 
+vagrant_file = File.open(protobox_boot) {|f| f.readline}
 
 # Check for missing data file
 if !File.file?(vagrant_dir + '/' + vagrant_file)
   puts "Data file is missing: #{vagrant_dir}/#{vagrant_file}\n"
+  puts "You may need to switch your config: ruby protobox switch [config]"
   exit
 end
 
@@ -46,7 +42,10 @@ end
 settings = YAML.load_file(vagrant_dir + '/' + vagrant_file)
 
 # Build the playbook
-playbook = build_playbook(settings, protobox_playbook);
+playbook = build_playbook(settings, protobox_dir);
+
+# Build the dashboard
+dashboard = build_dashboard(settings, protobox_dir);
 
 # Start vagrant configuration
 Vagrant.configure("2") do |config|
@@ -172,6 +171,15 @@ Vagrant.configure("2") do |config|
 
     config.vm.provision :shell, :path => "lib/shell/initial-setup.sh", :args => "-a \"" + params.join(" ") + "\"", :keep_color => true
   end 
+
+  # Finishing provisioner
+  config.vm.provision :shell, :inline => <<-PREPARE
+    /bin/cat /vagrant/lib/shell/logo.txt
+    DASHBOARD=( $( /bin/cat /vagrant/.protobox/dashboard ) )
+    if [[ ! -z "$DASHBOARD" ]]; then
+      echo "Dashboard: $DASHBOARD"
+    fi
+  PREPARE
 
   # SSH Configuration
   settings[vagrant_vm]['ssh'].each do |item, value|
