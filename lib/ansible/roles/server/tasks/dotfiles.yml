@@ -34,8 +34,8 @@
 #  when: item.stat.exists and item.item.path != dotfiles_path + '/.vimrc'
 
 - name: dotfiles | copy dot files
-  command: >
-    cp {{ item }} {{ dotfiles_path }}/{{ item|basename }}
-  with_fileglob: /vagrant/data/dot/*
+  copy: src={{ item }} dest={{ dotfiles_path }} owner=vagrant group=vagrant
+  with_fileglob: 
+    - /vagrant/data/dot/.*
   sudo: yes
   when: protobox_env == 'vagrant' and item|basename != '.gitignore'
