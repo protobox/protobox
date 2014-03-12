@@ -11,7 +11,8 @@ vagrant_ansible*
 packer/*
 
 # Gem Files
-gem/*
+vagrant-protobox-gem/*
+protobox-gem/*
 
 # Vagrant files
 vagrant_src/*
