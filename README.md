@@ -4,18 +4,13 @@ Protobox is a layer on top of [vagrant](http://vagrantup.com) and a [web GUI](ht
 
 ## Installation ##
 
-Installation
+Open terminal and run the following:
 
-	vagrant plugin install vagrant-protobox
-	ruby -e "$(curl -fsSL https://raw.github.com/protobox/protobox/master/lib/shell/bootstrap)"
+	gem install protobox && protobox init
 
-Alternatively, you can install it via git manually.
+Then run `vagrant up` and follow the protobox instructions on screen.
 
-	vagrant plugin install vagrant-protobox
-    git clone git@github.com:protobox/protobox.git protobox
-    cd protobox && cp data/config/common.yml-dist data/config/common.yml
-
-Then run `vagrant up` and pull up `http://192.168.5.10/` in your browser to see if it is setup correctly.
+Protobox can also be installed other ways, [click here to check out alternative installation options](http://getprotobox.com/docs/installation).
 
 ## Configuration ##
 
