@@ -4,12 +4,14 @@ Protobox is a layer on top of [vagrant](http://vagrantup.com) and a [web GUI](ht
 
 ## Installation ##
 
-Installation - OSX, *nix
+Installation
 
-	ruby -e "$(curl -fsSL https://raw.github.com/protobox/protobox/master/ansible/shell/bootstrap)"
+	vagrant plugin install vagrant-protobox
+	ruby -e "$(curl -fsSL https://raw.github.com/protobox/protobox/master/lib/shell/bootstrap)"
 
 Alternatively, you can install it via git manually.
 
+	vagrant plugin install vagrant-protobox
     git clone git@github.com:protobox/protobox.git protobox
     cd protobox && cp data/config/common.yml-dist data/config/common.yml
 

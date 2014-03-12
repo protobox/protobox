@@ -13,6 +13,9 @@ packer/*
 # Gem Files
 gem/*
 
+# Vagrant files
+vagrant_src/*
+
 # Web Files
 index.html
 

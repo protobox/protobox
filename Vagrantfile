@@ -10,6 +10,35 @@ vagrant_dir = File.expand_path(File.dirname(__FILE__))
 protobox_dir = vagrant_dir + '/.protobox'
 protobox_boot = protobox_dir + '/config'
 
+cli_file = vagrant_dir + '/.protobox_cli'
+cli_version = File.open(cli_file) {|f| f.readline}
+
+# Check vagrant version
+if Vagrant::VERSION < "1.5.0"
+  puts "Please upgrade to vagrant 1.5+: "
+  puts "http://www.vagrantup.com/downloads.html"
+  puts 
+  exit
+end
+
+# Check for protobox plugin
+if !Vagrant.has_plugin?('vagrant-protobox')
+  puts "Protobox vagrant plugin missing, run the following: "
+  puts 
+  puts "vagrant plugin install vagrant-protobox"
+  puts
+  exit
+end
+
+# Check for protobox cli updates
+if VagrantPlugins::Protobox::VERSION < cli_version
+  puts "Please update your protobox cli tools: "
+  puts 
+  puts "vagrant plugin update vagrant-protobox"
+  puts
+  exit
+end
+
 # Create protobox dir if it doesn't exist
 if !File.directory?(protobox_dir)
   Dir.mkdir(protobox_dir)
