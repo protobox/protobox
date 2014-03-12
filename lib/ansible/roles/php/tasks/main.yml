@@ -9,9 +9,9 @@
 
 - name: main | set facts
   set_fact: >
-    php_version_53={{ True if '5.3.' in php_version.stdout else False }}
-    php_version_54={{ True if '5.4.' in php_version.stdout else False }}
-    php_version_55={{ True if '5.5.' in php_version.stdout else False }}
+    php_version_53={{ 'yes' if '5.3.' in php_version.stdout else 'no' }}
+    php_version_54={{ 'yes' if '5.4.' in php_version.stdout else 'no' }}
+    php_version_55={{ 'yes' if '5.5.' in php_version.stdout else 'no' }}
 
 - include: ini.yml
 

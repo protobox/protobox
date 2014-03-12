@@ -24,7 +24,7 @@
     chdir=/etc/php5/mods-available
     php5enmod xhprof;
   sudo: yes
-  when: not php_version_53
+  when: php_version_53 == 'no'
   notify:
     - php-restart
 
@@ -33,7 +33,7 @@
     src=/etc/php5/mods-available/xhprof.ini
     dest=/etc/php5/conf.d/xhprof.ini
     state=link
-  when: php_version_53
+  when: php_version_53 == 'yes'
   notify:
     - php-restart
 
