@@ -34,7 +34,11 @@
 #  when: item.stat.exists and item.item.path != dotfiles_path + '/.vimrc'
 
 - name: dotfiles | copy dot files
-  copy: src={{ item }} dest={{ dotfiles_path }} owner=vagrant group=vagrant
+  copy: >
+    src={{ item }} 
+    dest={{ dotfiles_path }} 
+    owner=vagrant 
+    group=vagrant
   with_fileglob: 
     - /vagrant/data/dot/.*
   sudo: yes
