@@ -48,5 +48,8 @@
 # Symlink to PHP to use `php -v`
 
 - name: hhvm | symlink to php
-  shell: ln -s `which hhvm` /usr/local/bin/php
+  file: >
+    src=/usr/bin/hhvm
+    dest=/usr/local/bin/php
+    state=link
   sudo: yes
