@@ -78,34 +78,29 @@ if [[ ! -f /.protobox/python-software-properties ]]; then
     fi
 fi
 
-if [[ ! -f /.protobox/add-ansible-repo ]]; then
+if [[ ! -f /.protobox/install-pip ]]; then
     if [ "$OS" == 'debian' ] || [ "$OS" == 'ubuntu' ]; then
-        echo "Running add-apt-repository ansible"
-        add-apt-repository ppa:rquillo/ansible >/dev/null 2>&1
-        echo "Finished add-apt-repository ansible"
+        echo "Installing python-pip"
+        apt-get -y install python-pip python-dev >/dev/null 2>&1
+        echo "Finished python-pip"
 
-        echo "Running apt-get update"
-        apt-get update -y >/dev/null 2>&1
-        echo "Finished running apt-get update"
-
-        touch /.protobox/add-ansible-repo
+        touch /.protobox/install-pip
     elif [ "$OS" == 'centos' ]; then
+        #yum install install python-pip python-devel
 
-        touch /.protobox/add-ansible-repo
+        touch /.protobox/install-pip
     fi
 fi
 
 if [[ ! -f /.protobox/install-ansible ]]; then
     if [ "$OS" == 'debian' ] || [ "$OS" == 'ubuntu' ]; then
-        echo "Running apt-get install ansible"
-        apt-get -y install ansible >/dev/null 2>&1
-        echo "Finished apt-get install ansible"
+        echo "Running pip install ansible"
+        pip install ansible >/dev/null 2>&1
+        echo "Finished pip install ansible"
 
         touch /.protobox/install-ansible
     elif [ "$OS" == 'centos' ]; then
-        echo "Running yum install ansible"
-        sudo yum install ansible >/dev/null 2>&1
-        echo "Finished yum install ansible"
+        #pip install ansible
 
         touch /.protobox/install-ansible
     fi
