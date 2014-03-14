@@ -6,6 +6,7 @@
     name={{ item }}
     state=installed
     update_cache=yes
+    force=yes
   with_items: pkgs_phpmyadmin
   sudo: yes
   when: ansible_os_family == 'Debian'

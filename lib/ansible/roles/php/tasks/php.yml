@@ -1,40 +1,40 @@
 
 # Debian / Ubuntu
 
-#- name: version | add dotdeb package for php 5.4
+#- name: php | add dotdeb package for php 5.4
 #  apt_repository: >
 #    repo='deb http://packages.dotdeb.org {{ ansible_lsb.codename }}-php54 all' 
 #    state=present
 #  sudo: yes
 #  when: ansible_os_family == 'Debian' and php.version == '54'
 
-#- name: version | add dotdeb package sources for php 5.4
+#- name: php | add dotdeb package sources for php 5.4
 #  apt_repository: >
 #    repo='deb-src http://packages.dotdeb.org {{ ansible_lsb.codename }}-php54 all' 
 #    state=present
 #  sudo: yes
 #  when: ansible_os_family == 'Debian' and php.version == '54'
 
-#- name: version | add dotdeb apt key for php 5.4
+#- name: php | add dotdeb apt key for php 5.4
 #  apt_key: >
 #    url=http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x7E3F070089DF5277 
 #    state=present
 #  sudo: yes
 #  when: ansible_os_family == 'Debian' and php.version == '54'
 
-- name: version | add php 5.4 repository
+- name: php | add php 5.4 repository
   apt_repository: repo=ppa:ondrej/php5-oldstable
   sudo: yes
   when: ansible_os_family == 'Debian' and php.version == '54'
 
-- name: version | updates apt cache
+- name: php | updates apt cache
   apt: update_cache=true
   sudo: yes
   when: ansible_os_family == 'Debian' and php.version == '54'
 
 # PHP
 
-- name: version | install debian php
+- name: php | install debian php
   apt: >
     pkg={{ item }} 
     state=latest
@@ -43,7 +43,7 @@
   sudo: yes
   when: ansible_os_family == 'Debian'
 
-- name: version | install rpm php
+- name: php | install rpm php
   yum: >
     pkg={{ item }} 
     state=latest
@@ -53,15 +53,16 @@
 
 # PHP Modules
 
-- name: version | install debian php packages
+- name: php | install debian php packages
   apt: >
     pkg={{ item }}
     state=latest
+    force=yes
   with_items: php.modules
   sudo: yes
   when: ansible_os_family == 'Debian' and php.modules is defined
 
-- name: version | install debian php packages
+- name: php | install rpm php packages
   apt: >
     pkg={{ item }}
     state=latest

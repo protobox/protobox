@@ -4,6 +4,7 @@
   apt: >
     pkg={{ item }} 
     state=installed
+    force=yes
   with_items: pkgs_php_apache
   sudo: yes
   when: ansible_os_family == 'Debian'
