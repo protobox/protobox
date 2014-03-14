@@ -7,7 +7,6 @@
 - name: newrelic | check for new relic system
   stat: >
     path=/etc/init.d/newrelic-sysmond
-  sudo: yes
   register: newrelic_system
 
 - name: newrelic | get the key
@@ -15,18 +14,15 @@
     url=https://download.newrelic.com/548C16BF.gpg
     id=548C16BF
     state=present
-  sudo: yes
 
 - name: newrelic | add the repository
   copy: >
     content="deb http://apt.newrelic.com/debian/ newrelic non-free" 
     dest=/etc/apt/sources.list.d/newrelic.list
-  sudo: yes
   register: newrelic_repo
 
 - name: newrelic | updates apt cache
   apt: update_cache=yes
-  sudo: yes
   when: newrelic_repo.changed
 
 ## Server Agent
@@ -35,7 +31,6 @@
   apt: >
     pkg=newrelic-sysmond
     state=latest
-  sudo: yes
   when: not newrelic_system.stat.exists
   register: newrelic_apt
 
@@ -53,7 +48,6 @@
   service: >
     name=newrelic-sysmond 
     state=restarted
-  sudo: yes
   when: newrelic_apt.changed or newrelic_config.changed
 
 ## PHP Agent
@@ -61,14 +55,12 @@
 - name: newrelic | check for new relic php
   stat: >
     path=/etc/php5/conf.d/newrelic.ini
-  sudo: yes
   register: newrelic_php
 
 - name: newrelic | installs the php agent
   apt: >
     pkg=newrelic-php5
     state=latest
-  sudo: yes
   when: >
     monitoring.newrelic.php is defined and 
     monitoring.newrelic.php == 1 and
@@ -97,7 +89,6 @@
   service: >
     name=apache2
     state=restarted
-  sudo: yes
   when: >
     apache is defined and 
     apache.install == 1 and
@@ -107,7 +98,6 @@
   service: >
     name=nginx
     state=restarted
-  sudo: yes
   when: >
     nginx is defined and 
     nginx.install == 1 and 
@@ -120,7 +110,6 @@
     name=newrelic
     global=yes
     state=latest
-  sudo: yes
   when: >
     monitoring.newrelic.node is defined and 
     monitoring.newrelic.node == 1 and

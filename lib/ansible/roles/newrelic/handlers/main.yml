@@ -2,16 +2,13 @@
   service: >
     name=newrelic-sysmond 
     state=restarted
-  sudo: yes
 
 - name: newrelic-start
   service: >
     name=newrelic-sysmond 
     state=started
-  sudo: yes
 
 - name: newrelic-stop
   service: >
     name=newrelic-sysmond 
     state=stopped
-  sudo: yes

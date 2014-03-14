@@ -7,7 +7,6 @@
   with_together:
     - applications.drupal
     - drush_status.results
-  sudo: yes
   when: item.0.install == 1 and item.0.options.modules is defined
 
 - name: modules | enable modules
@@ -18,5 +17,4 @@
   with_together:
     - applications.drupal
     - drush_status.results
-  sudo: yes
   when: item.0.install == 1 and item.0.options.modules is defined

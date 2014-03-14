@@ -16,14 +16,12 @@
   template: >
     src=xhprof.ini.j2
     dest=/etc/php5/mods-available/xhprof.ini
-  sudo: yes
 
 # php 5.3 does not have php5enmod 
 - name: xhprof | enable xhprof config
   shell: >
     chdir=/etc/php5/mods-available
     php5enmod xhprof;
-  sudo: yes
   when: php_version_53 == 'no'
   notify:
     - php-restart

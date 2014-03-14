@@ -5,7 +5,6 @@
     pkg={{ item }} 
     state=installed
   with_items: pkgs_solr_dependencies
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 - name: solr | install rpm solr dependencies
@@ -13,7 +12,6 @@
     pkg={{ item }} 
     state=installed
   with_items: pkgs_solr_dependencies
-  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
 
 # Package
@@ -24,7 +22,6 @@
     state=latest
     update_cache=true
   with_items: pkgs_solr
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 - name: solr | install rpm solr
@@ -32,5 +29,4 @@
     pkg={{ item }} 
     state=latest
   with_items: pkgs_solr
-  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']

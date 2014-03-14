@@ -6,7 +6,6 @@
 
 #- name: pecl | install pecl
 #  command: pecl install pecl_http
-#  sudo: yes
 
 # PECL Packages 
 

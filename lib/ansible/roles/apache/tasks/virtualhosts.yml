@@ -11,14 +11,12 @@
     dest=/etc/apache2/sites-available/{{ item.name }}.conf
     mode=0640
   with_items: apache.vhosts
-  sudo: yes
   notify:
     - apache-restart
 
 - name: virtualhosts | activates our virtualhost
   command: a2ensite {{ item.name }}.conf
   with_items: apache.vhosts
-  sudo: yes
 
 - name: virtualhosts | check that our config is valid
   command: apache2ctl configtest
@@ -27,13 +25,11 @@
 
 - name: virtualhosts | rolling back - Restoring old default virtualhost
   command: a2ensite default
-  sudo: yes
   when: apache_result|failed
 
 - name: virtualhosts | rolling back - Removing our virtualhost
   command: a2dissite {{ item.name }}.conf
   with_items: apache.vhosts
-  sudo: yes
   when: apache_result|failed
 
 - name: virtualhosts | rolling back - Ending playbook
@@ -42,10 +38,8 @@
 
 - name: virtualhosts | deactivates the default virtualhost
   command: a2dissite default
-  sudo: yes
 
 - name: virtualhosts | deactivates the default ssl virtualhost
   command: a2dissite default-ssl
-  sudo: yes
   notify:
     - apache-restart

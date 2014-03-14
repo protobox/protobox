@@ -2,16 +2,13 @@
   service: >
     name={{ service_tomcat }}
     state=restarted
-  sudo: yes
 
 - name: tomcat-start
   service: >
     name={{ service_tomcat }}
     state=started
-  sudo: yes
 
 - name: tomcat-stop
   service: >
     name={{ service_tomcat }}
     state=stopped
-  sudo: yes

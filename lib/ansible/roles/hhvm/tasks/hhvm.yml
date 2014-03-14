@@ -4,14 +4,12 @@
   apt_key: >
     url=http://dl.hhvm.com/conf/hhvm.gpg.key
     state=present
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 - name: hhvm | add the repository
   copy: >
     content="deb http://dl.hhvm.com/ubuntu {{ ansible_lsb.codename }} main" 
     dest=/etc/apt/sources.list.d/hhvm.list
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 # Package
@@ -23,7 +21,6 @@
     update_cache=true
     force=yes
   with_items: pkgs_hhvm_nightly
-  sudo: yes
   when: ansible_os_family == 'Debian' and hhvm.nightly is defined and hhvm.nightly == 1
 
 - name: hhvm | install debian hhvm
@@ -33,7 +30,6 @@
     update_cache=true
     force=yes
   with_items: pkgs_hhvm
-  sudo: yes
   when: ansible_os_family == 'Debian' and (hhvm.nightly is not defined or hhvm.nightly == 0)
 
 - name: hhvm | install rpm hhvm
@@ -42,7 +38,6 @@
     state=installed
     force=yes
   with_items: pkgs_hhvm
-  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
 
 # Symlink to PHP to use `php -v`
@@ -52,4 +47,3 @@
     src=/usr/bin/hhvm
     dest=/usr/local/bin/php
     state=link
-  sudo: yes

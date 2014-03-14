@@ -129,5 +129,5 @@ fi
 
 # Run ansible playbook
 echo "Running ansible-playbook $PARAMS"
-sh -c "ansible-playbook $PARAMS"
+sh -c "ANSIBLE_FORCE_COLOR=true ANSIBLE_HOST_KEY_CHECKING=false PYTHONUNBUFFERED=1 ansible-playbook $PARAMS"
 echo "Finished ansible-playbook"

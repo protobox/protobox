@@ -3,4 +3,3 @@
     pkg={{ item }} 
     state=latest
   with_items: server.packages
-  sudo: yes

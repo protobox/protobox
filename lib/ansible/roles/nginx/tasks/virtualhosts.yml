@@ -2,7 +2,6 @@
   file: >
     path={{ path_nginx_virtualhost_enabled }}/default
     state=absent
-  sudo: yes
   notify:
     - nginx-restart
 
@@ -12,7 +11,6 @@
     dest={{ path_nginx_virtualhost_available }}/{{ item.name }}.conf
     mode=0640
   with_items: nginx.vhosts
-  sudo: yes
   notify:
     - nginx-restart
 
@@ -22,6 +20,5 @@
     dest={{ path_nginx_virtualhost_enabled }}/{{ item.name }}.conf
     state=link
   with_items: nginx.vhosts
-  sudo: yes
   notify:
     - nginx-restart

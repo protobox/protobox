@@ -5,7 +5,6 @@
     force=yes
   with_items:
     - unzip
-  sudo: yes
 
 - name: ngrok | set facts
   set_fact: >
@@ -36,7 +35,6 @@
     unzip ngrok.zip
     chdir=/usr/src/
     creates=/usr/src/ngrok
-  sudo: yes
   when: not ngrok_installed.stat.exists
 
 - name: ngrok | remove package
@@ -56,8 +54,7 @@
   template: >
     src=ngrok.sh.j2
     dest=/usr/local/bin/ngrok
-    owner=vagrant
-    group=vagrant
+    owner={{ ansible_env.USER }}
+    group={{ ansible_env.USER }}
     mode=0755
-  sudo: yes
   when: not ngrok_installed.stat.exists

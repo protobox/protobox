@@ -6,7 +6,6 @@
     state=latest
     update_cache=true
   with_items: pkgs_apache
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 - name: apache | install rpm apache
@@ -14,7 +13,6 @@
     pkg={{ item }} 
     state=latest
   with_items: pkgs_apache
-  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
 
 # Configuration
@@ -23,14 +21,12 @@
   template: >
     src=httpd.conf.j2
     dest={{ path_apache_httpd }}
-  sudo: yes
   notify:
     - apache-restart
 
 - name: apache | install apache modules
   command: a2enmod {{ item }}
   with_items: apache.modules
-  sudo: yes
   when: apache.modules is defined
   notify:
     - apache-restart

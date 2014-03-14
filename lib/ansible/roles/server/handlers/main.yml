@@ -2,4 +2,3 @@
   service: >
     name=ssh 
     state=restarted
-  sudo: yes

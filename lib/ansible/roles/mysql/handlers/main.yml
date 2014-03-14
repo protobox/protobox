@@ -2,17 +2,14 @@
   service: >
     name={{ service_mysql }}
     state=restarted
-  sudo: yes
 
 - name: mysql-start
   service: >
     name={{ service_mysql }} 
     state=started
     enabled=true
-  sudo: yes
 
 - name: mysql-stop
   service: >
     name={{ service_mysql }} 
     state=stopped
-  sudo: yes

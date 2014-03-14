@@ -5,26 +5,21 @@
   notify:
     - ssh-restart
 
-- name: sshkeys | set facts
-  set_fact: >
-    sshkeys_user="{{ 'vagrant' if protobox_env == 'vagrant' else ansible_user_id }}"
-    sshkeys_path="/home/{{ 'vagrant' if protobox_env == 'vagrant' else ansible_user_id }}"
-
 # make sure ssh config exists
 - name: sshkeys | ensure directory exists
   file: >
-    path={{ sshkeys_path }}/.ssh
-    owner={{ sshkeys_user }}
-    group={{ sshkeys_user }}
+    path={{ ansible_env.HOME }}/.ssh
+    owner={{ ansible_env.USER }} 
+    group={{ ansible_env.USER }} 
     mode=0700
     state=directory
 
 - name: sshkeys | ensure config exists
   template: >
     src=config.j2 
-    dest={{ sshkeys_path }}/.ssh/config 
-    owner={{ sshkeys_user }} 
-    group={{ sshkeys_user }} 
+    dest={{ ansible_env.HOME }}/.ssh/config 
+    owner={{ ansible_env.USER }}
+    group={{ ansible_env.USER }}
     mode=0600
   notify:
     - ssh-restart
@@ -44,22 +39,20 @@
 #    - server.ssh.authorized_keys
 #    - sshkeys_files.results
 
-#key={{ item.file|default(lookup('file', sshkeys_path + '/.ssh/id_rsa.pub')) }}
+#key={{ item.file|default(lookup('file', ansible_env.HOME + '/.ssh/id_rsa.pub')) }}
 - name: sshkeys | add authorized keys from files
   authorized_key: >
-    user={{ item.user|default(sshkeys_user) }}
+    user={{ item.user|default(ansible_env.USER) }}
     key="{{ lookup('file', item.file) }}"
     state=present
-  sudo: yes
   with_items: server.ssh.authorized_keys
   when: server.ssh.authorized_keys is defined and item.file is defined
 
 - name: sshkeys | add authorized key entries
   authorized_key: >
-    user={{ item.user|default(sshkeys_user) }}
+    user={{ item.user|default(ansible_env.USER) }}
     key="{{ item.key }}"
     state=present
-  sudo: yes
   with_items: server.ssh.authorized_keys
   when: server.ssh.authorized_keys is defined and item.key is defined
 
@@ -68,19 +61,17 @@
 # copy key files into place
 - name: sshkeys | add private keys from files
   shell: >
-    cp {{ item.file }} {{ sshkeys_path }}/.ssh/{{ item.file|basename }}
+    cp {{ item.file }} {{ ansible_env.HOME }}/.ssh/{{ item.file|basename }}
   with_items: server.ssh.private_keys
-  sudo: yes
   when: server.ssh.private_keys is defined and item.file is defined
 
 # copy key entries into place
 - name: sshkeys | add private keys entries
   shell: >
-    echo -e "{{ item.entry }}" >> {{ sshkeys_path }}/.ssh/{{ item.entry|md5 }} &&
-    echo -e "\nhost *\n\tIdentityFile '{{ sshkeys_path }}/.ssh/{{ item.entry|md5 }}'" >> {{ sshkeys_path }}/.ssh/config
-    creates={{ sshkeys_path }}/.ssh/{{ item.entry|md5 }}
+    echo -e "{{ item.entry }}" >> {{ ansible_env.HOME }}/.ssh/{{ item.entry|md5 }} &&
+    echo -e "\nhost *\n\tIdentityFile '{{ ansible_env.HOME }}/.ssh/{{ item.entry|md5 }}'" >> {{ ansible_env.HOME }}/.ssh/config
+    creates={{ ansible_env.HOME }}/.ssh/{{ item.entry|md5 }}
   with_items: server.ssh.private_keys
-  sudo: yes
   when: server.ssh.private_keys is defined and item.entry is defined and item.entry
 
 ## Known Hosts
@@ -93,26 +84,25 @@
 #  with_items:
 #   - { "host": "github.com", "line": "github.com,207.97.227.239 ssh-rsa 123" }
 
-- name: sshkeys_vagrant | ensure config exists
+- name: sshkeys | ensure config exists
   template: >
     src=known_hosts.j2 
-    dest={{ sshkeys_path }}/.ssh/known_hosts 
-    owner={{ sshkeys_user }} 
-    group={{ sshkeys_user }} 
+    dest={{ ansible_env.HOME }}/.ssh/known_hosts 
+    owner={{ ansible_env.USER }} 
+    group={{ ansible_env.USER }} 
     mode=0600
   notify:
     - ssh-restart
 
 - name: sshkeys | add keyscan
   shell: >
-    ssh-keyscan github.com >> {{ sshkeys_path }}/.ssh/known_hosts
-  sudo: yes
+    ssh-keyscan github.com >> {{ ansible_env.HOME }}/.ssh/known_hosts
 
 ## Copy keys from the filesystem 
 
 - name: sshkeys | copy custom ssh keys
   shell: >
-    cp {{ item }} {{ sshkeys_path }}/.ssh/{{ item|basename }}
+    cp {{ item }} {{ ansible_env.HOME }}/.ssh/{{ item|basename }}
   with_fileglob: /vagrant/data/ssh/*
   when: protobox_env == 'vagrant' and item|basename not in [ '.gitignore', 'config', 'known_hosts', 'authorized_keys' ]
 
@@ -124,7 +114,7 @@
 
 - name: sshkeys | install config entries
   shell: > 
-    cat /vagrant/data/ssh/config >> {{ sshkeys_path }}/.ssh/config
+    cat /vagrant/data/ssh/config >> {{ ansible_env.HOME }}/.ssh/config
   when: protobox_env == 'vagrant' and ssh_config.stat.exists
 
 - name: sshkeys | check if authorized_keys exists
@@ -135,24 +125,24 @@
 
 - name: sshkeys | install authorized_keys entries
   shell: > 
-    cat /vagrant/data/ssh/authorized_keys >> {{ sshkeys_path }}/.ssh/authorized_keys
+    cat /vagrant/data/ssh/authorized_keys >> {{ ansible_env.HOME }}/.ssh/authorized_keys
   when: protobox_env == 'vagrant' and ssh_authorized_keys.stat.exists
 
 ## Correct the Permissions
 
 - name: sshkeys | fix folder permissions
   file: >
-    path={{ sshkeys_path }}/.ssh
-    owner={{ sshkeys_user }} 
-    group={{ sshkeys_user }} 
+    path={{ ansible_env.HOME }}/.ssh
+    owner={{ ansible_env.USER }} 
+    group={{ ansible_env.USER }} 
     mode=0700
 
 - name: sshkeys | fix file permission
   file: >
     path={{ item }}
-    owner={{ sshkeys_user }} 
-    group={{ sshkeys_user }} 
+    owner={{ ansible_env.USER }} 
+    group={{ ansible_env.USER }} 
     mode=0600
-  with_fileglob: sshkeys_path + '/.ssh/*'
+  with_fileglob: ansible_env.HOME + '/.ssh/*'
   when: item|basename not in [ '.gitignore' ]
 

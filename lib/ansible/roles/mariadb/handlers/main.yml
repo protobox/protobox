@@ -2,17 +2,14 @@
   service: >
     name={{ service_mariadb }}
     state=restarted
-  sudo: yes
 
 - name: mariadb-start
   service: >
     name={{ service_mariadb }} 
     state=started
     enabled=true
-  sudo: yes
 
 - name: mariadb-stop
   service: >
     name={{ service_mariadb }} 
     state=stopped
-  sudo: yes

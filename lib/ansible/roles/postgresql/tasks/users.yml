@@ -2,14 +2,12 @@
   group: >
     name={{ postgresql.group|default('postgresql') }}
     state=present
-  sudo: yes
 
 - name: users | create user
   user: >
     name={{ postgresql.user|default('postgresql') }}
     group={{ postgresql.group|default('postgresql') }}
     state=present
-  sudo: yes
 
 - name: users | create database users
   sudo_user: {{ postgresql.user|default('postgresql') }}

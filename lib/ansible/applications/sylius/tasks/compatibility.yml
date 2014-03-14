@@ -1,6 +1,5 @@
 - name: compatibility | check for ssh config
-  stat: > 
-    path=/vagrant/.ssh/config
+  stat: path={{ ansible_env.HOME }}/.ssh/config
   register: ssh_config
   when: protobox_env == 'protobox'
 

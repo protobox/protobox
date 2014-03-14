@@ -5,4 +5,3 @@
   with_items:
     - curl
     - php5-curl
-  sudo: yes

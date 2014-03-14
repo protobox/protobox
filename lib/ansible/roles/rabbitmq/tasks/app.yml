@@ -4,14 +4,12 @@
   apt_key: >
     url={{ apt_key_rabbitmq }}
     state=present
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 - name: app | add the repository
   copy: >
     content="deb http://www.rabbitmq.com/debian/ {{ rabbitmq.release|default('testing') }} main" 
     dest=/etc/apt/sources.list.d/rabbitmq.list
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 - name: app | install debian rabbitmq
@@ -20,7 +18,6 @@
     state=latest
     update_cache=true
   with_items: pkgs_rabbitmq
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 # Package - RedHat
@@ -29,7 +26,6 @@
   rpm_key: > 
     key={{ apt_key_rabbitmq }}
     state=present
-  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
 
 - name: app | install rpm rabbitmq
@@ -38,5 +34,4 @@
     state=latest
     update_cache=true
   with_items: pkgs_rabbitmq
-  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']

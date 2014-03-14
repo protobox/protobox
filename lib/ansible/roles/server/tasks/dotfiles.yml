@@ -1,45 +1,40 @@
-- name: dotfiles | set facts
-  set_fact: >
-    dotfiles_path="{{ '/home/vagrant' if protobox_env == 'vagrant' else '/home/' ~ ansible_user_id }}"
-
 - name: dotfiles | install dotfiles
   git: >
     repo={{ server.dotfiles.repo }}
-    dest={{ server.dotfiles.repo_path|default(dotfiles_path) }}
+    dest={{ server.dotfiles.repo_path|default(ansible_env.HOME) }}
   when: server.dotfiles.repo is defined
 
 # check for vimrc if we are not in the root folder to symlink
 #- name: dotfiles | check for vimrc
 #  stat: >
-#    path={{ item.path|default(dotfiles_path) }}/.vimrc
+#    path={{ item.path|default(ansible_env.HOME) }}/.vimrc
 #  with_items: server.dotfiles.git
 #  register: dotfiles_vimrc
-#  when: server.dotfiles.git is defined and item.path|default(dotfiles_path) != dotfiles_path
+#  when: server.dotfiles.git is defined and item.path|default(ansible_env.HOME) != ansible_env.HOME
 
 #- debug: var=dotfiles_vimrc
 
 #- debug: var=item.stat.exists
 #  with_items: dotfiles_vimrc.results
 
-#- debug: msg="{{ item.stat.exists }} - {{ item.item.path }} - {{ dotfiles_path }}"
+#- debug: msg="{{ item.stat.exists }} - {{ item.item.path }} - {{ ansible_env.HOME }}"
 #  with_items: dotfiles_vimrc.results
 
 # add the symlink from previous step
 #- name: dotfiles | create .vimrc symlink
 #  file: >
 #    src={{ item.item.path }}/.vimrc
-#    dest={{ dotfiles_path }}/.vimrc
+#    dest={{ ansible_env.HOME }}/.vimrc
 #    state=symlink
 #  with_items: dotfiles_vimrc.results
-#  when: item.stat.exists and item.item.path != dotfiles_path + '/.vimrc'
+#  when: item.stat.exists and item.item.path != ansible_env.HOME + '/.vimrc'
 
 - name: dotfiles | copy dot files
   copy: >
     src={{ item }} 
-    dest={{ dotfiles_path }} 
-    owner=vagrant 
-    group=vagrant
+    dest={{ ansible_env.HOME }} 
+    owner={{ ansible_env.USER }} 
+    group={{ ansible_env.USER }} 
   with_fileglob: 
     - /vagrant/data/dot/.*
-  sudo: yes
-  when: protobox_env == 'vagrant' and item|basename != '.gitignore'
+  when: item|basename != '.gitignore'

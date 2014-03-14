@@ -17,6 +17,7 @@
     name=root
     host={{ item }}
     password={{ mariadb.root_password|default('') }}
+    priv=*.*:ALL,GRANT
   with_items:
     - "{{ ansible_hostname }}"
     - 127.0.0.1
@@ -29,21 +30,17 @@
     dest=/root/.my.cnf
     owner=root
     mode=0600
-  sudo: yes
-  when: ansible_user_id == 'root'
   notify:
     - mariadb-restart
 
 - name: users | add user credentials
   template: >
     src=my.user.cnf.j2
-    dest=/home/vagrant/.my.cnf
-    owner=vagrant
+    dest={{ ansible_env.HOME }}/.my.cnf
+    owner={{ ansible_env.USER }}
     mode=0600
-  sudo: yes
   notify:
     - mariadb-restart
-  when: protobox_env == 'vagrant'
 
 - name: users | remove anonymous user
   mysql_user: >
@@ -51,8 +48,8 @@
     host={{ item }}
     state=absent
   with_items:
+    - "{{ ansible_fqdn }}"
     - localhost
-    - ansible_fqdn
 
 # TODO : priv={{ item.name }}:{{ item.grant }}
 # priv=*.*:ALL host='%'

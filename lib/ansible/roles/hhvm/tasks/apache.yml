@@ -7,16 +7,14 @@
     update_cache=true
     force=yes
   with_items: pkgs_hhvm_apache
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 - name: apache | install rpm hhvm apache
   yum: >
-    pkg={{ item }} 
+    pkg={{ item }}
     state=latest
     force=yes
   with_items: pkgs_hhvm_apache
-  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
 
 # Modules
@@ -26,7 +24,6 @@
   with_items: 
     - proxy
     - proxy_fcgi
-  sudo: yes
   when: >
     '2.3' not in apache_version.stdout and 
     '2.2' not in apache_version.stdout
@@ -43,7 +40,6 @@
 #    - 'mod_proxy.load'
 #    - 'mod_proxy.conf'
 #    - 'mod_proxy_fcgi.load'
-#  sudo: yes
 #  when: "'2.3' in apache_version.stdout or '2.2' in apache_version.stdout"
 #  notify:
 #    - apache-restart

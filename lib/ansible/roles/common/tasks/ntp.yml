@@ -6,7 +6,6 @@
     state=latest
     update_cache=yes
   with_items: pkgs_ntp
-  sudo: yes
   when: ansible_os_family == 'Debian'
   notify:
     - ntp-restart
@@ -16,7 +15,6 @@
     pkg={{ item }} 
     state=latest
   with_items: pkgs_ntp
-  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
   notify:
     - ntp-restart
@@ -40,4 +38,3 @@
     name={{ service_ntp }}
     state=started
     enabled=yes
-  sudo: yes

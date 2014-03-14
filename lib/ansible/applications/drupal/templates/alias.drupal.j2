@@ -3,6 +3,6 @@
 # Drush aliases
 {% if applications.drupal is defined %}
 {% for item in applications.drupal %}
-alias drush{{ item.options.drush_version.split('.')[0]|default('') }}=/home/vagrant/drush/drush-{{ item.options.drush_version }}/drush
+alias drush{{ item.options.drush_version.split('.')[0]|default('') }}={{ ansible_env.HOME }}/drush/drush-{{ item.options.drush_version }}/drush
 {% endfor %}
 {% endif %}

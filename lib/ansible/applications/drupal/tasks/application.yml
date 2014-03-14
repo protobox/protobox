@@ -5,7 +5,6 @@
   ignore_errors: True
   register: drush_status
   with_items: applications.drupal
-  sudo: yes
   when: item.install == 1
 
 - name: application | create directory
@@ -24,8 +23,7 @@
     {{ 'drupal-' ~ item.options.drupal_version if item.options.drupal_version is defined else 'drupal' }}
     creates={{ item.path }}/index.php
   with_items: applications.drupal
-  sudo: yes
-  when: protobox_env == 'vagrant' and item.install == 1
+  when: item.install == 1
 
 - name: application | make writable
   file: >
@@ -62,7 +60,6 @@
   with_together:
     - applications.drupal
     - drush_status.results
-  sudo: yes
   when: item.0.install == 1 and item.1.rc != 0
 
 ## cleanup

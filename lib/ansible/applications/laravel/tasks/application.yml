@@ -1,6 +1,5 @@
 - name: application | check for laravel
-  stat: >
-    path=/usr/local/bin/laravel
+  stat: path=/usr/local/bin/laravel
   register: laravel_phar
 
 - name: application | download package
@@ -14,16 +13,14 @@
   command: >
     mv laravel.phar /usr/local/bin/laravel
     chdir=/usr/src/
-  sudo: yes
   when: not laravel_phar.stat.exists
 
 - name: application | set permissions
   file: >
     path=/usr/local/bin/laravel
-    owner=vagrant
-    group=vagrant
+    owner={{ ansible_env.USER }}
+    group={{ ansible_env.USER }}
     mode=0755
-  sudo: yes
   when: not laravel_phar.stat.exists
 
 - name: application | check installation
@@ -48,7 +45,6 @@
   with_together:
     - applications.laravel
     - laravel_install.results 
-  sudo: yes
   when: item.0.install == 1 and not item.1.stat.exists
 
 # TODO : set apache + nginx virtual host document root to /public folder or verify it as part of compatibility

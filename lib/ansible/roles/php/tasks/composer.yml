@@ -6,7 +6,6 @@
     state=latest
     force=yes
   with_items: pkgs_php_composer
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 - name: composer | install rpm dependencies
@@ -14,7 +13,6 @@
     pkg={{ item }} 
     state=latest
   with_items: pkgs_php_composer
-  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
 
 # Installation
@@ -23,4 +21,3 @@
   shell: >
     curl -sS https://getcomposer.org/installer | /usr/bin/php && /bin/mv -f ./composer.phar {{ path_php_composer }}
     creates={{ path_php_composer }}
-  sudo: yes

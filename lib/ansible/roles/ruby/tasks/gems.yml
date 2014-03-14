@@ -5,7 +5,6 @@
     name={{ item }}
     state=latest
   with_items: pkgs_ruby_gems
-  sudo: yes
   when: ruby.gems is defined
 
 - name: gems | install rpm gem dependencies
@@ -13,13 +12,10 @@
     pkg={{ item }}
     state=installed
   with_items: pkgs_ruby_gems
-  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat'] and ruby.gems is defined
 
 - name: gems | install gems
   command: >
     gem install {{ item }} --no-ri --no-rdoc
   with_items: ruby.gems
-  sudo: yes
   when: ruby.gems is defined
-

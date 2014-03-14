@@ -6,7 +6,6 @@
     state=installed
     force=yes
   with_items: pkgs_php_pear
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 - name: pear | install rpm php
@@ -14,7 +13,6 @@
     pkg={{ item }} 
     state=latest
   with_items: pkgs_php_pear
-  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
 
 # Pear Update / Configuration

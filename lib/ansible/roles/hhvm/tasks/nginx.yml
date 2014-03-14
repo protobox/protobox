@@ -7,7 +7,6 @@
     update_cache=true
     force=yes
   with_items: pkgs_hhvm_nginx
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 - name: nginx | install rpm hhvm nginx
@@ -16,5 +15,4 @@
     state=latest
     force=yes
   with_items: pkgs_hhvm_nginx
-  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']

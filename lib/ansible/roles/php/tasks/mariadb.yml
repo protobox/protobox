@@ -6,7 +6,6 @@
     state=latest
     force=yes
   with_items: pkgs_php_mariadb
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 - name: mariadb | install rpm php mariadb
@@ -14,5 +13,4 @@
     pkg={{ item }} 
     state=latest
   with_items: pkgs_php_mariadb
-  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']

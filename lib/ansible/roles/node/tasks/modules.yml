@@ -6,7 +6,6 @@
     global=yes
     state=latest
   with_items: node.npm
-  sudo: yes
   when: node.npm is defined
 
 # TODO : run 'npm install' inside the project directories

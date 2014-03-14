@@ -6,7 +6,6 @@
     state=latest
     update_cache=true
   with_items: pkgs_mariadb_dependencies
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 - name: mariadb | install rpm dependencies
@@ -14,7 +13,6 @@
     pkg={{ item }} 
     state=latest
   with_items: pkgs_mariadb_dependencies
-  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
 
 # Package
@@ -23,14 +21,12 @@
   apt_key: >
     url=http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xcbcb082a1bb943db
     state=present
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 - name: mariadb | add the repository
   copy: >
     content="deb {{ mariadb.repository|default('http://mirror.jmu.edu/pub/mariadb/repo/' + mariadb.version + '/' + ansible_lsb.id.lower()) }} {{ ansible_lsb.codename }} main" 
     dest=/etc/apt/sources.list.d/mariadb.list
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 - name: mariadb | install debian mariadb
@@ -39,7 +35,6 @@
     state=latest
     update_cache=true
   with_items: pkgs_mariadb
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 - name: mariadb | install rpm mariadb
@@ -48,7 +43,6 @@
     state=latest
     update_cache=true
   with_items: pkgs_mariadb
-  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
 
 # Configuration
@@ -60,6 +54,5 @@
     owner=root
     group=root
     mode=0644
-  sudo: yes
   notify:
     - mariadb-restart

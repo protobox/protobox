@@ -6,7 +6,6 @@
     state=installed
     force=yes
   with_items: pkgs_php_apache
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 - name: apache | install rpm php apache
@@ -14,7 +13,6 @@
     pkg={{ item }} 
     state=installed
   with_items: pkgs_php_apache
-  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
 
 # Configuration
@@ -23,7 +21,6 @@
   template: >
     src=php.ini.j2
     dest=/etc/php5/apache2/php.ini
-  sudo: yes
   when: php.ini is defined
   notify:
     - php-restart

@@ -7,7 +7,6 @@
     src=protobox.conf.j2
     dest={{ path_nginx_virtualhost_available }}/00-protobox.conf
     mode=0640
-  sudo: yes
   when: >
     (protobox.dashboard is undefined) or 
     (protobox.dashboard is defined and protobox.dashboard.install == 1)
@@ -17,7 +16,6 @@
     src={{ path_nginx_virtualhost_available }}/00-protobox.conf
     dest={{ path_nginx_virtualhost_enabled }}/00-protobox.conf
     state=link
-  sudo: yes
   notify:
     - nginx-restart
   when: >

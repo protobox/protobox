@@ -6,7 +6,6 @@
     state=latest
     update_cache=true
   with_items: pkgs_mysql_dependencies
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 - name: app | install rpm dependencies
@@ -14,7 +13,6 @@
     pkg={{ item }} 
     state=latest
   with_items: pkgs_mysql_dependencies
-  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
 
 # Package
@@ -24,7 +22,6 @@
     pkg={{ item }} 
     state=latest
   with_items: pkgs_mysql
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 - name: app | install rpm postgresql
@@ -32,7 +29,6 @@
     pkg={{ item }} 
     state=latest
   with_items: pkgs_mysql
-  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
 
 # Configuration
@@ -44,6 +40,5 @@
     owner={{ postgresql.user }}
     group={{ postgresql.group }}
     mode=0644
-  sudo: yes
   notify:
     - postgresql-restart

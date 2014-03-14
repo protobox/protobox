@@ -4,4 +4,3 @@
     state=latest
   with_items:
     - php5-mcrypt
-  sudo: yes

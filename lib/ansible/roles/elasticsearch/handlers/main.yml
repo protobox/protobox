@@ -2,16 +2,13 @@
   service: >
     name={{ service_elasticsearch }}
     state=restarted
-  sudo: yes
 
 - name: elasticsearch-start
   service: >
     name={{ service_elasticsearch }}
     state=started
-  sudo: yes
 
 - name: elasticsearch-stop
   service: >
     name={{ service_elasticsearch }}
     state=stopped
-  sudo: yes

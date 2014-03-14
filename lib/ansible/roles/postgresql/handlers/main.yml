@@ -2,17 +2,14 @@
   service: >
     name={{ service_postgresql }}
     state=restarted
-  sudo: yes
 
 - name: postgresql-start
   service: >
     name={{ service_postgresql }} 
     state=started
     enabled=true
-  sudo: yes
 
 - name: postgresql-stop
   service: >
     name={{ service_postgresql }} 
     state=stopped
-  sudo: yes

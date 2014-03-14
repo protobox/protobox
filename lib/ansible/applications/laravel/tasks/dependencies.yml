@@ -4,7 +4,6 @@
     state=latest
   with_items:
     - php5-mcrypt
-  sudo: yes
 
 # TODO : As of PHP 5.5, some OS distributions may require you to manually install the PHP JSON extension
 # 

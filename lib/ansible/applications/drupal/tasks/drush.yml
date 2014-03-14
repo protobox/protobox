@@ -74,7 +74,6 @@
 #  template: >
 #    src=alias.drupal.j2
 #    dest=/etc/profile.d/drupal.sh
-#  sudo: yes
 
 #- name: drush | run drush to download dependencies
 #  command: drush

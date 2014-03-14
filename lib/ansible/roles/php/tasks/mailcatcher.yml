@@ -6,7 +6,6 @@
   with_items:
     - libsqlite3-dev
     - rubygems
-  sudo: yes
 
 - name: mailcatcher | install packages
   command: >
@@ -14,7 +13,6 @@
   with_items:
     - rdoc
     - mailcatcher
-  sudo: yes
 
 #--smtp-ip= --http-ip=
 #--no-quit
@@ -31,10 +29,8 @@
 #    name=mailcatcher
 #    state=started
 #    arguments="{{ mailcatcher_ip }} {{ mailcatcher_port }} {{ mailcatcher_http }} {{ mailcatcher_no_quit }}"
-#  sudo: yes
 
 - name: mailcatcher | start service
   command: > 
     mailcatcher {{ mailcatcher_ip }} {{ mailcatcher_port }} {{ mailcatcher_http }} {{ mailcatcher_no_quit }}
-  sudo: yes
   ignore_errors: True

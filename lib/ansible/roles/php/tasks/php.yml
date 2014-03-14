@@ -5,31 +5,24 @@
 #  apt_repository: >
 #    repo='deb http://packages.dotdeb.org {{ ansible_lsb.codename }}-php54 all' 
 #    state=present
-#  sudo: yes
 #  when: ansible_os_family == 'Debian' and php.version == '54'
 
 #- name: php | add dotdeb package sources for php 5.4
 #  apt_repository: >
 #    repo='deb-src http://packages.dotdeb.org {{ ansible_lsb.codename }}-php54 all' 
 #    state=present
-#  sudo: yes
 #  when: ansible_os_family == 'Debian' and php.version == '54'
 
 #- name: php | add dotdeb apt key for php 5.4
 #  apt_key: >
 #    url=http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x7E3F070089DF5277 
 #    state=present
-#  sudo: yes
 #  when: ansible_os_family == 'Debian' and php.version == '54'
 
 - name: php | add php 5.4 repository
-  apt_repository: repo=ppa:ondrej/php5-oldstable
-  sudo: yes
-  when: ansible_os_family == 'Debian' and php.version == '54'
-
-- name: php | updates apt cache
-  apt: update_cache=true
-  sudo: yes
+  apt_repository: >
+    repo=ppa:ondrej/php5-oldstable
+    update_cache=true
   when: ansible_os_family == 'Debian' and php.version == '54'
 
 # PHP
@@ -40,7 +33,6 @@
     state=latest
     force=yes
   with_items: pkgs_php
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 - name: php | install rpm php
@@ -48,7 +40,6 @@
     pkg={{ item }} 
     state=latest
   with_items: pkgs_php
-  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
 
 # PHP Modules
@@ -59,7 +50,6 @@
     state=latest
     force=yes
   with_items: php.modules
-  sudo: yes
   when: ansible_os_family == 'Debian' and php.modules is defined
 
 - name: php | install rpm php packages
@@ -67,5 +57,4 @@
     pkg={{ item }}
     state=latest
   with_items: php.modules
-  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat'] and php.modules is defined

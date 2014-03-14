@@ -6,7 +6,6 @@
     state=installed
     force=yes
   with_items: pkgs_php_xdebug
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 - name: xdebug | install rpm php xdebug
@@ -14,7 +13,6 @@
     pkg={{ item }} 
     state=installed
   with_items: pkgs_php_xdebug
-  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
 
 # Configuration
@@ -27,7 +25,6 @@
     owner=root
     group=root
     mode=0755
-  sudo: yes
 
 #- name: main | set xdebug settings
 #  ini_file: >
@@ -37,7 +34,6 @@
 #    value={{ item.value }}
 #    state=present
 #  with_items: php.xdebug.settings
-#  sudo: yes
 #  when: php.xdebug.settings is defined and apache is defined and apache.install == 1
 #  notify:
 #    - restart php
@@ -46,13 +42,11 @@
   template: >
     src=xdebug.ini.j2
     dest=/etc/php5/mods-available/xdebug-options.ini
-  sudo: yes
 
 #- name: xdebug | ensure config file exists
 #  shell: >
 #    chdir=/etc/php5/mods-available
 #    touch xdebug.ini;
-#  sudo: yes
 
 #- name: xdebug | ensure xdebug config options contains section
 #  lineinfile: >
@@ -77,7 +71,6 @@
   shell: >
     chdir=/etc/php5/mods-available
     php5enmod xdebug-options;
-  sudo: yes
   when: php_version_53 == 'no'
   notify:
     - php-restart

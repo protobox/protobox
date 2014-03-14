@@ -8,7 +8,6 @@
     update_cache=yes
     force=yes
   with_items: pkgs_phpmyadmin
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 - name: phpmyadmin | intall rpm packages
@@ -16,7 +15,6 @@
     name={{ item }}
     state=installed
   with_items: pkgs_phpmyadmin
-  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
 
 # Apache Config
@@ -29,7 +27,6 @@
     line='Include /etc/phpmyadmin/apache.conf'
     state=present
     backup=yes
-  sudo: yes
   when: >
     ansible_os_family == 'Debian' and 
     apache is defined and 

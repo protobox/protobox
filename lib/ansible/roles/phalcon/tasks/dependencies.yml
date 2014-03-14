@@ -9,5 +9,4 @@
     - autoconf
     - php5-dev
     - php5-mysql
-  sudo: yes
   when: ansible_os_family == 'Debian'

@@ -10,7 +10,6 @@
     state=latest
     update_cache=true
   with_items: pkgs_mysql_dependencies
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 - name: mysql | install rpm dependencies
@@ -18,7 +17,6 @@
     pkg={{ item }} 
     state=latest
   with_items: pkgs_mysql_dependencies
-  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
 
 # Package
@@ -28,7 +26,6 @@
     pkg={{ item }} 
     state=latest
   with_items: pkgs_mysql
-  sudo: yes
   when: ansible_os_family == 'Debian'
 
 - name: mysql | install rpm mysql
@@ -36,7 +33,6 @@
     pkg={{ item }} 
     state=latest
   with_items: pkgs_mysql
-  sudo: yes
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
 
 # Configuration
@@ -48,6 +44,5 @@
     owner=root
     group=root
     mode=0644
-  sudo: yes
   notify:
     - mysql-restart

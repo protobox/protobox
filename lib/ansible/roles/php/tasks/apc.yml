@@ -16,15 +16,13 @@
   template: >
     src=apc.ini.j2
     dest=/etc/php5/mods-available/apc.ini
-  sudo: yes
 
 # php 5.3 does not have php5enmod 
 - name: apc | enable apc config
   shell: >
     chdir=/etc/php5/mods-available
     php5enmod apc;
-  sudo: yes
-  when: php.version != '53'
+  when: php_version_53 == 'no'
   notify:
     - php-restart
 
@@ -33,6 +31,6 @@
     src=/etc/php5/mods-available/apc.ini
     dest=/etc/php5/conf.d/apc.ini
     state=link
-  when: php.version == '53'
+  when: php_version_53 == 'yes'
   notify:
     - php-restart

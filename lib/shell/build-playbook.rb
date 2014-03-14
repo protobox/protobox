@@ -6,6 +6,8 @@ def build_playbook(yaml, protobox_dir)
   play = {}
   play['name'] = 'Core'
   play['hosts'] = 'all'
+  #play['sudo'] = true
+  #play['sudo_user'] = 'root'
   play['vars_files'] = ['$protobox_config']
   
   entries = []

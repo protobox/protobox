@@ -6,7 +6,6 @@
     force=yes
   with_items:
     - unzip
-  sudo: yes
 
 - name: application | set facts
   set_fact: >

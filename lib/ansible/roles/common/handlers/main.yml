@@ -3,4 +3,3 @@
     name={{ service_ntp }}
     state=restarted
     enabled=yes
-  sudo: yes
