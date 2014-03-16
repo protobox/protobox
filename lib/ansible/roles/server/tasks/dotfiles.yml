@@ -2,6 +2,7 @@
   git: >
     repo={{ server.dotfiles.repo }}
     dest={{ server.dotfiles.repo_path|default(ansible_env.HOME) }}
+    accept_hostkey=yes
   when: server.dotfiles.repo is defined
 
 # check for vimrc if we are not in the root folder to symlink

@@ -27,6 +27,7 @@
     repo={{ item.0.options.source|default('git@github.com:symfony/symfony-standard.git') }}
     dest={{ item.0.path }}
     version={{ item.0.options.revision|default('master') }}
+    accept_hostkey=yes
   with_together:
     - applications.symfony
     - symfony_install.results 

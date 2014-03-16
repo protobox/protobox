@@ -30,6 +30,7 @@
     repo={{ item.options.source }}
     dest={{ item.path }}
     version={{ item.options.revision|default('master') }}
+    accept_hostkey=yes
   with_items: applications.repository
   when: item.install == 1 and item.options.provider is defined and item.options.provider == 'git'
 

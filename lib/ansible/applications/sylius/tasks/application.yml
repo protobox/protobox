@@ -27,6 +27,7 @@
     repo={{ item.0.options.source|default('git@github.com:Sylius/Sylius.git') }}
     dest={{ item.0.path }}
     version={{ item.0.options.revision|default('master') }}
+    accept_hostkey=yes
   with_together:
     - applications.sylius
     - sylius_install.results 
