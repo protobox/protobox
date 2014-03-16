@@ -1,0 +1,7 @@
+url_get_pip: https://raw.github.com/pypa/pip/master/contrib/get-pip.py
+
+pkgs_python:
+  - python
+  - python-dev
+
+path_pip: /usr/local/bin/pip

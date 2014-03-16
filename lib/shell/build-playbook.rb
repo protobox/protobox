@@ -55,6 +55,11 @@ def build_playbook(yaml, protobox_dir)
     entries << { "role" => "elasticsearch", "when" => "elasticsearch is defined and elasticsearch.install == 1" }
   end
 
+  # Languages - python
+  if !yaml['python'].nil? and yaml['python']['install'].to_i == 1
+    entries << { "role" => "python", "when" => "python is defined and python.install == 1" }
+  end
+
   # Languages - php
   if !yaml['php'].nil? and yaml['php']['install'].to_i == 1
     entries << { "role" => "php", "when" => "php is defined and php.install == 1" }

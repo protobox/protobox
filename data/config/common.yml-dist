@@ -268,6 +268,18 @@ ruby:
     - sass
     - compass
 
+python:
+  install: 0
+  #setuptools:
+    #version: 123
+  pip:
+    install: 1
+    #version: 123
+    #packages: [  ]
+  virtualenv:
+    install: 1
+    #version: 123
+
 newrelic:
   install: 0
   license: ''

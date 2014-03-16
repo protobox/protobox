@@ -1,0 +1,16 @@
+# Package
+
+- name: package | install debian python
+  apt: >
+    pkg={{ item }} 
+    state=latest
+    force=yes
+  with_items: pkgs_python
+  when: ansible_os_family == 'Debian'
+
+- name: package | install rpm python
+  yum: >
+    pkg={{ item }} 
+    state=latest
+  with_items: pkgs_python
+  when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']

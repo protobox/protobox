@@ -1,0 +1,10 @@
+- name: main | add vars
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- include: package.yml
+
+- include: pip.yml
+  when: python.pip is defined and python.pip.install == 1
+
+- include: virtualenv.yml
+  when: python.virtualenv is defined and python.virtualenv.install == 1

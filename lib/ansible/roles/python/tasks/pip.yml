@@ -1,0 +1,27 @@
+- name: pip | download installer
+  get_url: >
+    url={{ url_get_pip }}
+    dest=/tmp/get-pip.py
+    owner=root
+    group=root
+    mode=0644
+
+- name: pip | run installer
+  command: >
+    python /tmp/get-pip.py 
+    creates="{{ path_pip }}"
+
+#- name: pip | update setuptools
+#  command: pip install -U setuptools
+
+- name: pip | update setuptools
+  pip: >
+    name="setuptools{% if python.setuptools is defined and python.setuptools.version is defined %}=={{ python.setuptools.version }}{% endif %}"
+    state=present
+
+- name: pip | intall packages
+  pip: >
+    name={{ item }}
+    state=present
+  with_items: python.pip.packages
+  when: python.pip.packages is defined
