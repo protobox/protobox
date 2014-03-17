@@ -96,7 +96,8 @@
 
 - name: sshkeys | add keyscan
   shell: >
-    ssh-keyscan github.com >> {{ ansible_env.HOME }}/.ssh/known_hosts
+    ssh-keyscan github.com >> /etc/ssh/ssh_known_hosts;
+    ssh-keyscan bitbucket.org >> /etc/ssh/ssh_known_hosts
 
 ## Copy keys from the filesystem 
 
