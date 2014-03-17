@@ -123,17 +123,54 @@ Vagrant.configure("2") do |config|
   # Synced Folders
   settings[vagrant_vm]['vm']['synced_folder'].each do |item, folder|
     if !folder['source'].nil? and !folder['target'].nil?
-      id = !folder['id'].nil? ? folder['id'] : ''
-      nfs = !folder['nfs'].nil? ? folder['nfs'] : false
-      dis = !folder['disabled'].nil? ? folder['disabled'] : false
-      own = !folder['owner'].nil? ? folder['owner'] : ''
-      grp = !folder['group'].nil? ? folder['group'] : ''
-      opt = !folder['mount_options'].nil? ? folder['mount_options'] : Array.new
+      type = !folder['type'].nil? ? folder['type'] : 'nfs'
+      create = !folder['create'].nil? ? folder['create'] : false
+      disabled = !folder['disabled'].nil? ? folder['disabled'] : false
 
-      if nfs
-        config.vm.synced_folder folder['source'], folder['target'], id: id, disabled: dis, :nfs => { :mount_options => opt }
+      # backwards compat: check if using nfs
+      if !folder['nfs'].nil? and folder['nfs']
+        type = 'nfs'
+      end
+
+      # NFS
+      if type == 'nfs'
+        nfs_udp = !folder['nfs_udp'].nil? ? folder['nfs_udp'] : true
+        nfs_version = !folder['nfs_version'].nil? ? folder['nfs_version'] : 3
+
+        config.vm.synced_folder folder['source'], folder['target'], 
+          type: type, 
+          create: create,
+          disabled: disabled, 
+          nfs_udp: nfs_udp, 
+          nfs_version: nfs_version
+      
+      # RSYNC
+      elsif type == 'rsync'
+        rsync_args = !folder['rsync__args'].nil? ? folder['rsync__args'] : ["--verbose", "--archive", "--delete", "-z"]
+        rsync_auto = !folder['rsync__auto'].nil? ? folder['rsync__auto'] : true
+        rsync_exclude = !folder['rsync__exclude'].nil? ? folder['rsync__exclude'] : [".vagrant/"]
+
+        config.vm.synced_folder folder['source'], folder['target'], 
+          type: type, 
+          create: create,
+          disabled: disabled, 
+          rsync__args: rsync_args, 
+          rsync__auto: rsync_auto, 
+          rsync__exclude: rsync_exclude
+      
+      # No type found, use old method
       else
-        config.vm.synced_folder folder['source'], folder['target'], id: id, disabled: dis, owner: own, group: grp, :mount_options => opt
+        #puts "Missing Type: " + type
+        owner = !folder['owner'].nil? ? folder['owner'] : ''
+        group = !folder['group'].nil? ? folder['group'] : ''
+        mount_options = !folder['mount_options'].nil? ? folder['mount_options'] : Array.new
+
+        config.vm.synced_folder folder['source'], folder['target'], 
+          create: create,
+          disabled: disabled, 
+          owner: owner, 
+          group: group, 
+          :mount_options => mount_options
       end
     end
   end

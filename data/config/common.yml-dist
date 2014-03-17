@@ -43,12 +43,15 @@ vagrant:
         id: vagrant-root
         source: ./
         target: /srv/www
-        nfs: false
-        owner: vagrant
-        group: www-data
-        mount_options: 
-          - 'dmode=775'
-          - 'fmode=775'
+        type: rsync
+        rsync__args: 
+          - '--verbose'
+          - '--archive'
+          - '--delete'
+          - '-z'
+        rsync__exclude:
+          - '.vagrant/'
+          - '.git/'
     usable_port_range: 2200..2250
   ssh:
     host: null
