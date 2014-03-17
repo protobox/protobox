@@ -43,7 +43,7 @@ vagrant:
         id: vagrant-root
         source: ./
         target: /srv/www
-        type: rsync
+        type: nfs
         rsync__args: 
           - '--verbose'
           - '--archive'
