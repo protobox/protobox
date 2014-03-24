@@ -93,14 +93,30 @@ Vagrant.configure("2") do |config|
   end
 
   # Default Box
-  config.vm.box = settings[vagrant_vm]['vm']['box']
-  config.vm.box_url = settings[vagrant_vm]['vm']['box_url']
+  if !settings[vagrant_vm]['vm']['box'].nil?
+    config.vm.box = settings[vagrant_vm]['vm']['box']
+  end
+
+  # Box URL
+  if !settings[vagrant_vm]['vm']['box_url'].nil?
+    config.vm.box_url = settings[vagrant_vm]['vm']['box_url']
+  end
+
+  # Box version
+  if !settings[vagrant_vm]['vm']['box_version'].nil?
+    config.vm.box_version = settings[vagrant_vm]['vm']['box_version']
+  end
+
+  # Box updates
+  if !settings[vagrant_vm]['vm']['box_check_update'].nil?
+    config.vm.box_check_update = settings[vagrant_vm]['vm']['box_check_update']
+  end
 
   # Hostname
   if !settings[vagrant_vm]['vm']['hostname'].nil?
     config.vm.hostname = settings[vagrant_vm]['vm']['hostname']
   end
- 
+
   # Ports and IP Address
   if !settings[vagrant_vm]['vm']['usable_port_range'].nil?
     ends = settings[vagrant_vm]['vm']['usable_port_range'].to_s.split('..').map{|d| Integer(d)}
