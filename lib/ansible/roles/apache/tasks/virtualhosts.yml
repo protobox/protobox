@@ -6,9 +6,8 @@
 #  with_items: apache.vhosts
 
 - name: virtualhosts | determine Apache version
-  command: apache2 -v | head -1 | awk '{split($3, a, "/"); split(a[2], b, "."]; print b[1] "." b[2]}'
+  command: apache2 -v | head -1 | awk '{split($3, a, "/"); split(a[2], b, "."); print b[1] "." b[2]}'
   register: apache_version
-  tags: testing
 
 - name: virtualhosts | add apache configurations
   template: >
@@ -16,7 +15,6 @@
     dest=/etc/apache2/sites-available/{{ item.name }}.conf
     mode=0640
   with_items: apache.vhosts
-  tags: testing
   notify:
     - apache-restart
 
