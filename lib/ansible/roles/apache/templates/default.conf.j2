@@ -20,8 +20,12 @@
         Options Indexes FollowSymLinks MultiViews
         #AllowOverride None
         AllowOverride All
+        {% if apache_version < 2.4 %}
         Order allow,deny
         allow from all
+        {% else %}
+        Require all granted
+        {% endif %}
     </Directory>
 
     # Values: debug, info, notice, warn, error, crit, alert, emerg
