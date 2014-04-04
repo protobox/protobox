@@ -30,6 +30,17 @@
     ErrorLog /var/log/apache2/error.log
     CustomLog /var/log/apache2/access.log combined
 
+    {% if item.aliases is defined %}{% for alias in item.aliases %}
+    Alias{% if alias.match %}Match{% endif %} {{ alias.source }} {{ alias.target }}
+    <Directory {{ alias.target }}>
+        Options Indexes FollowSymLinks MultiViews
+        #AllowOverride None
+        AllowOverride All
+        Order allow,deny
+        allow from all
+    </Directory>
+    {% endfor %}{% endif %}
+
     {% if item.setenv is defined %}{% for env in item.setenv %}
     SetEnv {{ env }}
     {% endfor %}{% endif %}
