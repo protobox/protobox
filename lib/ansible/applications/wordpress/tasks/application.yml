@@ -43,6 +43,7 @@
     repo={{ item.options.repo|default(wordpress_repo) }}
     dest={{ item.path }}
     version={{ item.options.revision|default(item.options.version) }}
+    accept_hostkey=yes
   with_items: applications.wordpress
   when: item.install == 1 and item.options.method is defined and item.options.method == 'git'
 

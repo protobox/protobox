@@ -18,6 +18,7 @@
     repo={{ item.0.options.source|default('git@github.com:pyrocms/pyrocms.git') }}
     dest={{ item.0.path }}
     version={{ item.0.options.version|default('master') }}
+    accept_hostkey=yes
   with_together:
     - applications.pyrocms
     - pyrocms_install.results 
