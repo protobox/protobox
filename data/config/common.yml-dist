@@ -156,6 +156,7 @@ php:
     - php5-gd
   pear:
     install: 1
+    channels: [ ]
     modules: [ ]
   pecl:
     install: 1
