@@ -186,7 +186,7 @@ php:
     display_startup_errors: 'On'
     error_reporting: '-1'
     short_open_tag: 'On'
-  timezone: America/Chicago
+  timezone: UTC
 
 phalcon:
   install: 0
