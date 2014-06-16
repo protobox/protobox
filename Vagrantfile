@@ -58,7 +58,7 @@ if !File.file?(protobox_boot)
 end
 
 # Open config file location
-vagrant_file = File.open(protobox_boot) {|f| f.readline}
+vagrant_file = File.open(protobox_boot) {|f| f.readline.chomp}
 
 # Check for missing data file
 if !File.file?(vagrant_dir + '/' + vagrant_file)
