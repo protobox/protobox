@@ -2,7 +2,7 @@
 
 - name: pear | install pear packages
   apt: >
-    pkg={{ item }} 
+    pkg={{ item }}
     state=installed
     force=yes
   with_items: pkgs_php_pear
@@ -10,7 +10,7 @@
 
 - name: pear | install rpm php
   yum: >
-    pkg={{ item }} 
+    pkg={{ item }}
     state=latest
   with_items: pkgs_php_pear
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
@@ -23,16 +23,22 @@
 - name: pear | set pear auto-discover
   command: pear config-set auto_discover 1
 
-# Pear Channels 
+# Pear Channels
 
 - name: pear | install channels
   command: pear channel-discover {{ item }}
   with_items: php.pear.channels
   when: php.pear.channels is defined
+  register: channel_result
+  changed_when: "'initialized' not in channel_result.stdout"
+  failed_when: "'already initialized' not in channel_result.stdout and 'succeeded' not in  channel_result.stdout"
 
-# Pear Packages 
+# Pear Packages
 
 - name: pear | install packages
   command: pear install {{ php.pear.install_args|default('') }} {{ item }}
   with_items: php.pear.modules
   when: php.pear.modules is defined
+  register: pear_result
+  changed_when: "'already installed' not in pear_result.stdout"
+  failed_when: "'already installed' not in pear_result.stdout and 'install ok' not in pear_result.stdout and pear_result.stderr"
