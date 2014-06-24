@@ -1,0 +1,3 @@
+; {{ ansible_managed }}
+
+sendmail_path = "/usr/local/rvm/bin/catchmail {{ mailcatcher_smtp_port }} {{ mailcatcher_ip }} -f {{ mailcatcher_email_from }}"
