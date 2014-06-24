@@ -8,3 +8,5 @@
 
 - include: dotfiles.yml
   when: server.dotfiles is defined and server.dotfiles.install == 1
+
+- include: logs.yml
