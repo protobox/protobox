@@ -22,7 +22,7 @@ define('DB_NAME', '{{ item.0.options.dbname|default('wordpress') }}');
 define('DB_USER', '{{ item.0.options.dbuser|default('') }}');
 
 /** MySQL database password */
-define('DB_PASSWORD', '{{ item.0.options.dbname|default('') }}');
+define('DB_PASSWORD', '{{ item.0.options.dbpass|default('') }}');
 
 /** MySQL hostname */
 define('DB_HOST', '{{ item.0.options.dbhost|default('localhost') }}');
