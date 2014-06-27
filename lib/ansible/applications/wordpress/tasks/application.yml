@@ -91,8 +91,8 @@
 
 - name: application | copy config file
   template: >
-    src={{ item.config|default('wp-config.php.j2') }}
-    dest={{ item.path }}/wp-config.php
+    src={{ item.0.config|default('wp-config.php.j2') }}
+    dest={{ item.0.path }}/wp-config.php
   with_together: 
     - applications.wordpress
     - wordpress_config.results
