@@ -19,10 +19,10 @@
 define('DB_NAME', '{{ item.0.options.dbname|default('wordpress') }}');
 
 /** MySQL database username */
-define('DB_USER', '{{ item.0.options.dbuser|default('') }}');
+define('DB_USER', '{{ item.0.options.dbuser|default('root') }}');
 
 /** MySQL database password */
-define('DB_PASSWORD', '{{ item.0.options.dbname|default('') }}');
+define('DB_PASSWORD', '{{ item.0.options.dbpass|default('root') }}');
 
 /** MySQL hostname */
 define('DB_HOST', '{{ item.0.options.dbhost|default('localhost') }}');
@@ -43,7 +43,7 @@ define('DB_COLLATE', '');
  * @since 2.6.0
  */
 
-{{ item.3.stdout }}
+{{ item.2.stdout }}
 
 /**#@-*/
 
