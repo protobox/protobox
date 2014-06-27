@@ -96,6 +96,6 @@
   with_together: 
     - applications.wordpress
     - wordpress_config.results
-    - wordpress_salt
+    - wordpress_salt.results
   when: item.0.install == 1 and not item.1.stat.exists
 
