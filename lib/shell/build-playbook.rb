@@ -110,9 +110,14 @@ def build_playbook(yaml, protobox_dir)
     entries << { "role" => "rabbitmq", "when" => "rabbitmq is defined and rabbitmq.install == 1" }
   end
 
-  # Tools - newrelic
-  if !yaml['newrelic'].nil? and yaml['newrelic']['install'].to_i == 1
-    entries << { "role" => "newrelic", "when" => "newrelic is defined and newrelic.install == 1" }
+  #
+  # Monitoring
+  #
+  if !yaml['monitoring'].nil?
+    # Tools - newrelic
+    if !yaml['monitoring']['newrelic'].nil? and yaml['monitoring']['newrelic']['install'].to_i == 1
+      entries << { "role" => "newrelic", "when" => "monitoring.newrelic is defined and monitoring.newrelic.install == 1" }
+    end
   end
 
   # Tools - ngrok
