@@ -17,7 +17,7 @@ def build_dashboard(yaml, protobox_dir)
   #
 
   # Exit out here if the dashboard should not be installed
-  if !yaml['protobox']['dashbard'].nil? and yaml['protobox']['dashboard']['install'].to_i != 1
+  if !yaml['protobox']['dashboard'].nil? and yaml['protobox']['dashboard']['install'].to_i != 1
     return false
   end
 
@@ -30,10 +30,24 @@ def build_dashboard(yaml, protobox_dir)
   #  end
   #end
 
+  data_path = nil
+
   if !yaml['protobox']['dashboard'].nil? and !yaml['protobox']['dashboard']['path'].nil?
-    data_path = yaml['protobox']['dashboard']['path'] << '/' unless yaml['protobox']['dashboard']['path'].end_with?('/')
+    yaml['vagrant']['vm']['synced_folder'].each { |share,data|
+      next if data['source'].nil? or data['target'].nil?
+      share_source = data['source']
+      share_target = data['target']
+
+      if yaml['protobox']['dashboard']['path'].start_with?(share_target)
+        local_path = File.expand_path(yaml['protobox']['dashboard']['path'].gsub(/^#{share_target}/, share_source).prepend('../../'), File.dirname(__FILE__))
+        local_path = local_path << '/' unless local_path.end_with?('/')
+        data_path = local_path if File.directory?(local_path)
+      end
+
+      break unless data_path.nil?
+    }
   else
-    data_path =  File.expand_path('/../../web/protobox/')
+    data_path =  File.expand_path('/../../web/protobox/', File.dirname(__FILE__))
   end
 
   # Exit out here if the path does not exist
