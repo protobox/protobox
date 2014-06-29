@@ -23,7 +23,7 @@
 #--strip-path=1
 - name: application | extract archive
   command: >
-    /bin/tar xvf wordpress-{{ item.options.version }}.tar.gz -C ./ --strip-components=1
+    /bin/tar xvfo wordpress-{{ item.options.version }}.tar.gz -C ./ --strip-components=1
     chdir={{ item.path }}
     creates=index.php
   with_items: applications.wordpress
