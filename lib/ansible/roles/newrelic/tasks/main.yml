@@ -1,6 +1,6 @@
 - name: newrelic | check for license
   fail: msg="New Relic license is required"
-  when: monitoring.newrelic.license is not defined or not monitoring.newrelic.license
+  when: newrelic.license is not defined or not newrelic.license
 
 ## Debian
 
@@ -62,8 +62,8 @@
     pkg=newrelic-php5
     state=latest
   when: >
-    monitoring.newrelic.php is defined and 
-    monitoring.newrelic.php == 1 and
+    newrelic.php is defined and 
+    newrelic.php == 1 and
     php is defined and 
     php.install == 1 and
 
@@ -79,8 +79,8 @@
     mode=0640
   register: newrelic_ini
   when: >
-    monitoring.newrelic.php is defined and 
-    monitoring.newrelic.php == 1 and
+    newrelic.php is defined and 
+    newrelic.php == 1 and
     php is defined and 
     php.install == 1 and
     not newrelic_php.stat.exists
@@ -111,8 +111,8 @@
     global=yes
     state=latest
   when: >
-    monitoring.newrelic.node is defined and 
-    monitoring.newrelic.node == 1 and
+    newrelic.node is defined and 
+    newrelic.node == 1 and
     node is defined and 
     node.install == 1
 
