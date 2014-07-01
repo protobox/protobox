@@ -5,32 +5,58 @@
     force=yes
   with_items:
     - libsqlite3-dev
-    - rubygems
 
-- name: mailcatcher | install packages
-  command: >
-    gem install {{ item }} --no-ri --no-rdoc
-  with_items:
-    - rdoc
-    - mailcatcher
+- name: mailcatcher | install RVM 
+  shell: \curl -L https://get.rvm.io | bash -s stable --ruby
 
-#--smtp-ip= --http-ip=
-#--no-quit
+- name: mailcatcher | install mailcatcher
+  shell: /usr/local/rvm/bin/rvm default@mailcatcher --create do gem install mailcatcher --no-rdoc --no-ri
+
+- name: mailcatcher | install wrapper
+  shell: /usr/local/rvm/bin/rvm wrapper default@mailcatcher --no-prefix mailcatcher catchmail
+
 - name: mailcatcher | set facts
   set_fact: >
     mailcatcher_ip="--ip={{ php.mailcatcher.ip|default('0.0.0.0') }}"
-    mailcatcher_port="{{ '--smtp-port=' ~ php.mailcatcher.smtp_port if php.mailcatcher.smtp_port is defined else '' }}"
-    mailcatcher_http="{{ '--http-port=' ~ php.mailcatcher.http_port if php.mailcatcher.http_port is defined else '' }}"
+    mailcatcher_email_from="{{ php.email_from|default('admin@domain.com') }}"
+    mailcatcher_smtp_port="{{ '--smtp-port=' ~ php.mailcatcher.smtp_port if php.mailcatcher.smtp_port is defined else '' }}"
+    mailcatcher_http_port="{{ '--http-port=' ~ php.mailcatcher.http_port if php.mailcatcher.http_port is defined else '' }}"
     mailcatcher_no_quit=""
 
-# service not found:
-#- name: mailcatcher | start service
-#  service: > 
-#    name=mailcatcher
-#    state=started
-#    arguments="{{ mailcatcher_ip }} {{ mailcatcher_port }} {{ mailcatcher_http }} {{ mailcatcher_no_quit }}"
+- name: mailcatcher | create startup script
+  template: src=mailcatcher.j2 dest=/etc/init.d/mailcatcher mode=0755
 
-- name: mailcatcher | start service
-  command: > 
-    mailcatcher {{ mailcatcher_ip }} {{ mailcatcher_port }} {{ mailcatcher_http }} {{ mailcatcher_no_quit }}
-  ignore_errors: True
+- name: mailcatcher | start on boot
+  command: update-rc.d mailcatcher defaults
+
+- name: mailcatcher | not already running 
+  command: pkill mailcatcher
+  ignore_errors: yes
+
+- name: mailcatcher | start it
+  command: /etc/init.d/mailcatcher
+  ignore_errors: yes
+
+- name: mailcatcher | set php ini
+  template: >
+    src=mailcatcher.ini.j2
+    dest=/etc/php5/mods-available/mailcatcher.ini
+  when: php is defined and php.install == 1
+
+- name: xdebug | enable xdebug config
+  shell: >
+    chdir=/etc/php5/mods-available
+    php5enmod mailcatcher;
+  when: php is defined and php.install == 1 and php_version_53 == 'no'
+  notify:
+    - php-restart
+
+- name: xdebug | enable xdebug config on php 5.3
+  file: >
+    src=/etc/php5/mods-available/mailcatcher.ini
+    dest=/etc/php5/conf.d/mailcatcher.ini
+    state=link
+  when: php is defined and php.install == 1 and php_version_53 == 'yes'
+  notify:
+    - php-restart
+

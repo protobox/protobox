@@ -1,0 +1,5 @@
+#! /bin/sh
+# /etc/init.d/mailcatcher
+#
+
+/usr/local/rvm/bin/mailcatcher {{ mailcatcher_ip }} {{ mailcatcher_smtp_port }} {{ mailcatcher_http_port }}
