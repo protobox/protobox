@@ -82,3 +82,13 @@ if ( !defined('ABSPATH') )
 
 /** Sets up WordPress vars and included files. */
 require_once(ABSPATH . 'wp-settings.php');
+
+{% if item.0.options.config is defined %}
+/**
+ * Custom configuration
+ * {{ ansible_managed }}
+ */
+{% for config, value in item.0.options.config.iteritems() %}
+define('{{ config | upper }}', {{ value|to_nice_json }});
+{% endfor %}
+{% endif %}
