@@ -24,6 +24,24 @@
   notify:
     - apache-restart
 
+- name: apache | apache2 lock
+  file: >
+    path=/var/lock/apache2
+    owner={{ apache.user }}
+    group={{ apache.group }}
+    mode=0755
+
+- name: apache | set envvars
+  template: >
+    src=envvars.j2
+    dest=/etc/apache2/envvars
+    owner=root
+    group=root
+    mode=0644
+  notify:
+    - apache-restart
+  when: ansible_os_family == 'Debian'
+
 - name: apache | install apache modules
   command: a2enmod {{ item }}
   with_items: apache.modules
