@@ -36,3 +36,11 @@
   with_items: pkgs_nginx
   when: ansible_os_family in ['CentOS', 'Fedora', 'OpenSuse', 'RedHat']
 
+# Configuration
+
+- name: nginx | set nginx.conf 
+  template: >
+    src={{ nginx.config|default('nginx.conf.j2') }}
+    dest={{ path_nginx_conf }}
+  notify:
+    - nginx-restart

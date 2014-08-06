@@ -28,3 +28,11 @@
   when: php.ini is defined
   notify:
     - php-restart
+
+- name: nginx | set nginx fpm conf 
+  template: >
+    src=php-fpm.conf.j2
+    dest=/etc/php5/fpm/pool.d/www.conf
+#  when: php.fpm is defined
+  notify:
+    - php-restart

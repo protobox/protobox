@@ -19,7 +19,7 @@
 
 - name: apache | set httpd.conf 
   template: >
-    src=httpd.conf.j2
+    src={{ apache.config|default('httpd.conf.j2') }}
     dest={{ path_apache_httpd }}
   notify:
     - apache-restart

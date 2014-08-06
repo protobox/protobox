@@ -6,3 +6,5 @@ service_nginx: nginx
 path_nginx_virtualhost_enabled: /etc/nginx/sites-enabled
 
 path_nginx_virtualhost_available: /etc/nginx/sites-available
+
+path_nginx_conf: /etc/nginx/nginx.conf

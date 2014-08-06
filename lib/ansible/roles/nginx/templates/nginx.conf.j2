@@ -1,0 +1,102 @@
+user www-data;
+worker_processes 4;
+pid /var/run/nginx.pid;
+
+events {
+        worker_connections 768;
+        # multi_accept on;
+}
+
+http {
+
+        ##
+        # Basic Settings
+        ##
+
+        # See - http://jeremyfelt.com/code/2013/01/08/clear-nginx-cache-in-vagrant/
+        #
+        # The nginx default for sendfile is on, which appears to not jive with something
+        # about the VM for some things, causing weird encoding issues in Javascript
+        # that create syntax errors and weird encoding issues in CSS that make it seem
+        # like your file has been cached forever. Crazy stuff - so off it is.
+        sendfile off;
+
+        tcp_nopush on;
+        tcp_nodelay on;
+        keepalive_timeout 65;
+        types_hash_max_size 2048;
+        # server_tokens off;
+
+        # server_names_hash_bucket_size 64;
+        # server_name_in_redirect off;
+
+        include /etc/nginx/mime.types;
+        default_type application/octet-stream;
+
+        ##
+        # Logging Settings
+        ##
+
+        access_log /var/log/nginx/access.log;
+        error_log /var/log/nginx/error.log;
+
+        ##
+        # Gzip Settings
+        ##
+
+        gzip on;
+        gzip_disable "msie6";
+
+        # gzip_vary on;
+        # gzip_proxied any;
+        # gzip_comp_level 6;
+        # gzip_buffers 16 8k;
+        # gzip_http_version 1.1;
+        # gzip_types text/plain text/css application/json application/x-javascr$
+
+        ##
+        # nginx-naxsi config
+        ##
+        ##
+        # Uncomment it if you installed nginx-naxsi
+        ##
+
+        #include /etc/nginx/naxsi_core.rules;
+
+        ##
+        # nginx-passenger config
+        ##
+        # Uncomment it if you installed nginx-passenger
+        ##
+
+        #passenger_root /usr;
+        #passenger_ruby /usr/bin/ruby;
+
+        ##
+        # Virtual Host Configs
+        ##
+
+        include /etc/nginx/conf.d/*.conf;
+        include /etc/nginx/sites-enabled/*;
+}
+
+#mail {
+#       # See sample authentication script at:
+#       # http://wiki.nginx.org/ImapAuthenticateWithApachePhpScript
+#
+#       # auth_http localhost/auth.php;
+#       # pop3_capabilities "TOP" "USER";
+#       # imap_capabilities "IMAP4rev1" "UIDPLUS";
+#
+#       server {
+#               listen     localhost:110;
+#               protocol   pop3;
+#               proxy      on;
+#       }
+#
+#       server {
+#               listen     localhost:143;
+#               protocol   imap;
+#               proxy      on;
+#       }
+#}
