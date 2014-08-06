@@ -2,6 +2,7 @@
 # vi: set ft=ruby :
 
 require 'yaml'
+require File.expand_path(File.dirname(__FILE__) + '/lib/shell/build-protobox')
 require File.expand_path(File.dirname(__FILE__) + '/lib/shell/build-playbook')
 require File.expand_path(File.dirname(__FILE__) + '/lib/shell/build-dashboard')
 
@@ -9,6 +10,7 @@ dir = Dir.pwd
 vagrant_dir = File.expand_path(File.dirname(__FILE__))
 protobox_dir = vagrant_dir + '/.protobox'
 protobox_boot = protobox_dir + '/config'
+ansible_version = protobox_dir + '/ansible_version'
 
 cli_file = vagrant_dir + '/.protobox_cli'
 cli_version = File.open(cli_file) {|f| f.readline}
@@ -70,11 +72,14 @@ end
 # Load settings into memory
 settings = YAML.load_file(vagrant_dir + '/' + vagrant_file)
 
+# Build protobox files
+protobox_playbook = build_protobox(settings, protobox_dir)
+
 # Build the playbook
-playbook = build_playbook(settings, protobox_dir);
+playbook = build_playbook(settings, protobox_dir)
 
 # Build the dashboard
-dashboard = build_dashboard(settings, protobox_dir);
+dashboard = build_dashboard(settings, protobox_dir)
 
 # Start vagrant configuration
 Vagrant.configure("2") do |config|

@@ -6,6 +6,7 @@ CODENAME=$(/bin/bash /vagrant/lib/shell/os-detect.sh CODENAME)
 PUPPET_LOCATION=( $( /bin/cat /vagrant/.protobox/config ) )
 PUPPET_DATA="/vagrant/$PUPPET_LOCATION"
 PROTOBOX_LOGO=/vagrant/lib/shell/logo.txt
+ANSIBLE_VERSION=( $( /bin/cat /vagrant/.protobox/ansible_version ) )
 
 # process arguments
 while getopts ":a:" opt; do
@@ -93,16 +94,30 @@ if [[ ! -f /.protobox/install-pip ]]; then
 fi
 
 if [[ ! -f /.protobox/install-ansible ]]; then
-    if [ "$OS" == 'debian' ] || [ "$OS" == 'ubuntu' ]; then
-        echo "Running pip install ansible"
-        pip install ansible >/dev/null 2>&1
-        echo "Finished pip install ansible"
+    if [ "$ANSIBLE_VERSION" != 'latest' ]; then
+        if [ "$OS" == 'debian' ] || [ "$OS" == 'ubuntu' ]; then
+            echo "Running pip install ansible==$ANSIBLE_VERSION"
+            pip install ansible==$ANSIBLE_VERSION >/dev/null 2>&1
+            echo "Finished pip install ansible==$ANSIBLE_VERSION"
 
-        touch /.protobox/install-ansible
-    elif [ "$OS" == 'centos' ]; then
-        #pip install ansible
+            touch /.protobox/install-ansible
+        elif [ "$OS" == 'centos' ]; then
+            #pip install ansible==$ANSIBLE_VERSION
 
-        touch /.protobox/install-ansible
+            touch /.protobox/install-ansible
+        fi
+    else
+        if [ "$OS" == 'debian' ] || [ "$OS" == 'ubuntu' ]; then
+            echo "Running pip install ansible"
+            pip install ansible >/dev/null 2>&1
+            echo "Finished pip install ansible"
+
+            touch /.protobox/install-ansible
+        elif [ "$OS" == 'centos' ]; then
+            #pip install ansible
+
+            touch /.protobox/install-ansible
+        fi
     fi
 fi
 

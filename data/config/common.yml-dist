@@ -2,6 +2,8 @@
 protobox:
   version: 0.0.1
   document: abc123
+  ansible:
+    version: latest
   dashboard:
     install: 1
     path: /srv/www/web/protobox
