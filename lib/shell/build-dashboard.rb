@@ -33,25 +33,27 @@ def build_dashboard(yaml, protobox_dir)
   data_path = nil
 
   if !yaml['protobox']['dashboard'].nil? and !yaml['protobox']['dashboard']['path'].nil?
-    yaml['vagrant']['vm']['synced_folder'].each { |share,data|
-      next if data['source'].nil? or data['target'].nil?
-      share_source = data['source']
-      share_target = data['target']
+    if yaml['vagrant']['vm'].has_key?("synced_folder")
+      yaml['vagrant']['vm']['synced_folder'].each { |share,data|
+        next if data['source'].nil? or data['target'].nil?
+        share_source = data['source']
+        share_target = data['target']
 
-      if yaml['protobox']['dashboard']['path'].start_with?(share_target)
-        local_path = File.expand_path(yaml['protobox']['dashboard']['path'].gsub(/^#{share_target}/, share_source).prepend('../../'), File.dirname(__FILE__))
-        local_path = local_path << '/' unless local_path.end_with?('/')
-        data_path = local_path if File.directory?(local_path)
-      end
+        if yaml['protobox']['dashboard']['path'].start_with?(share_target)
+          local_path = File.expand_path(yaml['protobox']['dashboard']['path'].gsub(/^#{share_target}/, share_source).prepend('../../'), File.dirname(__FILE__))
+          local_path = local_path << '/' unless local_path.end_with?('/')
+          data_path = local_path if File.directory?(local_path)
+        end
 
-      break unless data_path.nil?
-    }
+        break unless data_path.nil?
+      }
+    end
   else
     data_path =  File.expand_path('/../../web/protobox/', File.dirname(__FILE__))
   end
 
   # Exit out here if the path does not exist
-  if !File.directory?(data_path)
+  if data_path.nil? or !File.directory?(data_path)
     #Dir.mkdir(data_path)
     return false
   end

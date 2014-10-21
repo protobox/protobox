@@ -12,6 +12,11 @@
 
 # Configuration
 
+- name: apc | create directory
+  file: >
+    path=/etc/php5/mods-available/
+    state=directory
+
 - name: apc | set ini 
   template: >
     src=apc.ini.j2

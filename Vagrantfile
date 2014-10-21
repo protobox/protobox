@@ -98,32 +98,32 @@ Vagrant.configure("2") do |config|
   end
 
   # Default Box
-  if !settings[vagrant_vm]['vm']['box'].nil?
+  if settings[vagrant_vm]['vm'].has_key?("box") and !settings[vagrant_vm]['vm']['box'].nil?
     config.vm.box = settings[vagrant_vm]['vm']['box']
   end
 
   # Box URL
-  if !settings[vagrant_vm]['vm']['box_url'].nil?
+  if settings[vagrant_vm]['vm'].has_key?("box_url") and !settings[vagrant_vm]['vm']['box_url'].nil?
     config.vm.box_url = settings[vagrant_vm]['vm']['box_url']
   end
 
   # Box version
-  if !settings[vagrant_vm]['vm']['box_version'].nil?
+  if settings[vagrant_vm]['vm'].has_key?("box_version") and !settings[vagrant_vm]['vm']['box_version'].nil?
     config.vm.box_version = settings[vagrant_vm]['vm']['box_version']
   end
 
   # Box updates
-  if !settings[vagrant_vm]['vm']['box_check_update'].nil?
+  if settings[vagrant_vm]['vm'].has_key?("box_check_update") and !settings[vagrant_vm]['vm']['box_check_update'].nil?
     config.vm.box_check_update = settings[vagrant_vm]['vm']['box_check_update']
   end
 
   # Hostname
-  if !settings[vagrant_vm]['vm']['hostname'].nil?
+  if settings[vagrant_vm]['vm'].has_key?("hostname") and !settings[vagrant_vm]['vm']['hostname'].nil?
     config.vm.hostname = settings[vagrant_vm]['vm']['hostname']
   end
 
   # Ports and IP Address
-  if !settings[vagrant_vm]['vm']['usable_port_range'].nil?
+  if settings[vagrant_vm]['vm'].has_key?("usable_port_range") and !settings[vagrant_vm]['vm']['usable_port_range'].nil?
     ends = settings[vagrant_vm]['vm']['usable_port_range'].to_s.split('..').map{|d| Integer(d)}
     config.vm.usable_port_range = (ends[0]..ends[1])
   end
@@ -132,66 +132,70 @@ Vagrant.configure("2") do |config|
   config.vm.network :private_network, ip: settings[vagrant_vm]['vm']['network']['private_network'].to_s
 
   # Forwarded ports
-  settings[vagrant_vm]['vm']['network']['forwarded_port'].each do |item, port|
-    if !port['guest'].nil? and 
-       !port['host'].nil? and 
-       !port['guest'].empty? and 
-       !port['host'].empty?
-      config.vm.network :forwarded_port, guest: Integer(port['guest']), host: Integer(port['host'])
+  if settings[vagrant_vm]['vm']['network'].has_key?("forwarded_port") and !settings[vagrant_vm]['vm']['network']['forwarded_port'].nil?
+    settings[vagrant_vm]['vm']['network']['forwarded_port'].each do |item, port|
+      if !port['guest'].nil? and 
+         !port['host'].nil? and 
+         !port['guest'].empty? and 
+         !port['host'].empty?
+        config.vm.network :forwarded_port, guest: Integer(port['guest']), host: Integer(port['host'])
+      end
     end
   end
 
   # Synced Folders
-  settings[vagrant_vm]['vm']['synced_folder'].each do |item, folder|
-    if !folder['source'].nil? and !folder['target'].nil?
-      type = !folder['type'].nil? ? folder['type'] : 'nfs'
-      create = !folder['create'].nil? ? folder['create'] : false
-      disabled = !folder['disabled'].nil? ? folder['disabled'] : false
+  if settings[vagrant_vm]['vm'].has_key?("synced_folder") and !settings[vagrant_vm]['vm']['synced_folder'].nil?
+    settings[vagrant_vm]['vm']['synced_folder'].each do |item, folder|
+      if !folder['source'].nil? and !folder['target'].nil?
+        type = !folder['type'].nil? ? folder['type'] : 'nfs'
+        create = !folder['create'].nil? ? folder['create'] : false
+        disabled = !folder['disabled'].nil? ? folder['disabled'] : false
 
-      # backwards compat: check if using nfs
-      if !folder['nfs'].nil? and folder['nfs']
-        type = 'nfs'
-      end
+        # backwards compat: check if using nfs
+        if !folder['nfs'].nil? and folder['nfs']
+          type = 'nfs'
+        end
 
-      # NFS
-      if type == 'nfs'
-        nfs_udp = !folder['nfs_udp'].nil? ? folder['nfs_udp'] : true
-        nfs_version = !folder['nfs_version'].nil? ? folder['nfs_version'] : 3
+        # NFS
+        if type == 'nfs'
+          nfs_udp = !folder['nfs_udp'].nil? ? folder['nfs_udp'] : true
+          nfs_version = !folder['nfs_version'].nil? ? folder['nfs_version'] : 3
 
-        config.vm.synced_folder folder['source'], folder['target'], 
-          type: type, 
-          create: create,
-          disabled: disabled, 
-          nfs_udp: nfs_udp, 
-          nfs_version: nfs_version
-      
-      # RSYNC
-      elsif type == 'rsync'
-        rsync_args = !folder['rsync__args'].nil? ? folder['rsync__args'] : ["--verbose", "--archive", "--delete", "-z"]
-        rsync_auto = !folder['rsync__auto'].nil? ? folder['rsync__auto'] : true
-        rsync_exclude = !folder['rsync__exclude'].nil? ? folder['rsync__exclude'] : [".vagrant/"]
+          config.vm.synced_folder folder['source'], folder['target'], 
+            type: type, 
+            create: create,
+            disabled: disabled, 
+            nfs_udp: nfs_udp, 
+            nfs_version: nfs_version
+        
+        # RSYNC
+        elsif type == 'rsync'
+          rsync_args = !folder['rsync__args'].nil? ? folder['rsync__args'] : ["--verbose", "--archive", "--delete", "-z"]
+          rsync_auto = !folder['rsync__auto'].nil? ? folder['rsync__auto'] : true
+          rsync_exclude = !folder['rsync__exclude'].nil? ? folder['rsync__exclude'] : [".vagrant/"]
 
-        config.vm.synced_folder folder['source'], folder['target'], 
-          type: type, 
-          create: create,
-          disabled: disabled, 
-          rsync__args: rsync_args, 
-          rsync__auto: rsync_auto, 
-          rsync__exclude: rsync_exclude
-      
-      # No type found, use old method
-      else
-        #puts "Missing Type: " + type
-        owner = !folder['owner'].nil? ? folder['owner'] : ''
-        group = !folder['group'].nil? ? folder['group'] : ''
-        mount_options = !folder['mount_options'].nil? ? folder['mount_options'] : Array.new
+          config.vm.synced_folder folder['source'], folder['target'], 
+            type: type, 
+            create: create,
+            disabled: disabled, 
+            rsync__args: rsync_args, 
+            rsync__auto: rsync_auto, 
+            rsync__exclude: rsync_exclude
+        
+        # No type found, use old method
+        else
+          #puts "Missing Type: " + type
+          owner = !folder['owner'].nil? ? folder['owner'] : ''
+          group = !folder['group'].nil? ? folder['group'] : ''
+          mount_options = !folder['mount_options'].nil? ? folder['mount_options'] : Array.new
 
-        config.vm.synced_folder folder['source'], folder['target'], 
-          create: create,
-          disabled: disabled, 
-          owner: owner, 
-          group: group, 
-          :mount_options => mount_options
+          config.vm.synced_folder folder['source'], folder['target'], 
+            create: create,
+            disabled: disabled, 
+            owner: owner, 
+            group: group, 
+            :mount_options => mount_options
+        end
       end
     end
   end
@@ -269,16 +273,20 @@ Vagrant.configure("2") do |config|
   PREPARE
 
   # SSH Configuration
-  settings[vagrant_vm]['ssh'].each do |item, value|
-    if !value.nil?
-      config.ssh.send("#{item}=", value)
+  if settings[vagrant_vm].has_key?("ssh") and !settings[vagrant_vm]['ssh'].nil?
+    settings[vagrant_vm]['ssh'].each do |item, value|
+      if !value.nil?
+        config.ssh.send("#{item}=", value)
+      end
     end
   end
 
   # Vagrant Configuration
-  settings[vagrant_vm]['vagrant'].each do |item, value|
-    if !value.nil?
-      config.vagrant.send("#{item}=", /:(.+)/ =~ value ? $1.to_sym : value)
+  if settings[vagrant_vm].has_key?("vagrant") and !settings[vagrant_vm]['vagrant'].nil?
+    settings[vagrant_vm]['vagrant'].each do |item, value|
+      if !value.nil?
+        config.vagrant.send("#{item}=", /:(.+)/ =~ value ? $1.to_sym : value)
+      end
     end
   end
 end
