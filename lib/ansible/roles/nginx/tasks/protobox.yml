@@ -27,3 +27,4 @@
     name: vagrant
     groups: www-data
     state: present
+    append: yes
