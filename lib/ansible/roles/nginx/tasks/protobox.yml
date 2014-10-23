@@ -21,3 +21,9 @@
   when: >
     (protobox.dashboard is undefined) or 
     (protobox.dashboard is defined and protobox.dashboard.install == 1)
+
+- name: protobox | add vagrant user to www-data
+  user:
+    name: vagrant
+    groups: www-data
+    state: present

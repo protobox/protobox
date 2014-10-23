@@ -24,3 +24,12 @@
   when: php.ini is defined
   notify:
     - php-restart
+
+# Set php permissions
+
+- name: apache | fix permissions
+  file: 
+    path: /var/lib/php5
+    owner: root
+    group: "{{ apache.group | default('www-data') }}" 
+    mode: 0770

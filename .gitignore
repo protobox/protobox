@@ -1,6 +1,6 @@
 # Vagrant Files
 .vagrant
-package.box
+*.box
 
 # Ansible Files
 vagrant_ansible*

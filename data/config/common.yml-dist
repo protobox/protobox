@@ -105,7 +105,7 @@ apache:
   modules:
     - rewrite
   user: vagrant
-  group: www-data
+  group: vagrant
   default_vhost: false
   mpm_module: prefork
   vhosts:
