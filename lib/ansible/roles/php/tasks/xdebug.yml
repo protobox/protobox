@@ -71,7 +71,7 @@
   shell: >
     chdir=/etc/php5/mods-available
     php5enmod xdebug-options;
-  when: php_version_53 == 'no'
+  when: php_version_53 == 'no' and (php.xdebug.enabled is not defined or php.xdebug.enabled == 1)
   notify:
     - php-restart
 
@@ -80,7 +80,7 @@
     src=/etc/php5/mods-available/xdebug-options.ini
     dest=/etc/php5/conf.d/xdebug-options.ini
     state=link
-  when: php_version_53 == 'yes'
+  when: php_version_53 == 'yes' and (php.xdebug.enabled is not defined or php.xdebug.enabled == 1)
   notify:
     - php-restart
 

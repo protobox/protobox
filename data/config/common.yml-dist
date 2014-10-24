@@ -173,6 +173,7 @@ php:
     install: 0
   xdebug:
     install: 1
+    enabled: 1
     webgrind: 1
     settings:
       default_enable: '1'

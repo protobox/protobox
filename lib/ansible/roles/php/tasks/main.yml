@@ -4,14 +4,14 @@
 - include: php.yml
 
 - name: main | check version
-  shell: php -i | grep 'PHP Version' | head -1
+  shell: "php -i | grep 'PHP Version' | head -1 | sed -r 's/^.{15}//'"
   register: php_version
 
 - name: main | set facts
-  set_fact: >
-    php_version_53={{ 'yes' if '5.3.' in php_version.stdout else 'no' }}
-    php_version_54={{ 'yes' if '5.4.' in php_version.stdout else 'no' }}
-    php_version_55={{ 'yes' if '5.5.' in php_version.stdout else 'no' }}
+  set_fact:
+    php_version_53: "{{ 'yes' if '5.3.' in php_version.stdout else 'no' }}"
+    php_version_54: "{{ 'yes' if '5.4.' in php_version.stdout else 'no' }}"
+    php_version_55: "{{ 'yes' if '5.5.' in php_version.stdout else 'no' }}"
 
 - include: ini.yml
 
