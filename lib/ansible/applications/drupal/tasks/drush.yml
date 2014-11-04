@@ -11,6 +11,9 @@
 - name: drush | install console table
   command: >
     pear install Console_Table
+  register: pear_result
+  changed_when: "'already installed' not in pear_result.stdout"
+  failed_when: "'already installed' not in pear_result.stdout and 'install ok' not in pear_result.stdout and pear_result.stderr"
 
 #- name: drush | install drush version
 #  command: >
