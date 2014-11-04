@@ -7,7 +7,9 @@
     - libsqlite3-dev
 
 - name: mailcatcher | install RVM 
-  shell: \curl -L https://get.rvm.io | bash -s stable --ruby
+  shell: >
+    gpg --keyserver hkp://keys.gnupg.net --recv-keys D39DC0E3 &&
+    \curl -L https://get.rvm.io | bash -s stable --ruby
 
 - name: mailcatcher | install mailcatcher
   shell: /usr/local/rvm/bin/rvm default@mailcatcher --create do gem install mailcatcher --no-rdoc --no-ri
