@@ -3,3 +3,4 @@
     src=/var/log
     dest=/vagrant/logs
     state=link
+  ignore_errors: yes
