@@ -17,7 +17,8 @@ ansible_src/*
 # Web Files
 index.html
 
-# Sublime Text
+# IDE
+.idea
 *.sublime*
 
 # OS or Editor folders
