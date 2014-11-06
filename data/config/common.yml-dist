@@ -149,7 +149,7 @@ hhvm:
 
 php:
   install: 1
-  version: '54'
+  version: '53'
   modules:
     - php5-cli
     - php5-intl
