@@ -36,10 +36,17 @@
   fail: msg="Configuration file is not valid. Please check that before re-running the playbook."
   when: apache_result|failed
 
-- name: virtualhosts | deactivates the default virtualhost
-  command: a2dissite default
-
-- name: virtualhosts | deactivates the default ssl virtualhost
-  command: a2dissite default-ssl
+- name: virtualhosts | remove default sites
+  file: >
+    path=/etc/apache2/sites-enabled/{{ item }}
+    state=absent
+  with_items:
+    - 'default'
+    - 'default.conf'
+    - '000-default'
+    - '000-default.conf'
+    - 'default-ssl'
+    - 'default-ssl.conf'
   notify:
     - apache-restart
+	
