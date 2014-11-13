@@ -5,6 +5,10 @@
 #    state=directory
 #  with_items: apache.vhosts
 
+- name: virtualhosts | determine Apache version
+  command: apache2 -v | head -1 | awk '{split($3, a, "/"); split(a[2], b, "."); print b[1] "." b[2]}'
+  register: apache_version
+
 - name: virtualhosts | add apache configurations
   template: >
     src={{ item.template|default('default.conf.j2') }}
@@ -36,10 +40,16 @@
   fail: msg="Configuration file is not valid. Please check that before re-running the playbook."
   when: apache_result|failed
 
-- name: virtualhosts | deactivates the default virtualhost
-  command: a2dissite default
-
-- name: virtualhosts | deactivates the default ssl virtualhost
-  command: a2dissite default-ssl
+- name: virtualhosts | remove default sites
+  file: >
+    path=/etc/apache2/sites-enabled/{{ item }}
+    state=absent
+  with_items:
+    - 'default'
+    - 'default.conf'
+    - '000-default'
+    - '000-default.conf'
+    - 'default-ssl'
+    - 'default-ssl.conf'
   notify:
     - apache-restart

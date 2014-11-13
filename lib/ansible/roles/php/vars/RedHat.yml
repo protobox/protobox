@@ -25,6 +25,7 @@ pkgs_php_mariadb:
 
 pkgs_php_composer:
   - php5-curl
+ - php5-json 
 
 pkgs_phpmyadmin:
   - phpmyadmin
