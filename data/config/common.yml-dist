@@ -104,6 +104,7 @@ apache:
   install: 1
   modules:
     - rewrite
+    - ssl
   user: vagrant
   group: vagrant
   default_vhost: false
@@ -119,6 +120,9 @@ apache:
         - 'APP_ENV dev'
       override:
         - All
+      ssl: 0
+      ssl_cert: '/srv/www/data/ssl/server.crt'
+      ssl_key: '/srv/www/data/ssl/server.key'
 
 nginx:
   install: 0
