@@ -140,6 +140,9 @@ nginx:
         - index.php
       envvars:
         - 'APP_ENV dev'
+      ssl: 0
+      ssl_cert: '/srv/www/data/ssl/server.crt'
+      ssl_key: '/srv/www/data/ssl/server.key'
 
 varnish:
   install: 0
