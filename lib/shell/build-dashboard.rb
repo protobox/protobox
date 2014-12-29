@@ -63,19 +63,33 @@ def build_dashboard(yaml, protobox_dir)
 
   if !yaml['apache'].nil? and yaml['apache']['install'] == 1
     yaml['apache']['vhosts'].each do |vhost|
-      websites.push({
-        :name => vhost['name'], 
-        :site => "http://" + vhost['servername'] + (vhost['port'].to_i != 80 ? ':' + vhost['port'].to_s : '')
-      })
+      if (vhost['ssl'] != 1)
+        websites.push({
+          :name => vhost['name'],
+          :site => "http://" + vhost['servername'] + (vhost['port'].to_i != 80 ? ':' + vhost['port'].to_s : '')
+        })
+      else
+        websites.push({
+          :name => vhost['name'],
+          :site => "https://" + vhost['servername'] + (vhost['port'].to_i != 443 ? ':' + vhost['port'].to_s : '')
+        })
+      end
     end
   end
 
   if !yaml['nginx'].nil? and yaml['nginx']['install'] == 1
     yaml['nginx']['vhosts'].each do |vhost|
-      websites.push({
-        :name => vhost['name'], 
-        :site => "http://" + vhost['server_name'] + (vhost['listen_port'].to_i != 80 ? ':' + vhost['listen_port'].to_s : '')
-      })
+      if (vhost['ssl'] != 1)
+        websites.push({
+          :name => vhost['name'],
+          :site => "http://" + vhost['server_name'] + (vhost['listen_port'].to_i != 80 ? ':' + vhost['listen_port'].to_s : '')
+        })
+      else
+        websites.push({
+          :name => vhost['name'],
+          :site => "https://" + vhost['server_name'] + (vhost['listen_port'].to_i != 443 ? ':' + vhost['listen_port'].to_s : '')
+        })
+      end
     end
   end
 

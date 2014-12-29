@@ -24,6 +24,13 @@
   notify:
     - apache-restart
 
+- name: apache | set ports.conf
+  template: >
+    src={{ apache.config|default('ports.conf.j2') }}
+    dest=/etc/apache2/ports.conf
+  notify:
+    - apache-restart
+
 - name: apache | apache2 lock
   file: >
     path=/var/lock/apache2
@@ -48,3 +55,21 @@
   when: apache.modules is defined
   notify:
     - apache-restart
+
+- name: apache | check ssl if module is enabled
+  command: sudo apache2ctl -M
+  register: apache_result
+  ignore_errors: True
+
+- name: apache | verify ssl directory
+  file: >
+    path=/etc/apache2/ssl
+    state=directory
+  when: "'ssl_module' in apache_result.stdout"
+
+- name: apache | create self-signed SSL cert
+  command: >
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj "/C=US/ST=Oregon/L=Portland/O=IT/CN={{ ansible_fqdn }}" -keyout /etc/apache2/ssl/server.key -extensions v3_ca -out /etc/apache2/ssl/server.crt
+  notify:
+    - apache-restart
+  when: "'ssl_module' in apache_result.stdout"

@@ -44,3 +44,14 @@
     dest={{ path_nginx_conf }}
   notify:
     - nginx-restart
+
+- name: nginx | verify ssl directory
+  file: >
+    path=/etc/nginx/ssl
+    state=directory
+
+- name: nginx | create self-signed SSL cert
+  command: >
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj "/C=US/ST=Oregon/L=Portland/O=IT/CN={{ ansible_fqdn }}" -keyout /etc/nginx/ssl/server.key -extensions v3_ca -out /etc/nginx/ssl/server.crt
+  notify:
+    - nginx-restart
