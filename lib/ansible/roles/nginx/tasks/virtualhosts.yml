@@ -20,16 +20,5 @@
     dest={{ path_nginx_virtualhost_enabled }}/{{ item.name }}.conf
     state=link
   with_items: nginx.vhosts
-  when: item.ssl is not defined or item.ssl != 1
-  notify:
-    - nginx-restart
-
-- name: virtualhosts | enable the ssl virtualhost
-  file: >
-    src={{ path_nginx_virtualhost_available }}/{{ item.name }}_ssl.conf
-    dest={{ path_nginx_virtualhost_enabled }}/{{ item.name }}_ssl.conf
-    state=link
-  with_items: nginx.vhosts
-  when: item.ssl is defined and item.ssl == 1
   notify:
     - nginx-restart
