@@ -11,17 +11,6 @@
     dest={{ path_nginx_virtualhost_available }}/{{ item.name }}.conf
     mode=0640
   with_items: nginx.vhosts
-  when: item.ssl is not defined or item.ssl != 1
-  notify:
-    - nginx-restart
-
-- name: virtualhosts | add nginx ssl configurations
-  template: >
-    src={{ item.template|default('default_ssl.conf.j2') }}
-    dest={{ path_nginx_virtualhost_available }}/{{ item.name }}_ssl.conf
-    mode=0640
-  with_items: nginx.vhosts
-  when: item.ssl == 1
   notify:
     - nginx-restart
 
@@ -41,6 +30,6 @@
     dest={{ path_nginx_virtualhost_enabled }}/{{ item.name }}_ssl.conf
     state=link
   with_items: nginx.vhosts
-  when: item.ssl == 1
+  when: item.ssl is defined and item.ssl == 1
   notify:
     - nginx-restart

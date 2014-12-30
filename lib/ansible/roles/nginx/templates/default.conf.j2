@@ -42,3 +42,53 @@ server {
                 include fastcgi_params;
         }
 }
+
+{% if item.ssl is defined and item.ssl == 1 %}
+server {
+        listen {{ item.ssl_listen_port|default('443') }};
+        #listen [::]:{{ item.ssl_listen_port|default('443') }} ipv6only=on default_server;
+        server_name {{ item.server_name }}{% if item.server_aliases %}{% for alias in item.server_aliases %} {{ alias }}{% endfor %}{% endif %};
+        root {{ item.www_root }};
+
+        client_max_body_size 64M;
+
+        # Deny access to any files with a .php extension in the uploads directory
+        location ~* /(?:uploads|files)/.*\.php$ {
+                deny all;
+        }
+ 
+        location / {
+                index index.php index.html index.htm;
+                try_files $uri $uri/ /index.php?$args;
+        }
+ 
+        location ~* \.(gif|jpg|jpeg|png|css|js)$ {
+                expires max;
+        }
+ 
+        location ~ \.php$ {
+                try_files $uri =404;
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+
+                {% if hhvm is defined and hhvm.install == 1 %}
+                fastcgi_pass 127.0.0.1:9000;
+                {% else %}
+                fastcgi_pass unix:/var/run/php5-fpm.sock;
+                {% endif %}
+
+                fastcgi_index index.php;
+
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+
+                {% if item.envvars is defined %}{% for env in item.envvars %}
+                fastcgi_param {{ env }};
+                {% endfor %}{% endif %}
+
+                include fastcgi_params;
+        }
+
+        ssl on;
+        ssl_certificate {{ item.ssl_cert|default('/etc/nginx/ssl/server.crt') }};
+        ssl_certificate_key {{ item.ssl_key|default('/etc/nginx/ssl/server.key') }};
+}
+{% endif %}

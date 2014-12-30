@@ -11,17 +11,6 @@
     dest=/etc/apache2/sites-available/{{ item.name }}.conf
     mode=0640
   with_items: apache.vhosts
-  when: item.ssl is not defined or item.ssl != 1
-  notify:
-    - apache-restart
-
-- name: virtualhosts | add apache ssl configurations
-  template: >
-    src={{ item.template|default('default_ssl.conf.j2') }}
-    dest=/etc/apache2/sites-available/{{ item.name }}_ssl.conf
-    mode=0640
-  with_items: apache.vhosts
-  when: item.ssl == 1
   notify:
     - apache-restart
 
@@ -33,7 +22,7 @@
 - name: virtualhosts | activates our ssl virtualhost
   command: a2ensite {{ item.name }}_ssl.conf
   with_items: apache.vhosts
-  when: item.ssl == 1
+  when: item.ssl is defined and item.ssl == 1
 
 - name: virtualhosts | check that our config is valid
   command: apache2ctl configtest
@@ -56,7 +45,7 @@
 - name: virtualhosts | rolling back - Removing our ssl virtualhost
   command: a2dissite {{ item.name }}_ssl.conf
   with_items: apache.vhosts
-  when: apache_result|failed and item.ssl == 1
+  when: apache_result|failed and (item.ssl is defined and item.ssl == 1)
 
 - name: virtualhosts | rolling back - Ending playbook
   fail: msg="Configuration file is not valid. Please check that before re-running the playbook."
@@ -64,8 +53,12 @@
 
 - name: virtualhosts | deactivates the default virtualhost
   command: a2dissite default
+  ignore_errors: True
+  notify:
+    - apache-restart
 
 - name: virtualhosts | deactivates the default ssl virtualhost
   command: a2dissite default-ssl
+  ignore_errors: True
   notify:
     - apache-restart
