@@ -10,7 +10,7 @@ protobox:
 
 vagrant:
   vm:
-    box: "chef/ubuntu-12.04"
+    box: "chef/ubuntu-14.04"
     box_check_update: 'true'
     hostname: protobox
     network:
@@ -156,7 +156,7 @@ hhvm:
 
 php:
   install: 1
-  version: '53'
+  version: '55'
   modules:
     - php5-cli
     - php5-intl
