@@ -36,6 +36,7 @@
 </VirtualHost>
 
 {% if item.ssl is defined and item.ssl == 1 %}
+<IfModule mod_ssl.c>
 <VirtualHost *:{{ item.ssl_port|default('443') }}>
     SSLEngine on
     SSLCertificateFile {{ item.ssl_cert|default('/etc/apache2/ssl/server.crt') }}
@@ -75,4 +76,5 @@
     SetEnv {{ env }}
     {% endfor %}{% endif %}
 </VirtualHost>
+</IfModule>
 {% endif %}

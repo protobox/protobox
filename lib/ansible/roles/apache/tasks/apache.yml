@@ -24,12 +24,12 @@
   notify:
     - apache-restart
 
-#- name: apache | set ports.conf
-#  template: >
-#    src={{ apache.config|default('ports.conf.j2') }}
-#    dest=/etc/apache2/ports.conf
-#  notify:
-#    - apache-restart
+- name: apache | set ports.conf
+  template: >
+    src={{ apache.ports|default('ports.conf.j2') }}
+    dest={{ path_apache_ports }}
+  notify:
+    - apache-restart
 
 - name: apache | apache2 lock
   file: >

@@ -4,3 +4,5 @@ pkgs_apache:
 service_apache: apache2
 
 path_apache_httpd: /etc/apache2/httpd.conf
+
+path_apache_ports: /etc/apache2/ports.conf

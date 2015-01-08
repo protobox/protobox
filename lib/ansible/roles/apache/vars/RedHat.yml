@@ -5,3 +5,5 @@ pkgs_apache:
 service_apache: apachectl
 
 path_apache_httpd: /etc/httpd/conf/httpd.conf
+
+path_apache_ports: /etc/httpd/conf/ports.conf
