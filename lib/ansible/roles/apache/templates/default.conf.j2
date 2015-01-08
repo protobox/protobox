@@ -38,10 +38,6 @@
 {% if item.ssl is defined and item.ssl == 1 %}
 <IfModule mod_ssl.c>
 <VirtualHost *:{{ item.ssl_port|default('443') }}>
-    SSLEngine on
-    SSLCertificateFile {{ item.ssl_cert|default('/etc/apache2/ssl/server.crt') }}
-    SSLCertificateKeyFile {{ item.ssl_key|default('/etc/apache2/ssl/server.key') }}
-
     ServerName {{ item.servername }}
     {% if item.serveraliases %}ServerAlias{% for alias in item.serveraliases %} {{ alias }}{% endfor %}{% endif %}
     {% if item.serveradmin is defined %}ServerAdmin {{ item.serveradmin }}{% endif %}
@@ -52,6 +48,10 @@
     {% endif %}
 
     DocumentRoot {{ item.docroot }}
+
+    SSLEngine on
+    SSLCertificateFile {{ item.ssl_cert|default('/etc/apache2/ssl/server.crt') }}
+    SSLCertificateKeyFile {{ item.ssl_key|default('/etc/apache2/ssl/server.key') }}
 
     <Directory />
         Options FollowSymLinks
