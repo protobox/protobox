@@ -20,7 +20,7 @@
 
 - name: compatibility | require mysql
   fail: msg="Mysql is required"
-  when: mysql is not defined or mysql.install != 1
+  when: (mysql is not defined or mysql.install != 1) and (mariadb is not defined or mariadb.install != 1)
 
 - name: compatibility | check for install path
   fail: msg="Drupal - {{ item.name }} - Install path missing"
