@@ -102,7 +102,9 @@ fi
 
 # Has galaxy file
 if [ -f "/vagrant/.protobox/ansible_requirements.yml" ]; then
-    ansible-galaxy install -r /vagrant/.protobox/ansible_requirements.yml
+    echo "Installing ansible galaxy roles"
+    # --ignore-errors
+    ansible-galaxy install --force -r /vagrant/.protobox/ansible_requirements.yml
 fi
 
 # Run ansible playbook

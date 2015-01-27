@@ -321,7 +321,7 @@ class IDE
     play['hosts'] = 'all'
     #play['sudo'] = true
     #play['sudo_user'] = 'root'
-    play['vars_files'] = ['{{ protobox_config }}']
+    #play['vars_files'] = ['{{ protobox_config }}']
     
     play['roles'] = []
 
@@ -330,7 +330,7 @@ class IDE
         entry = {}
 
         # skip if not supposed to run
-        if !mod['autorun'].nil? and mod['autorun'] != 'true'
+        if !mod['autorun'].nil? and mod['autorun'] == 'false'
           next
         end
 
@@ -342,7 +342,14 @@ class IDE
           entry['role'] = mod['name']
         end
 
-        #TODO - extract config, and pass it in as variables
+        # Load in config if specified
+        if !mod['config'].nil?
+          file_path = self.get_local_path(mod['config'])
+          if File.exists?(file_path)
+            mod_config = YAML.load_file(file_path)
+            entry.merge!(mod_config)
+          end
+        end
 
         play['roles'].push(entry)
       end
@@ -356,6 +363,11 @@ class IDE
     end
 
     return true
+  end
+
+  def self.get_local_path(path)
+    path.gsub! '@', @root_dir + '/'
+    return path
   end
 
   def self.build_galaxyfile(yaml)
