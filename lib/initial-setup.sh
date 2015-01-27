@@ -23,27 +23,27 @@ iscmd() {
 #
 # Update software
 #
-#if [ "$OS" == 'debian' ] || [ "$OS" == 'ubuntu' ]; then
-#    echo "Running initial-setup apt-get update"
-#    apt-get update -y >/dev/null 2>&1
-#    echo "Finished running initial-setup apt-get update"
-#elif [[ "$OS" == 'centos' ]]; then
-#    echo "Running initial-setup yum update"
-#    yum update -y >/dev/null 2>&1
-#    echo "Finished running initial-setup yum update"
-#
-#    echo "Installing basic development tools (CentOS)"
-#    yum -y groupinstall "Development Tools" >/dev/null 2>&1
-#    echo "Finished installing basic development tools (CentOS)"
-#fi
+if [ "$OS" == 'debian' ] || [ "$OS" == 'ubuntu' ]; then
+    echo "Running initial-setup apt-get update"
+    apt-get update -y >/dev/null 2>&1
+    echo "Finished running initial-setup apt-get update"
+elif [[ "$OS" == 'centos' ]]; then
+    echo "Running initial-setup yum update"
+    yum update -y >/dev/null 2>&1
+    echo "Finished running initial-setup yum update"
+
+    echo "Installing basic development tools (CentOS)"
+    yum -y groupinstall "Development Tools" >/dev/null 2>&1
+    echo "Finished installing basic development tools (CentOS)"
+fi
 
 #
 # Install basic packages
 #
-#if [[ "$OS" == 'ubuntu' && ("$CODENAME" == 'lucid' || "$CODENAME" == 'precise') && ! -f /.protobox/ubuntu-required-libraries ]]; then
-#    echo 'Installing basic curl packages (Ubuntu only)'
+#if [[ "$OS" == 'ubuntu' && ("$CODENAME" == 'lucid' || "$CODENAME" == 'precise') ]]; then
+#    echo 'Installing basic curl packages'
 #    apt-get install -y libcurl3 libcurl4-gnutls-dev >/dev/null 2>&1
-#    echo 'Finished installing basic curl packages (Ubuntu only)'
+#    echo 'Finished installing basic curl packages'
 #fi
 
 # 
@@ -154,7 +154,7 @@ if [ -f "/vagrant/.protobox/ansible_requirements.yml" ]; then
     echo "Installing ansible galaxy roles"
     # --ignore-errors
     ansible-galaxy install --force -r /vagrant/.protobox/ansible_requirements.yml
-    echo "Finishedinstalling ansible galaxy roles"
+    echo "Finished installing ansible galaxy roles"
 fi
 
 # Run ansible playbook
