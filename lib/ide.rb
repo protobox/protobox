@@ -9,7 +9,7 @@ class IDE
   def self.configure(config)
     @root_dir = File.expand_path(File.join(File.dirname(__FILE__), '../'))
     @protobox_dir = File.join(@root_dir, '.protobox')
-    @protobox_config = File.join(@protobox_dir, 'config')
+    @protobox_config = File.join(@root_dir, 'config.yml')
 
     # Check vagrant version
     if Vagrant::VERSION < "1.5.0"
@@ -24,16 +24,9 @@ class IDE
       Dir.mkdir(@protobox_dir)
     end
 
-    # Check if protobox boot file exists, if it doesn't create it here
-    if !File.file?(@protobox_config)
-      File.open(@protobox_config, 'w') do |file|
-        file.write('data/config/common.yml')
-      end
-    end
-
     # Check for boot file
     if !File.file?(@protobox_config)
-      raise IDEError, "Boot file is missing: #{@protobox_config}\n"
+      raise IDEError, "Config file is missing: #{@protobox_config}\n"
     end
 
     # Store the current version of Vagrant for use in conditionals when dealing
@@ -41,71 +34,57 @@ class IDE
     @vagrant_version = Vagrant::VERSION.sub(/^v/, '')
 
     # Open config file location
-    vagrant_file = File.open(@protobox_config) {|f| f.readline.chomp}
-    vagrant_path = File.join(@root_dir, vagrant_file)
-
-    # Check for missing data file
-    if !File.file?(vagrant_path)
-      msg = "Data file is missing:\n#{vagrant_path}\n"
-      msg += "You may need to switch your config:\nruby protobox switch [config]\n"
-
-      raise IDEError, msg
-    end
-
-    # Load settings into memory
-    settings = YAML.load_file(vagrant_path)
-
-    settings2 = YAML.load_file(File.join(@root_dir, 'config.yml'))
+    settings = YAML.load_file(@protobox_config)
 
     # Build protobox files
     self.build_protobox(settings)
 
     # Build the playbook
-    self.build_playbook(settings2)
+    self.build_playbook(settings)
 
     # Build the galaxy file
-    self.build_galaxyfile(settings2)
+    self.build_galaxyfile(settings)
 
     # Build the dashboard
     self.build_dashboard(settings)
 
     # Default Box
-    if settings2['vagrant'].has_key?("box") and !settings2['vagrant']['box'].nil?
-      config.vm.box = settings2['vagrant']['box']
+    if settings['vagrant'].has_key?("box") and !settings['vagrant']['box'].nil?
+      config.vm.box = settings['vagrant']['box']
     end
 
     # Box URL
-    if settings2['vagrant'].has_key?("box_url") and !settings2['vagrant']['box_url'].nil?
-      config.vm.box_url = settings2['vagrant']['box_url']
+    if settings['vagrant'].has_key?("box_url") and !settings['vagrant']['box_url'].nil?
+      config.vm.box_url = settings['vagrant']['box_url']
     end
 
     # Box version
-    if settings2['vagrant'].has_key?("box_version") and !settings2['vagrant']['box_version'].nil?
-      config.vm.box_version = settings2['vagrant']['box_version']
+    if settings['vagrant'].has_key?("box_version") and !settings['vagrant']['box_version'].nil?
+      config.vm.box_version = settings['vagrant']['box_version']
     end
 
     # Box updates
-    if settings2['vagrant'].has_key?("box_check_update") and !settings2['vagrant']['box_check_update'].nil?
-      config.vm.box_check_update = settings2['vagrant']['box_check_update']
+    if settings['vagrant'].has_key?("box_check_update") and !settings['vagrant']['box_check_update'].nil?
+      config.vm.box_check_update = settings['vagrant']['box_check_update']
     end
 
     # Hostname
-    if settings2['vagrant'].has_key?("hostname") and !settings2['vagrant']['hostname'].nil?
-      config.vm.hostname = settings2['vagrant']['hostname']
+    if settings['vagrant'].has_key?("hostname") and !settings['vagrant']['hostname'].nil?
+      config.vm.hostname = settings['vagrant']['hostname']
     end
 
     # Ports and IP Address
-    if settings2['vagrant'].has_key?("usable_port_range") and !settings2['vagrant']['usable_port_range'].nil?
-      ends = settings2['vagrant']['usable_port_range'].to_s.split('..').map{|d| Integer(d)}
+    if settings['vagrant'].has_key?("usable_port_range") and !settings['vagrant']['usable_port_range'].nil?
+      ends = settings['vagrant']['usable_port_range'].to_s.split('..').map{|d| Integer(d)}
       config.vm.usable_port_range = (ends[0]..ends[1])
     end
 
     # network IP
-    config.vm.network :private_network, ip: settings2['vagrant']['ip'].to_s
+    config.vm.network :private_network, ip: settings['vagrant']['ip'].to_s
 
     # Forwarded ports
-    if settings2['vagrant'].has_key?("ports") and !settings2['vagrant']['ports'].nil?
-      settings2['vagrant']['ports'].each do |item, port|
+    if settings['vagrant'].has_key?("ports") and !settings['vagrant']['ports'].nil?
+      settings['vagrant']['ports'].each do |item, port|
         if !port['guest'].nil? and 
            !port['host'].nil? and 
            !port['guest'].empty? and 
@@ -122,7 +101,7 @@ class IDE
     #end
 
     # Copy The SSH Private Keys To The Box
-    #settings2['vagrant']["keys"].each do |key|
+    #settings['vagrant']["keys"].each do |key|
     #  config.vm.provision "shell" do |s|
     #    s.privileged = false
     #    s.inline = "echo \"$1\" > /home/vagrant/.ssh/$2 && chmod 600 /home/vagrant/.ssh/$2"
@@ -136,8 +115,8 @@ class IDE
     #end
 
     # Synced Folders
-    if settings2['vagrant'].has_key?("folders") and !settings2['vagrant']['folders'].nil?
-      settings2['vagrant']['folders'].each do |item, folder|
+    if settings['vagrant'].has_key?("folders") and !settings['vagrant']['folders'].nil?
+      settings['vagrant']['folders'].each do |item, folder|
         if !folder['source'].nil? and !folder['target'].nil?
           type = !folder['type'].nil? ? folder['type'] : 'nfs'
           create = !folder['create'].nil? ? folder['create'] : false
@@ -195,19 +174,19 @@ class IDE
     # Provider Configuration
     
     config.vm.provider "virtualbox" do |prov|
-      if settings2['vagrant'].has_key?("hostname") and !settings2['vagrant']['hostname'].nil?
-        prov.name = settings2['vagrant']['hostname']
+      if settings['vagrant'].has_key?("hostname") and !settings['vagrant']['hostname'].nil?
+        prov.name = settings['vagrant']['hostname']
       end
-      prov.customize ["modifyvm", :id, "--memory", settings2['vagrant']["memory"] ||= "2048"]
-      prov.customize ["modifyvm", :id, "--cpus", settings2['vagrant']["cpus"] ||= "1"]
+      prov.customize ["modifyvm", :id, "--memory", settings['vagrant']["memory"] ||= "2048"]
+      prov.customize ["modifyvm", :id, "--cpus", settings['vagrant']["cpus"] ||= "1"]
       prov.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
       prov.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       #prov.customize ["modifyvm", :id, "--ostype", "Ubuntu_64"]
     end
 
-    if settings2['vagrant'].has_key?("provider") and !settings2['vagrant']['provider'].nil?
+    if settings['vagrant'].has_key?("provider") and !settings['vagrant']['provider'].nil?
       # Loop through provders
-      settings2['vagrant']['provider'].each do |prov, options|
+      settings['vagrant']['provider'].each do |prov, options|
         # Set specific provider info
         config.vm.provider prov.to_sym do |params|
           # Loop through provider options
@@ -229,21 +208,21 @@ class IDE
     # Ansible Provisioning
     ansible_params = Array.new
 
-    if !settings2['ansible'].nil? and !settings2['ansible']['playbook'].nil? and settings2['ansible']['playbook'] != "default"
-      playbook_path = "/vagrant/" + settings2['ansible']['playbook']
+    if !settings['ansible'].nil? and !settings['ansible']['playbook'].nil? and settings['ansible']['playbook'] != "default"
+      playbook_path = "/vagrant/" + settings['ansible']['playbook']
     else
       playbook_path = "/vagrant/.protobox/playbook"
     end
 
     ansible_params << playbook_path
 
-    if !settings2['ansible'].nil? and !settings2['ansible']['inventory'].nil?
+    if !settings['ansible'].nil? and !settings['ansible']['inventory'].nil?
       ansible_params << "-i \"" + ansible['inventory'] + "\""
     end
 
-    if !settings2['ansible'].nil? and !settings2['ansible']['verbose'].nil?
-      if settings2['ansible']['verbose'] == 'vv' or settings2['ansible']['verbose'] == 'vvv' or ansible['verbose'] == 'vvvv'
-        ansible_params << "-" + settings2['ansible']['verbose']
+    if !settings['ansible'].nil? and !settings['ansible']['verbose'].nil?
+      if settings['ansible']['verbose'] == 'vv' or settings['ansible']['verbose'] == 'vvv' or ansible['verbose'] == 'vvvv'
+        ansible_params << "-" + settings['ansible']['verbose']
       else
         ansible_params << "--verbose"
       end
@@ -251,14 +230,14 @@ class IDE
 
     ansible_params << "--connection=local"
 
-    if !settings2['ansible'].nil? and !settings2['ansible']['extra_vars'].nil?
+    if !settings['ansible'].nil? and !settings['ansible']['extra_vars'].nil?
       extra_vars = ansible['extra_vars']
     else
       extra_vars = Hash.new
     end
 
     extra_vars['protobox_env'] = "vagrant"
-    extra_vars['protobox_config'] = "/vagrant/" + vagrant_file
+    #extra_vars['protobox_config'] = "/vagrant/" + vagrant_file
 
     ansible_params << "--extra-vars=\"" + extra_vars.map{|k,v| "#{k}=#{v}"}.join(" ").gsub("\"","\\\"") + "\"" unless extra_vars.empty?
 
@@ -279,8 +258,8 @@ class IDE
     PREPARE
 
     # SSH Configuration
-    if settings2['vagrant'].has_key?("ssh") and !settings2['vagrant']['ssh'].nil?
-      settings2['vagrant']['ssh'].each do |item, value|
+    if settings['vagrant'].has_key?("ssh") and !settings['vagrant']['ssh'].nil?
+      settings['vagrant']['ssh'].each do |item, value|
         if !value.nil?
           config.ssh.send("#{item}=", value)
         end
@@ -288,8 +267,8 @@ class IDE
     end
 
     # Vagrant Configuration
-    if settings2['vagrant'].has_key?("config") and !settings2['vagrant']['config'].nil?
-      settings2['vagrant']['config'].each do |item, value|
+    if settings['vagrant'].has_key?("config") and !settings['vagrant']['config'].nil?
+      settings['vagrant']['config'].each do |item, value|
         if !value.nil?
           config.vagrant.send("#{item}=", /:(.+)/ =~ value ? $1.to_sym : value)
         end
@@ -407,6 +386,8 @@ class IDE
   end
 
   def self.build_dashboard(yaml)
+    return false
+
     protobox_dashboard = File.join(@protobox_dir, 'dashboard')
 
     if !yaml['vagrant']['vm']['network']['private_network'].nil?

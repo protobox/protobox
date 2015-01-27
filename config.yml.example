@@ -3,10 +3,6 @@ protobox:
   version: 0.0.1
   configuration: abc123
 
-ansible:
-  version: latest
-  playbook: default
-
 vagrant:
   box: ubuntu/trusty64
   hostname: protobox
