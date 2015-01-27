@@ -1,5 +1,0 @@
-pkgs_node_dependencies:
-  - python-software-properties
-
-pkgs_node:
-  - nodejs

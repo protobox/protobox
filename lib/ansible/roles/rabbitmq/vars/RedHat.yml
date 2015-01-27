@@ -1,6 +1,0 @@
-apt_key_rabbitmq: "https://www.rabbitmq.com/rabbitmq-signing-key-public.asc"
-
-pkgs_rabbitmq:
-  - rabbitmq-server-3.2.2-1.noarch.rpm
-
-service_rabbitmq: rabbitmq-server

@@ -1,6 +1,0 @@
-- name: main | add vars
-  include_vars: "{{ ansible_os_family }}.yml"
-
-- include: node.yml
-
-- include: modules.yml

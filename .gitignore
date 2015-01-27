@@ -6,6 +6,7 @@
 vagrant_ansible*
 .my.cnf
 .protobox
+config.yml
 
 # Other Repos
 packer/*
@@ -13,6 +14,7 @@ vagrant-protobox-gem/*
 protobox-gem/*
 vagrant_src/*
 ansible_src/*
+roles_dev/*
 
 # Web Files
 index.html

@@ -1,0 +1,131 @@
+---
+protobox:
+  version: 0.0.1
+  configuration: abc123
+
+ansible:
+  version: latest
+  playbook: default
+
+vagrant:
+  box: ubuntu/trusty64
+  hostname: protobox
+  ip: 192.168.5.10
+
+modules:
+  - source: protobox
+    name: common
+  - source: protobox
+    name: apache
+    autorun: false
+    config: "@"
+  - source: protobox
+    name: elasticsearch
+    autorun: false
+    config: "@"
+  - source: protobox
+    name: hhvm
+    autorun: false
+    config: "@"
+  - source: protobox
+    name: mariadb
+    autorun: false
+    config: "@"
+  - source: protobox
+    name: mysql
+    autorun: false
+    config: "@data/config/mysql.yml"
+  - source: ansible-galaxy
+    name: andyceo.mysql
+    config: "@data/config/mysql.yml"
+  - source: protobox
+    name: newrelic
+    autorun: false
+    config: "@"
+  - source: protobox
+    name: nginx
+    autorun: false
+    config: "@"
+  - source: protobox
+    name: ngrok
+    autorun: false
+    config: "@"
+  - source: protobox
+    name: node
+    autorun: false
+    config: "@"
+  - source: protobox
+    name: phalcon
+    autorun: false
+    config: "@"
+  - source: protobox
+    name: php
+    autorun: false
+    config: "@"
+  - source: protobox
+    name: postgresql
+    autorun: false
+    config: "@"
+  - source: protobox
+    name: python
+    autorun: false
+    config: "@"
+  - source: protobox
+    name: rabbitmq
+    autorun: false
+    config: "@"
+  - source: protobox
+    name: ruby
+    autorun: false
+    config: "@"
+  - source: protobox
+    name: server
+    autorun: false
+    config: "@"
+  - source: protobox
+    name: solr
+    autorun: false
+    config: "@"
+  - source: protobox
+    name: varnish
+    autorun: false
+    config: "@"
+  - source: protobox
+    name: drupal
+    autorun: false
+    config: "@"
+  - source: protobox
+    name: laravel
+    autorun: false
+    config: "@"
+  - source: protobox
+    name: lemonstand
+    autorun: false
+    config: "@"
+  - source: protobox
+    name: pyrocms
+    autorun: false
+    config: "@"
+  - source: protobox
+    name: repository
+    autorun: false
+    config: "@"
+  - source: protobox
+    name: sylius
+    autorun: false
+    config: "@"
+  - source: protobox
+    name: symfony
+    autorun: false
+    config: "@"
+  - source: protobox
+    name: wordpress
+    autorun: false
+    config: "@"
+
+
+pre_scripts:
+  - "@data/scripts/pre"
+
+post_scripts:
+  - "@data/scripts/post"

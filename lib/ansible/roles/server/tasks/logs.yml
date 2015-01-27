@@ -1,6 +1,0 @@
-- name: logs | link logs to vagrant folder
-  file: >
-    src=/var/log
-    dest=/vagrant/logs
-    state=link
-  ignore_errors: yes

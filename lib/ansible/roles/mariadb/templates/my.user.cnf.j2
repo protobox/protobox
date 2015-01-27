@@ -1,6 +1,0 @@
-# {{ ansible_managed }}
-[client]
-user=root
-{% if mariadb.root_password is defined %}
-password={{ mariadb.root_password }}
-{% endif %}

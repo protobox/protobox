@@ -1,4 +1,0 @@
-- name: virtualenv | install virtualenv
-  pip: >
-    name="virtualenv{% if python.virtualenv.version is defined %}=={{ python.virtualenv.version }}{% endif %}"
-    state=present
