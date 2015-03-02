@@ -20,6 +20,7 @@ index.html
 # IDE
 .idea
 *.sublime*
+.idea/*
 
 # OS or Editor folders
 .DS_Store
