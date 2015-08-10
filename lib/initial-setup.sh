@@ -82,6 +82,18 @@ elif [[ "$OS" == 'centos' ]]; then
 fi
 
 #
+# Install python git
+#
+if [ "$OS" == 'debian' ] || [ "$OS" == 'ubuntu' ]; then
+    echo "Installing git"
+    apt-get -y install git >/dev/null 2>&1
+    echo "Finished installing git"
+elif [ "$OS" == 'centos' ]; then
+    echo "TODO - centos"
+    #yum install install git
+fi
+
+#
 # Install pip
 #
 #if ! iscmd "pip"; then

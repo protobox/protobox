@@ -360,7 +360,7 @@ class IDE
       role = {}
 
       if mod['source'] == 'protobox'
-        role['src'] = 'https://github.com/protobox/ansible-' + mod['name'] + '.git'
+        role['src'] = 'https://github.com/protobox/ansible-' + mod['name'] + ''
         role['version'] = 'master'
         role['name'] = 'protobox.' + mod['name']
       elsif mod['source'] == 'git'
