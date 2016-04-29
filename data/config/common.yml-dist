@@ -10,7 +10,7 @@ protobox:
 
 vagrant:
   vm:
-    box: "chef/ubuntu-14.04"
+    box: "bento/ubuntu-14.04"
     box_check_update: 'true'
     hostname: protobox
     network:
@@ -37,7 +37,7 @@ vagrant:
         #hosts: "webservers"
         #inventory: "ansible/inventory"
         #verbose: "yes"
-        #extra_vars: 
+        #extra_vars:
         #  ntp_server: "pool.ntp.org"
         #  nginx_workers: 4'
     synced_folder:
@@ -46,7 +46,7 @@ vagrant:
         source: ./
         target: /srv/www
         type: nfs
-        rsync__args: 
+        rsync__args:
           - '--verbose'
           - '--archive'
           - '--delete'
@@ -172,9 +172,9 @@ php:
     modules: [ ]
   apc:
     install: 1
-  composer: 
+  composer:
     install: 1
-  mailcatcher: 
+  mailcatcher:
     install: 0
   phpmyadmin:
     install: 0
@@ -224,7 +224,7 @@ postgresql:
     - name: app
       user: root
       password: root
-      grant: 
+      grant:
         - CREATEDB
         - SUPERUSER
       sql_file: ''
@@ -339,8 +339,8 @@ applications:
   #    install: 1
   #    path: /srv/www/web/lemonstand
   #    options:
-  #      holder: 
-  #      serial: 
+  #      holder:
+  #      serial:
   #      dbhost: localhost
   #      dbname: lemonstand
   #      dbuser: root
